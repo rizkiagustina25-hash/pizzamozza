@@ -1,152 +1,1110 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{ $product->name }} - Pizza Mozza</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+    <title>
+        {{ $product->name }} - PizzaMozza
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    
+<style>
+    .app-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 240px;
+        background: #fff;
+        border-right: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+        transition: transform .25s ease;
+    }
+
+    .app-brand {
+        height: 80px;
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid #eee;
+        color: #e63946;
+        font-size: 21px;
+        font-weight: 700;
+        text-decoration: none;
+        flex-shrink: 0;
+    }
+
+    .app-brand-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #e63946;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .app-menu {
+        padding: 24px 15px;
+        flex: 1;
+    }
+
+    .app-menu-label {
+        margin: 0 12px 12px;
+        color: #999;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .app-menu-link {
+        display: block;
+        padding: 13px 15px;
+        margin-bottom: 6px;
+        border-radius: 9px;
+        text-decoration: none;
+        color: #555;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+    .app-menu-link:hover,
+    .app-menu-link.active {
+        background: #e63946;
+        color: #fff;
+    }
+
+    .app-profile {
+        padding: 18px;
+        border-top: 1px solid #eee;
+        font-size: 13px;
+    }
+
+    .app-main {
+        margin-left: 240px;
+        min-height: 100vh;
+    }
+
+    .app-topbar {
+        height: 80px;
+        padding: 0 30px;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+    }
+
+    .app-menu-toggle {
+        display: none;
+        border: 0;
+        background: transparent;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 800px) {
+        .app-sidebar {
+            transform: translateX(-100%);
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f4ef;
+        .app-sidebar.open {
+            transform: translateX(0);
         }
 
-        .navbar {
-            background: #b52323;
-            padding: 20px 50px;
+        .app-main {
+            margin-left: 0;
         }
 
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
+        .app-menu-toggle {
+            display: block;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 50px auto;
-            padding: 20px;
+        .app-topbar {
+            padding: 0 16px;
         }
+    }
+</style>
 
-        .product-detail {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
 
-        .product-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 15px;
-            background: #eee;
-        }
-
-        .product-info {
-            padding: 20px;
-        }
-
-        .product-info h1 {
-            font-size: 35px;
-            margin-bottom: 15px;
-        }
-
-        .description {
-            color: #666;
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-
-        .price {
-            color: #b52323;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .stock {
-            margin-bottom: 25px;
-        }
-
-        .button {
-            display: inline-block;
-            background: #b52323;
-            color: white;
-            text-decoration: none;
-            border: none;
-            padding: 13px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        @media (max-width: 700px) {
-            .product-detail {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 
-<body>
 
-    <div class="navbar">
-        <a href="{{ route('dashboard') }}">
+<body class="bg-orange-50 min-h-screen">
+
+
+    {{-- =====================================================
+         NAVBAR
+    ====================================================== --}}
+
+    
+<aside class="app-sidebar" id="appSidebar">
+    <a href="{{ route('dashboard') }}" class="app-brand">
+        <span class="app-brand-icon">🍕</span>
+        <span>PizzaMozza</span>
+    </a>
+
+    <nav class="app-menu">
+        <p class="app-menu-label">MAIN MENU</p>
+
+        <a href="{{ route('dashboard') }}" class="app-menu-link">
+            🏠 Dashboard
+        </a>
+
+        <a href="{{ route('products.index') }}" class="app-menu-link">
+            🍕 Produk</a>
+
+        {{-- Route khusus pesanan belum tersedia di daftar route --}}
+        <a href="{{ route('dashboard') }}" class="app-menu-link">
+            📦 Pesanan Saya
+        </a>
+
+        {{-- Route khusus akun belum tersedia di daftar route --}}
+        <a href="{{ route('dashboard') }}" class="app-menu-link">
+            👤 Akun Saya
+        </a>
+    </nav>
+
+    <div class="app-profile">
+        @auth
+            <strong>{{ auth()->user()->name }}</strong>
+            <p class="text-gray-400 mt-1">Pelanggan</p>
+
+            <form action="{{ route('logout') }}" method="POST" class="mt-3">
+                @csrf
+                <button type="submit" class="text-red-600">Keluar</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="text-red-600">Login</a>
+        @endauth
+    </div>
+</aside>
+
+<div class="app-main">
+    <header class="app-topbar">
+        <button
+            type="button"
+            class="app-menu-toggle"
+            onclick="document.getElementById('appSidebar').classList.toggle('open')"
+            aria-label="Buka menu"
+        >☰</button>
+
+        <span class="font-semibold text-gray-700">Detail Produk</span>
+
+        <a href="{{ route('cart.index') }}"
+           class="text-sm font-semibold text-gray-700 hover:text-red-600">
+            🛒 Keranjang
+            @php
+                $cartCount = array_sum(array_column(session()->get('cart', []), 'quantity'));
+            @endphp
+            ({{ $cartCount }})
+        </a>
+    </header>
+
+
+
+
+    {{-- =====================================================
+         MAIN CONTENT
+    ====================================================== --}}
+
+    <main class="max-w-7xl mx-auto px-5 lg:px-8 py-8">
+
+
+        {{-- BREADCRUMB --}}
+
+        <div class="flex items-center gap-2 text-sm mb-7">
+
+            <a
+                href="{{ route('dashboard') }}"
+                class="text-gray-400 hover:text-orange-500 transition"
+            >
+                Beranda
+            </a>
+
+            <span class="text-gray-300">
+                /
+            </span>
+
+            <span class="text-orange-500 font-semibold">
+                Detail Produk
+            </span>
+
+        </div>
+
+
+
+        {{-- BACK BUTTON --}}
+
+        <a
+            href="{{ route('dashboard') }}"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-orange-500 transition mb-6"
+        >
             ← Kembali ke Dashboard
         </a>
-    </div>
 
-    <div class="container">
 
-        <div class="product-detail">
 
-            <div>
-                @if ($product->image)
-                    <img
-                        src="{{ asset('image/' . $product->image) }}"
-                        alt="{{ $product->name }}"
-                        class="product-image"
+        {{-- =================================================
+             PRODUCT DETAIL
+        ================================================== --}}
+
+        <div
+            class="bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden"
+        >
+
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+
+
+                {{-- =================================================
+                     PRODUCT IMAGE
+                ================================================== --}}
+
+                <div
+                    class="bg-orange-50 min-h-[420px] flex items-center justify-center p-8"
+                >
+
+                    <div
+                        class="w-full max-w-lg aspect-square rounded-3xl bg-white shadow-sm overflow-hidden flex items-center justify-center"
                     >
-                @else
-                    <div class="product-image"></div>
-                @endif
-            </div>
 
-            <div class="product-info">
+                        @if ($product->image)
 
-                <h1>{{ $product->name }}</h1>
+                            <img
+                                src="{{ asset('image/' . $product->image) }}"
+                                alt="{{ $product->name }}"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-8xl\'>🍕</span>';"
+                            >
 
-                <p class="description">
-                    {{ $product->description }}
-                </p>
+                        @else
 
-                <div class="price">
-                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                            <span class="text-8xl">
+                                🍕
+                            </span>
+
+                        @endif
+
+                    </div>
+
                 </div>
 
-                <div class="stock">
-                    Stok tersedia: <strong>{{ $product->stock }}</strong>
+
+
+                {{-- =================================================
+                     PRODUCT INFORMATION
+                ================================================== --}}
+
+                <div class="p-7 lg:p-10">
+
+
+                    {{-- CATEGORY --}}
+
+                    <div class="flex items-center gap-2 mb-3">
+
+                        <span
+                            class="inline-flex items-center px-3 py-1 rounded-full bg-orange-100 text-orange-600 text-xs font-bold"
+                        >
+
+                            {{ ucfirst($product->category ?? 'Pizza') }}
+
+                        </span>
+
+                    </div>
+
+
+
+                    {{-- NAME --}}
+
+                    <h1
+                        class="text-3xl lg:text-4xl font-bold text-gray-800"
+                    >
+
+                        {{ $product->name }}
+
+                    </h1>
+
+
+
+                    {{-- DESCRIPTION --}}
+
+                    @if ($product->description)
+
+                        <p
+                            class="text-gray-500 mt-4 leading-relaxed"
+                        >
+
+                            {{ $product->description }}
+
+                        </p>
+
+                    @else
+
+                        <p
+                            class="text-gray-500 mt-4 leading-relaxed"
+                        >
+
+                            Nikmati {{ $product->name }}
+                            dengan cita rasa khas PizzaMozza.
+
+                        </p>
+
+                    @endif
+
+
+
+                    <div class="border-t border-gray-100 my-6"></div>
+
+
+
+                    {{-- =================================================
+                         ADD TO CART FORM
+                    ================================================== --}}
+
+                    <form
+                        action="{{ route('cart.add') }}"
+                        method="POST"
+                        id="productForm"
+                    >
+
+                        @csrf
+
+                    {{-- ID produk wajib dikirim ke CartController --}}
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                        {{-- =================================================
+                             VARIANT
+                        ================================================== --}}
+
+                        @if ($product->variants->count() > 0)
+
+                            <div>
+
+                                <div class="flex items-center justify-between mb-3">
+
+                                    <label
+                                        class="font-bold text-gray-800"
+                                    >
+                                        Pilih Ukuran
+                                    </label>
+
+                                    <span
+                                        class="text-xs text-gray-400"
+                                    >
+                                        Wajib dipilih
+                                    </span>
+
+                                </div>
+
+
+                                <div
+                                    class="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                                >
+
+                                    @foreach ($product->variants as $index => $variant)
+
+                                        <label
+                                            class="variant-option cursor-pointer"
+                                        >
+
+                                            <input
+                                                type="radio"
+                                                name="variant_id"
+                                                value="{{ $variant->id }}"
+                                                data-price="{{ $variant->price }}"
+                                                class="hidden variant-radio"
+                                                {{ $index === 0 ? 'checked' : '' }}
+                                            >
+
+
+                                            <div
+                                                class="variant-card border-2 border-gray-200 rounded-xl p-4 hover:border-orange-400 transition"
+                                            >
+
+                                                <div class="flex items-center justify-between">
+
+                                                    <div>
+
+                                                        <p class="font-bold text-gray-800">
+
+                                                            {{ $variant->name }}
+
+                                                        </p>
+
+                                                        <p class="text-xs text-gray-400 mt-1">
+
+                                                            Pilihan ukuran
+
+                                                        </p>
+
+                                                    </div>
+
+
+                                                    <div
+                                                        class="text-orange-600 font-bold"
+                                                    >
+
+                                                        Rp
+                                                        {{ number_format(
+                                                            $variant->price,
+                                                            0,
+                                                            ',',
+                                                            '.'
+                                                        ) }}
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </label>
+
+                                    @endforeach
+
+                                </div>
+
+                            </div>
+
+                        @else
+
+                            {{-- FALLBACK JIKA TIDAK ADA VARIANT --}}
+
+                            <div
+                                class="bg-orange-50 rounded-xl p-4"
+                            >
+
+                                <p class="text-sm text-gray-500">
+                                    Harga produk
+                                </p>
+
+                                <p
+                                    class="text-2xl font-bold text-orange-600 mt-1"
+                                >
+
+                                    Rp
+                                    {{ number_format(
+                                        $product->price ?? 0,
+                                        0,
+                                        ',',
+                                        '.'
+                                    ) }}
+
+                                </p>
+
+                            </div>
+
+                        @endif
+
+
+
+                        {{-- =================================================
+                             TOPPINGS
+                        ================================================== --}}
+
+                        @if (isset($toppings) && $toppings->count() > 0)
+
+                            <div class="mt-7">
+
+                                <div class="flex items-center justify-between mb-3">
+
+                                    <label
+                                        class="font-bold text-gray-800"
+                                    >
+                                        Tambahan Topping
+                                    </label>
+
+                                    <span
+                                        class="text-xs text-gray-400"
+                                    >
+                                        Opsional
+                                    </span>
+
+                                </div>
+
+
+                                <div class="space-y-2">
+
+                                    @foreach ($toppings as $topping)
+
+                                        <label
+                                            class="topping-option flex items-center justify-between gap-3 border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-orange-300 hover:bg-orange-50 transition"
+                                        >
+
+                                            <div class="flex items-center gap-3">
+
+                                                <input
+                                                    type="checkbox"
+                                                    name="toppings[]"
+                                                    value="{{ $topping->id }}"
+                                                    data-medium="{{ $topping->price_medium }}"
+                                                    data-large="{{ $topping->price_large }}"
+                                                    class="topping-checkbox w-4 h-4 accent-orange-500"
+                                                >
+
+                                                <div>
+
+                                                    <p
+                                                        class="font-semibold text-gray-700 text-sm"
+                                                    >
+
+                                                        {{ $topping->name }}
+
+                                                    </p>
+
+                                                    <p
+                                                        class="topping-price text-xs text-gray-400"
+                                                        data-medium="{{ $topping->price_medium }}"
+                                                        data-large="{{ $topping->price_large }}"
+                                                    >
+
+                                                        + Rp
+                                                        {{ number_format(
+                                                            $topping->price_medium,
+                                                            0,
+                                                            ',',
+                                                            '.'
+                                                        ) }}
+
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <span class="text-lg">
+                                                🍕
+                                            </span>
+
+                                        </label>
+
+                                    @endforeach
+
+                                </div>
+
+                            </div>
+
+                        @endif
+
+
+
+                        {{-- =================================================
+                             QUANTITY
+                        ================================================== --}}
+
+                        <div class="mt-7">
+
+                            <label
+                                class="font-bold text-gray-800 block mb-3"
+                            >
+                                Jumlah
+                            </label>
+
+
+                            <div class="flex items-center">
+
+
+                                <button
+                                    type="button"
+                                    onclick="decreaseQty()"
+                                    class="w-11 h-11 rounded-l-xl bg-gray-100 hover:bg-orange-100 hover:text-orange-600 font-bold text-lg transition"
+                                >
+                                    −
+                                </button>
+
+
+                                <input
+                                    type="number"
+                                    id="quantity"
+                                    name="quantity"
+                                    value="1"
+                                    min="1"
+                                    class="w-16 h-11 border-y border-gray-200 text-center font-bold text-gray-700 focus:outline-none"
+                                >
+
+
+                                <button
+                                    type="button"
+                                    onclick="increaseQty()"
+                                    class="w-11 h-11 rounded-r-xl bg-gray-100 hover:bg-orange-100 hover:text-orange-600 font-bold text-lg transition"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+
+                        {{-- =================================================
+                             PRICE TOTAL
+                        ================================================== --}}
+
+                        <div
+                            class="mt-7 bg-orange-50 rounded-2xl p-5"
+                        >
+
+                            <div class="flex justify-between items-center">
+
+                                <div>
+
+                                    <p class="text-xs text-gray-400">
+                                        Total Harga
+                                    </p>
+
+                                    <p
+                                        id="totalPrice"
+                                        class="text-2xl font-bold text-orange-600 mt-1"
+                                    >
+                                        Rp 0
+                                    </p>
+
+                                </div>
+
+
+                                <div
+                                    class="text-xs text-gray-400 text-right"
+                                >
+
+                                    <p>
+                                        Termasuk topping
+                                    </p>
+
+                                    <p>
+                                        Sesuai pilihan kamu
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        {{-- =================================================
+                             ADD TO CART BUTTON
+                        ================================================== --}}
+
+                        <button
+                            type="submit"
+                            class="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2"
+                        >
+
+                            🛒
+
+                            Tambah ke Keranjang
+
+                        </button>
+
+
+                    </form>
+
+
                 </div>
 
-                <button class="button">
-                    🛒 Tambah ke Keranjang
-                </button>
 
             </div>
 
         </div>
 
-    </div>
+
+
+        {{-- =================================================
+             PRODUCT DESCRIPTION CARD
+        ================================================== --}}
+
+        <div
+            class="mt-7 bg-white rounded-2xl border border-orange-100 shadow-sm p-6"
+        >
+
+            <h2 class="text-lg font-bold text-gray-800">
+                Tentang Produk
+            </h2>
+
+            <p class="text-gray-500 text-sm leading-relaxed mt-3">
+
+                {{ $product->description
+                    ?? 'Pizza lezat dengan bahan pilihan dan cita rasa khas PizzaMozza. Cocok dinikmati bersama keluarga maupun teman.' }}
+
+            </p>
+
+        </div>
+
+
+    </main>
+
+
+
+    {{-- =====================================================
+         FOOTER
+    ====================================================== --}}
+
+    <footer class="mt-12 bg-white border-t border-orange-100">
+
+        <div
+            class="max-w-7xl mx-auto px-5 lg:px-8 py-7 text-center"
+        >
+
+            <p class="text-sm text-gray-400">
+
+                © {{ date('Y') }} PizzaMozza.
+                Semua hak dilindungi.
+
+            </p>
+
+        </div>
+
+    </footer>
+
+
+
+    {{-- =====================================================
+         JAVASCRIPT
+    ====================================================== --}}
+
+    <script>
+
+        const variantRadios =
+            document.querySelectorAll('.variant-radio');
+
+        const toppingCheckboxes =
+            document.querySelectorAll('.topping-checkbox');
+
+        const quantityInput =
+            document.getElementById('quantity');
+
+        const totalPrice =
+            document.getElementById('totalPrice');
+
+
+        function getSelectedVariant() {
+
+            const selected =
+                document.querySelector(
+                    '.variant-radio:checked'
+                );
+
+            if (!selected) {
+
+                return {
+                    price: 0,
+                    name: ''
+                };
+
+            }
+
+            return {
+                price: parseFloat(
+                    selected.dataset.price
+                ) || 0,
+
+                name:
+                    selected.closest(
+                        '.variant-option'
+                    )
+                    ?.querySelector(
+                        '.variant-card p'
+                    )?.textContent.trim() || ''
+            };
+
+        }
+
+
+        function updateToppingPrices() {
+
+            const variant =
+                getSelectedVariant();
+
+
+            toppingCheckboxes.forEach(
+                checkbox => {
+
+                    const medium =
+                        parseFloat(
+                            checkbox.dataset.medium
+                        ) || 0;
+
+                    const large =
+                        parseFloat(
+                            checkbox.dataset.large
+                        ) || 0;
+
+
+                    const label =
+                        checkbox.closest(
+                            '.topping-option'
+                        );
+
+                    const priceElement =
+                        label?.querySelector(
+                            '.topping-price'
+                        );
+
+
+                    const isLarge =
+                        variant.name
+                            .toLowerCase()
+                            .includes('large') ||
+                        variant.name
+                            .toLowerCase()
+                            .includes('besar');
+
+
+                    const price =
+                        isLarge
+                            ? large
+                            : medium;
+
+
+                    if (priceElement) {
+
+                        priceElement.textContent =
+                            '+ Rp ' +
+                            new Intl.NumberFormat(
+                                'id-ID'
+                            ).format(price);
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        function calculateTotal() {
+
+            const variant =
+                getSelectedVariant();
+
+
+            let price =
+                variant.price;
+
+
+            toppingCheckboxes.forEach(
+                checkbox => {
+
+                    if (checkbox.checked) {
+
+                        const medium =
+                            parseFloat(
+                                checkbox.dataset.medium
+                            ) || 0;
+
+                        const large =
+                            parseFloat(
+                                checkbox.dataset.large
+                            ) || 0;
+
+
+                        const isLarge =
+                            variant.name
+                                .toLowerCase()
+                                .includes('large') ||
+                            variant.name
+                                .toLowerCase()
+                                .includes('besar');
+
+
+                        price +=
+                            isLarge
+                                ? large
+                                : medium;
+
+                    }
+
+                }
+            );
+
+
+            const quantity =
+                parseInt(
+                    quantityInput.value
+                ) || 1;
+
+
+            const total =
+                price * quantity;
+
+
+            totalPrice.textContent =
+                'Rp ' +
+                new Intl.NumberFormat(
+                    'id-ID'
+                ).format(total);
+
+        }
+
+
+        function increaseQty() {
+
+            const current =
+                parseInt(
+                    quantityInput.value
+                ) || 1;
+
+            quantityInput.value =
+                current + 1;
+
+            calculateTotal();
+
+        }
+
+
+        function decreaseQty() {
+
+            const current =
+                parseInt(
+                    quantityInput.value
+                ) || 1;
+
+            if (current > 1) {
+
+                quantityInput.value =
+                    current - 1;
+
+            }
+
+            calculateTotal();
+
+        }
+
+
+        variantRadios.forEach(
+            radio => {
+
+                radio.addEventListener(
+                    'change',
+                    function () {
+
+                        document
+                            .querySelectorAll(
+                                '.variant-card'
+                            )
+                            .forEach(card => {
+
+                                card.classList.remove(
+                                    'border-orange-500',
+                                    'bg-orange-50'
+                                );
+
+                                card.classList.add(
+                                    'border-gray-200'
+                                );
+
+                            });
+
+
+                        const card =
+                            this.closest(
+                                '.variant-option'
+                            )
+                            .querySelector(
+                                '.variant-card'
+                            );
+
+
+                        card.classList.remove(
+                            'border-gray-200'
+                        );
+
+                        card.classList.add(
+                            'border-orange-500',
+                            'bg-orange-50'
+                        );
+
+
+                        updateToppingPrices();
+
+                        calculateTotal();
+
+                    }
+                );
+
+            }
+        );
+
+
+        toppingCheckboxes.forEach(
+            checkbox => {
+
+                checkbox.addEventListener(
+                    'change',
+                    calculateTotal
+                );
+
+            }
+        );
+
+
+        quantityInput.addEventListener(
+            'input',
+            calculateTotal
+        );
+
+
+        // Jalankan saat halaman pertama dibuka
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+
+                const selected =
+                    document.querySelector(
+                        '.variant-radio:checked'
+                    );
+
+
+                if (selected) {
+
+                    const card =
+                        selected.closest(
+                            '.variant-option'
+                        )
+                        .querySelector(
+                            '.variant-card'
+                        );
+
+
+                    card.classList.remove(
+                        'border-gray-200'
+                    );
+
+                    card.classList.add(
+                        'border-orange-500',
+                        'bg-orange-50'
+                    );
+
+                }
+
+
+                updateToppingPrices();
+
+                calculateTotal();
+
+            }
+        );
+
+    </script>
+
 
 </body>
+
 </html>

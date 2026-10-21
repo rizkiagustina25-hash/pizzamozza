@@ -106,6 +106,135 @@
         }
 
 
+/* SIDEBAR — mengikuti dashboard */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #fff;
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+}
+
+.sidebar-brand {
+    height: 80px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #f3f3f3;
+    color: #e63946;
+    font-size: 21px;
+    font-weight: bold;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.sidebar-brand .brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e63946;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-menu {
+    padding: 24px 15px;
+    flex: 1;
+}
+
+.sidebar-label {
+    margin: 0 12px 12px;
+    color: #999;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.sidebar-link {
+    display: block;
+    padding: 13px 15px;
+    margin-bottom: 6px;
+    border-radius: 9px;
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    background: #e63946;
+    color: #fff;
+}
+
+.sidebar-profile {
+    padding: 18px;
+    border-top: 1px solid #eee;
+    font-size: 13px;
+}
+
+.sidebar-profile a {
+    color: #e63946;
+    text-decoration: none;
+}
+
+.main-wrapper {
+    margin-left: 240px;
+    min-height: 100vh;
+}
+
+.header {
+    height: 80px;
+    padding: 0 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.mobile-menu-button {
+    display: none;
+    border: none;
+    background: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+@media (max-width: 800px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-wrapper {
+        margin-left: 0;
+    }
+
+    .mobile-menu-button {
+        display: inline-block;
+    }
+
+    .header {
+        padding: 0 16px;
+    }
+
+    .header-right {
+        gap: 12px;
+    }
+}
+
         /* =========================================
            CONTAINER
         ========================================= */
@@ -705,49 +834,66 @@
 
 <body>
 
-
-    {{-- =========================================
-         HEADER
-    ========================================== --}}
-
-    <header class="header">
-
-        <a
-            href="{{ route('dashboard') }}"
-            class="logo"
-        >
-            🍕 PizzaMozza
+    <aside class="sidebar" id="sidebar">
+        <a href="{{ route('dashboard') }}" class="sidebar-brand">
+            <span class="brand-icon">🍕</span>
+            <span>PizzaMozza</span>
         </a>
 
+        <nav class="sidebar-menu">
+            <p class="sidebar-label">MAIN MENU</p>
 
-        <div class="header-right">
-
-            <a
-                href="{{ route('dashboard') }}"
-                class="header-link"
-            >
-                🏠 Home
+            <a href="{{ route('dashboard') }}" class="sidebar-link">
+                🏠 Dashboard
             </a>
 
-
-            <a
-                href="{{ route('cart.index') }}"
-                class="header-link"
-            >
-                🛒 Keranjang
+            <a href="{{ route('products.index') }}" class="sidebar-link active">
+                🍕 Produk
             </a>
 
+            <a href="{{ route('dashboard') }}" class="sidebar-link">
+                📦 Pesanan Saya
+            </a>
+
+            <a href="{{ route('dashboard') }}" class="sidebar-link">
+                👤 Akun Saya
+            </a>
+        </nav>
+
+        <div class="sidebar-profile">
+            @auth
+                <strong>{{ auth()->user()->name }}</strong>
+                <div style="color:#999; margin-top:5px;">Pelanggan</div>
+                <form action="{{ route('logout') }}" method="POST" style="margin-top:10px;">
+                    @csrf
+                    <button type="submit" style="border:0;background:none;color:#e63946;cursor:pointer;">
+                        Keluar
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}">Login</a>
+            @endauth
         </div>
+    </aside>
 
-    </header>
+    <div class="main-wrapper">
+        <header class="header">
+            <button
+                type="button"
+                class="mobile-menu-button"
+                onclick="document.getElementById('sidebar').classList.toggle('open')"
+                aria-label="Buka menu"
+            >☰</button>
 
+            <div class="header-right">
+                <a href="{{ route('cart.index') }}" class="header-link">
+                    🛒 Keranjang
+                    ({{ count(session('cart', [])) }})
+                </a>
+            </div>
+        </header>
 
-
-    {{-- =========================================
-         MAIN
-    ========================================== --}}
-
-    <main class="container">
+        <main class="container">
 
 
         {{-- KEMBALI --}}
@@ -1075,38 +1221,21 @@
                     <div class="button-group">
 
 
-                        <form
-    action="{{ route('cart.add') }}"
-    method="POST"
-    style="flex: 1;"
-    onsubmit="return prepareCart()"
->
+                        
+<form action="{{ route('cart.add') }}" method="POST" onsubmit="return prepareCart()">
     @csrf
 
-    <input
-        type="hidden"
-        name="variant_id"
-        id="selectedVariant"
-    >
-
-    <input
-        type="hidden"
-        name="quantity"
-        id="selectedQuantity"
-        value="1"
-    >
+    <input type="hidden" name="product_id" value="{{ $product->id }}">
+    <input type="hidden" name="variant_id" id="selectedVariant" value="">
+    <input type="hidden" name="quantity" id="quantityInput" value="1">
 
     <div id="toppingInputs"></div>
 
-    <button
-        type="submit"
-        class="cart-button"
-        style="width: 100%;"
-    >
+    <button type="submit" class="cart-button">
         🛒 Tambah ke Keranjang
     </button>
-
 </form>
+
 
 
                         <button
@@ -1164,9 +1293,7 @@
         function prepareCart()
 {
     const selectedVariant =
-        document.querySelector(
-            'input[name="variant"]:checked'
-        );
+        document.getElementById('quantityInput').value = quantity;
 
     if (!selectedVariant) {
 
@@ -1269,7 +1396,7 @@
 
         function increaseQuantity()
         {
-
+            document.getElementById('quantityInput').value = quantity;
             quantity++;
 
             quantityElement.innerText =
@@ -1283,6 +1410,7 @@
         function decreaseQuantity()
         {
 
+            document.getElementById('quantityInput').value = quantity;
             if (quantity > 1)
             {
 

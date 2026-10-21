@@ -15,47 +15,59 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
 
-            return redirect()->intended(
-                route('checkout.index')
-            );
+        $user = Auth::user();
+
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
         }
 
-        return back()
-            ->withErrors([
-                'email' => 'Email atau password salah.',
-            ])
-            ->withInput();
+        if ($user->role === 'karyawan') {
+            return redirect()->route('karyawan.dashboard');
+        }
+
+        return redirect()->route('dashboard');
     }
 
-    public function showRegister()
-    {
-        return view('auth.register');
-    }
+    return back()
+        ->withErrors([
+            'email' => 'Email atau password salah.',
+        ])
+        ->withInput();
+}
+
+public function showRegister()
+{
+    return view('auth.register');
+}
 
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-            'address' => 'required|string|max:1000',
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+        'no_hp' => ['required', 'string', 'max:20', 'unique:users,no_hp'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+        'address' => ['required', 'string', 'max:1000'],
         ]);
 
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'address' => $data['address'],
-        ]);
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'no_hp' => $data['no_hp'],
+        'password' => Hash::make($data['password']),
+        'address' => $data['address'],
+        'role' => 'pelanggan',
+        'status' => 'active',
+]);
 
         Auth::login($user);
 
@@ -63,6 +75,33 @@ class AuthController extends Controller
 
         return redirect()->route('checkout.index');
     }
+
+public function showResetPassword()
+{
+    return view('auth.reset-password');
+}
+
+public function resetPassword(Request $request)
+{
+    $data = $request->validate([
+        'current_password' => ['required', 'current_password'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ], [
+        'current_password.current_password' => 'Password lama tidak sesuai.',
+        'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+        'password.min' => 'Password baru minimal 8 karakter.',
+    ]);
+
+    $user = Auth::user();
+
+    $user->update([
+        'password' => Hash::make($data['password']),
+    ]);
+
+    return redirect()
+        ->route('dashboard', ['menu' => 'profile'])
+        ->with('success', 'Password berhasil diubah.');
+}
 
     public function logout(Request $request)
     {

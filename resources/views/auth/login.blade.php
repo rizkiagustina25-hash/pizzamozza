@@ -87,6 +87,22 @@
             border-radius: 8px;
             margin-bottom: 20px;
         }
+
+        .forgot-password {
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: 18px;
+}
+
+.forgot-password a {
+    color: #c62828;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
     </style>
 </head>
 
@@ -130,6 +146,13 @@
                 placeholder="Masukkan password"
                 required
             >
+            
+<div class="forgot-password">
+    <a href="{{ route('password.reset.form') }}">
+    Lupa password?
+</a>
+</div>
+
 
             <button type="submit">
                 Login

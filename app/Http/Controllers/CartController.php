@@ -2,235 +2,104 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductVariant;
+use App\Models\Product;
 use App\Models\Topping;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class CartController extends Controller
 {
-    /**
-     * Menampilkan keranjang
-     */
-    public function index()
+    public function index(Request $request): View
     {
-        $cart = session()->get('cart', []);
-
-        $total = 0;
-
-        foreach ($cart as $item) {
-            $total += $item['subtotal'];
-        }
+        $cart = $request->session()->get('cart', []);
+        $total = collect($cart)->sum(fn ($item) => (float) ($item['subtotal'] ?? ((float) ($item['price'] ?? 0) * (int) ($item['quantity'] ?? 0))));
 
         return view('cart.index', compact('cart', 'total'));
     }
 
-
-    /**
-     * Menambahkan produk ke keranjang
-     */
-    public function add(Request $request)
+    public function add(Request $request): RedirectResponse
     {
-        $request->validate([
-            'variant_id' => 'required|exists:product_variants,id',
-            'quantity' => 'required|integer|min:1',
-            'toppings' => 'nullable|array',
-            'toppings.*' => 'exists:toppings,id',
+        $validated = $request->validate([
+            'product_id' => ['required', 'integer', 'exists:products,id'],
+            'variant_id' => ['required', 'integer', 'exists:product_variants,id'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:99'],
+            'toppings' => ['sometimes', 'array'],
+            'toppings.*' => ['integer', 'exists:toppings,id'],
         ]);
 
-
-        // Ambil variant
-        $variant = ProductVariant::with('product')
-            ->findOrFail($request->variant_id);
-
-
-        $product = $variant->product;
-
-
-        // Harga dasar
-        $unitPrice = (float) $variant->price;
-
-
-        // Data topping
-        $selectedToppings = [];
-
-
-        if ($request->has('toppings')) {
-
-            foreach ($request->toppings as $toppingId) {
-
-                $topping = Topping::findOrFail($toppingId);
-
-
-                /*
-                 * Kalau Large gunakan harga large.
-                 * Selain Large gunakan harga medium.
-                 */
-
-                if (
-                    strtolower($variant->name) === 'large' ||
-                    strtolower($variant->name) === 'box besar'
-                ) {
-                    $toppingPrice = (float) $topping->price_large;
-                } else {
-                    $toppingPrice = (float) $topping->price_medium;
-                }
-
-
-                $unitPrice += $toppingPrice;
-
-
-                $selectedToppings[] = [
-                    'id' => $topping->id,
-                    'name' => $topping->name,
-                    'price' => $toppingPrice,
-                ];
-            }
+        $product = Product::with('variants')->findOrFail($validated['product_id']);
+        $variant = $product->variants->firstWhere('id', (int) $validated['variant_id']);
+        if (!$variant) {
+            return back()->withInput()->with('error', 'Ukuran produk tidak sesuai dengan produk yang dipilih.');
         }
 
+        $toppings = Topping::query()
+            ->where('active', true)
+            ->whereIn('id', $validated['toppings'] ?? [])
+            ->get();
+        $isLarge = str_contains(strtolower((string) $variant->name), 'large');
+        $toppingRows = $toppings->map(fn ($topping) => [
+            'id' => $topping->id,
+            'name' => $topping->name,
+            'price' => (float) ($isLarge ? $topping->price_large : $topping->price_medium),
+        ])->values()->all();
 
-        $quantity = (int) $request->quantity;
-
-
-        $subtotal = $unitPrice * $quantity;
-
-
-        /*
-         * Buat key unik.
-         *
-         * Produk yang sama dengan topping berbeda
-         * dianggap sebagai item keranjang berbeda.
-         */
-
-        $toppingIds = collect($selectedToppings)
-            ->pluck('id')
-            ->sort()
-            ->implode('-');
-
-
-        $cartKey =
-            $product->id .
-            '-' .
-            $variant->id .
-            '-' .
-            ($toppingIds ?: 'none');
-
-
-        $cart = session()->get('cart', []);
-
-
-        /*
-         * Kalau item sudah ada,
-         * tambahkan jumlahnya.
-         */
+        $unitPrice = (float) $variant->price + collect($toppingRows)->sum('price');
+        $quantity = (int) $validated['quantity'];
+        $cart = $request->session()->get('cart', []);
+        $cartKey = $product->id . '-' . $variant->id . '-' . md5(json_encode(array_column($toppingRows, 'id')));
 
         if (isset($cart[$cartKey])) {
-
             $cart[$cartKey]['quantity'] += $quantity;
-
-            $cart[$cartKey]['subtotal'] =
-                $cart[$cartKey]['unit_price'] *
-                $cart[$cartKey]['quantity'];
-
+            $cart[$cartKey]['subtotal'] = $cart[$cartKey]['unit_price'] * $cart[$cartKey]['quantity'];
         } else {
-
             $cart[$cartKey] = [
-
                 'product_id' => $product->id,
-
-                'product_name' => $product->name,
-
                 'variant_id' => $variant->id,
-
-                'variant_name' => $variant->name,
-
+                'name' => $product->name,
+                'product_name' => $product->name,
+                'variant_name' => $variant->name ?? 'Ukuran',
+                'price' => $unitPrice,
                 'unit_price' => $unitPrice,
-
                 'quantity' => $quantity,
-
-                'toppings' => $selectedToppings,
-
-                'subtotal' => $subtotal,
-
-                'image' => $product->image,
-
+                'subtotal' => $unitPrice * $quantity,
+                'toppings' => $toppingRows,
+                'image' => $product->image ?? null,
             ];
         }
 
-
-        session()->put('cart', $cart);
-
-
-        return redirect()
-            ->route('cart.index')
-            ->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+        $request->session()->put('cart', $cart);
+        return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
-
-    /**
-     * Update jumlah produk
-     */
-    public function update(Request $request, $key)
+    public function update(Request $request, string $key): RedirectResponse
     {
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-
-        $cart = session()->get('cart', []);
-
-
-        if (isset($cart[$key])) {
-
-            $cart[$key]['quantity'] =
-                (int) $request->quantity;
-
-
-            $cart[$key]['subtotal'] =
-                $cart[$key]['unit_price'] *
-                $cart[$key]['quantity'];
-
-
-            session()->put('cart', $cart);
+        $validated = $request->validate(['quantity' => ['required', 'integer', 'min:1', 'max:99']]);
+        $cart = $request->session()->get('cart', []);
+        if (!isset($cart[$key])) {
+            return redirect()->route('cart.index')->with('error', 'Produk tidak ditemukan di keranjang.');
         }
-
-
-        return redirect()
-            ->route('cart.index');
+        $cart[$key]['quantity'] = (int) $validated['quantity'];
+        $unitPrice = (float) ($cart[$key]['unit_price'] ?? $cart[$key]['price'] ?? 0);
+        $cart[$key]['unit_price'] = $unitPrice;
+        $cart[$key]['price'] = $unitPrice;
+        $cart[$key]['subtotal'] = $unitPrice * $cart[$key]['quantity'];
+        $request->session()->put('cart', $cart);
+        return redirect()->route('cart.index')->with('success', 'Jumlah produk berhasil diperbarui.');
     }
 
-
-    /**
-     * Hapus item
-     */
-    public function remove($key)
+    public function remove(Request $request, string $key): RedirectResponse
     {
-        $cart = session()->get('cart', []);
-
-
-        if (isset($cart[$key])) {
-
-            unset($cart[$key]);
-
-            session()->put('cart', $cart);
-        }
-
-
-        return redirect()
-            ->route('cart.index')
-            ->with('success', 'Produk dihapus dari keranjang.');
+        $cart = $request->session()->get('cart', []);
+        unset($cart[$key]);
+        $request->session()->put('cart', $cart);
+        return redirect()->route('cart.index')->with('success', 'Produk berhasil dihapus dari keranjang.');
     }
 
-
-    /**
-     * Kosongkan keranjang
-     */
-    public function clear()
+    public function clear(Request $request): RedirectResponse
     {
-        session()->forget('cart');
-
-
-        return redirect()
-            ->route('cart.index')
-            ->with('success', 'Keranjang berhasil dikosongkan.');
+        $request->session()->forget('cart');
+        return redirect()->route('cart.index')->with('success', 'Keranjang berhasil dikosongkan.');
     }
 }
