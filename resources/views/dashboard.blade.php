@@ -661,7 +661,7 @@
 
                     <section class="section">
                         <div class="section-header">
-                            <h2 class="section-title">Pesanan Terbaru</h2>
+                            <h2 class="section-title">Produk Pesanan Terbaru</h2>
                             <a href="{{ route('dashboard') }}?menu=orders" class="section-link">Lihat Semua →</a>
                         </div>
                         <div class="latest-orders-card">

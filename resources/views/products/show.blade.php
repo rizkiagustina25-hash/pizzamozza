@@ -1,3 +1,7 @@
+@php
+    $isNastar = mb_strtolower(trim($product->name)) === 'kue nastar';
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -649,7 +653,27 @@
 
                         </div>
 
+@if ($isNastar)
+    <div class="mt-6">
+        <label for="po_date"
+               class="block font-bold text-gray-800 mb-2">
+            Tanggal Pre-Order
+        </label>
 
+        <input
+            type="date"
+            id="po_date"
+            min="{{ now()->toDateString() }}"
+            required
+            class="w-full border border-gray-200 rounded-xl p-3
+                   focus:outline-none focus:ring-2 focus:ring-orange-400"
+        >
+
+        <p class="text-sm text-gray-500 mt-2">
+            Pilih tanggal yang kamu inginkan untuk pesanan Kue Nastar.
+        </p>
+    </div>
+@endif
 
                         {{-- =================================================
                              PRICE TOTAL
@@ -701,16 +725,27 @@
                              ADD TO CART BUTTON
                         ================================================== --}}
 
-                        <button
-                            type="submit"
-                            class="w-full mt-5 bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2"
-                        >
-
-                            🛒
-
-                            Tambah ke Keranjang
-
-                        </button>
+                        @if ($isNastar)
+    <button
+        type="button"
+        onclick="orderViaWhatsApp()"
+        class="w-full mt-5 bg-green-600 hover:bg-green-700
+               text-white font-bold py-4 rounded-xl transition
+               shadow-sm flex items-center justify-center gap-2"
+    >
+        <span>💬</span>
+        Pesan Kue Nastar via WhatsApp
+    </button>
+@else
+    <button
+        type="submit"
+        class="w-full mt-5 bg-orange-500 hover:bg-orange-600
+               text-white font-bold py-4 rounded-xl transition
+               shadow-sm flex items-center justify-center gap-2"
+    >
+        🛒 Tambah ke Keranjang
+    </button>
+@endif
 
 
                     </form>
@@ -1101,7 +1136,65 @@
 
             }
         );
+function orderViaWhatsApp() {
+    const quantity = parseInt(quantityInput.value, 10);
+    const dateInput = document.getElementById('po_date');
+    const poDate = dateInput.value;
 
+    if (!Number.isInteger(quantity) || quantity < 1) {
+        alert('Jumlah pesanan minimal 1.');
+        quantityInput.focus();
+        return;
+    }
+
+    if (!poDate) {
+        alert('Silakan pilih tanggal Pre-Order.');
+        dateInput.focus();
+        return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const selectedDate = new Date(poDate + 'T00:00:00');
+
+    if (selectedDate < today) {
+        alert('Tanggal Pre-Order tidak boleh sebelum hari ini.');
+        dateInput.focus();
+        return;
+    }
+
+    const productName = @json($product->name);
+    const unitPrice = Number(@json((float) $product->price));
+    const total = unitPrice * quantity;
+    const sellerNumber = @json(config('services.whatsapp.seller_number'));
+
+    const formattedPrice = new Intl.NumberFormat('id-ID').format(unitPrice);
+    const formattedTotal = new Intl.NumberFormat('id-ID').format(total);
+
+    const message = [
+        'Halo PizzaMozza, saya ingin memesan Pre-Order.',
+        '',
+        'Produk: ' + productName,
+        'Jumlah: ' + quantity,
+        'Harga satuan: Rp ' + formattedPrice,
+        'Perkiraan total: Rp ' + formattedTotal,
+        'Tanggal Pre-Order: ' + poDate,
+        '',
+        'Mohon konfirmasi ketersediaan dan pesanan saya. Terima kasih.'
+    ].join('\n');
+
+    if (!sellerNumber) {
+        alert('Nomor WhatsApp penjual belum dikonfigurasi.');
+        return;
+    }
+
+    const whatsappUrl =
+        'https://wa.me/' + sellerNumber +
+        '?text=' + encodeURIComponent(message);
+
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+}
     </script>
 
 

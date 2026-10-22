@@ -34,5 +34,7 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+'whatsapp' => [
+    'seller_number' => env('WHATSAPP_SELLER_NUMBER', ''),
+],
 ];
