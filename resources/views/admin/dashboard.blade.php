@@ -4,31 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Dashboard Admin - PizzaMozza</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
->   <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* =========================================================
-           RESET
-        ========================================================= */
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: #f7f8fa;
-            color: #222;
+            color: #292323;
         }
 
         a {
@@ -36,106 +26,64 @@
             color: inherit;
         }
 
-        button,
-        input,
-        select {
+        button {
             font-family: inherit;
+            cursor: pointer;
         }
 
-
-        /* =========================================================
-           LAYOUT
-        ========================================================= */
-
-        .admin-layout {
-            min-height: 100vh;
-        }
-
+        /* SIDEBAR */
         .sidebar {
             position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-
-            width: 265px;
-
-            background: #ffffff;
-            border-right: 1px solid #e8e8e8;
-
+            inset: 0 auto 0 0;
+            width: 250px;
+            background: #941919;
+            color: white;
             display: flex;
             flex-direction: column;
-
             z-index: 100;
         }
 
-        .main-wrapper {
-            min-height: 100vh;
-            margin-left: 265px;
-        }
-
-
-        /* =========================================================
-           SIDEBAR
-        ========================================================= */
-
         .brand {
-            height: 88px;
-
-            padding: 18px 24px;
-
             display: flex;
             align-items: center;
-            gap: 11px;
-
-            border-bottom: 1px solid #eeeeee;
+            gap: 12px;
+            padding: 22px;
+            border-bottom: 1px solid #ffffff25;
         }
 
         .brand-icon {
-            width: 38px;
-            height: 38px;
-
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #fff0f0;
-
-            font-size: 20px;
+            background: #b52d2d;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
         }
 
         .brand-content h1 {
-            font-size: 23px;
-            font-weight: 700;
-
-            line-height: 1.1;
-
-            color: #f0e5da;
+            font-size: 21px;
+            color: white;
         }
 
         .brand-content p {
             margin-top: 4px;
-
             font-size: 11px;
-
-            color: #999;
+            color: #f5dede;
         }
 
         .sidebar-menu {
-            padding: 24px 15px;
+            flex: 1;
+            padding: 24px 14px;
+            overflow-y: auto;
         }
 
         .menu-title {
-            margin: 0 12px 12px;
-
+            margin: 0 12px 13px;
+            color: #f5dede;
             font-size: 10px;
-            font-weight: 700;
-
-            color: #999;
-
-            letter-spacing: .8px;
-            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .menu-list {
@@ -143,83 +91,54 @@
         }
 
         .menu-item {
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .menu-link {
-            min-height: 45px;
-
-            padding: 0 14px;
-
-            border-radius: 9px;
-
             display: flex;
             align-items: center;
-            gap: 12px;
-
-            color: #555;
-
+            gap: 13px;
+            padding: 13px 14px;
+            border-radius: 9px;
+            color: white;
             font-size: 13px;
             font-weight: 600;
-
-            transition: .2s ease;
+            transition: .2s;
         }
 
-        .menu-link:hover {
-            background: #fff2f2;
-            color: #e5242a;
+        .menu-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
         }
 
+        .menu-link:hover,
         .menu-link.active {
-            background: #B52D2D;
-            color: #ffffff;
+            background: #b52d2d;
         }
 
-        .menu-icon {
-            width: 22px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 16px;
-        }
-
+        /* PROFIL ADMIN */
         .sidebar-bottom {
-            margin-top: auto;
-
-            padding: 18px 16px;
-
-            border-top: 1px solid #eeeeee;
+            padding: 17px;
+            border-top: 1px solid #ffffff25;
         }
 
         .admin-profile {
             display: flex;
             align-items: center;
-            gap: 11px;
-
-            margin-bottom: 15px;
-
-            padding: 5px 6px;
+            gap: 10px;
+            margin-bottom: 14px;
         }
 
-        .admin-avatar {
-            width: 40px;
-            height: 40px;
-
-            flex-shrink: 0;
-
+        .admin-avatar,
+        .topbar-avatar {
+            width: 39px;
+            height: 39px;
             border-radius: 50%;
-
-            background: #fff0f4;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #65358b;
-
-            font-size: 17px;
+            display: grid;
+            place-items: center;
+            background: #b52d2d;
+            flex-shrink: 0;
         }
 
         .admin-info {
@@ -228,213 +147,130 @@
 
         .admin-info strong {
             display: block;
-
             font-size: 12px;
-
-            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .admin-info span {
             display: block;
-
             margin-top: 4px;
-
+            color: #f5dede;
             font-size: 10px;
-
-            color: #999;
         }
 
         .logout-button {
             width: 100%;
-            height: 38px;
-
-            border: 1px solid #ffbcbc;
+            padding: 10px;
+            border: 0;
             border-radius: 8px;
-
-            background: #fff7f7;
-            color: #e5242a;
-
+            background: white;
+            color: #941919;
             font-size: 12px;
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition: .2s ease;
+            font-weight: bold;
         }
 
         .logout-button:hover {
-            background: #ffeaea;
+            background: #f5dede;
         }
 
+        /* MAIN CONTENT */
+        .main-wrapper {
+            min-height: 100vh;
+            margin-left: 250px;
+        }
 
-        /* =========================================================
-           TOPBAR
-        ========================================================= */
+        .topbar {
+            min-height: 70px;
+            padding: 12px 32px;
+            background: white;
+            border-bottom: 1px solid #e9e9e9;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
 
-        /* =========================================================
-   TOPBAR - SAMA DENGAN HALAMAN KELOLA PESANAN
-========================================================= */
+        .topbar-admin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: right;
+        }
 
-.topbar {
-    min-height: 72px;
-    padding: 12px 34px;
-    background: #ffffff;
-    border-bottom: 1px solid #e8e8e8;
+        .topbar-admin strong {
+            display: block;
+            font-size: 13px;
+        }
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
+        .topbar-admin span {
+            display: block;
+            margin-top: 3px;
+            color: #999;
+            font-size: 10px;
+        }
 
-.topbar-title {
-    font-size: 13px;
-    color: #777;
-}
-
-.topbar-admin {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.topbar-admin-info {
-    text-align: right;
-}
-
-.topbar-admin-info strong {
-    display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: #333;
-}
-
-.topbar-admin-info span {
-    display: block;
-    margin-top: 3px;
-    font-size: 10px;
-    color: #999;
-}
-
-.topbar-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #fff0f4;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #941919;
-    font-size: 16px;
-}
-
-
-        /* =========================================================
-           CONTENT
-        ========================================================= */
+        .topbar-avatar {
+            background: #fff0f1;
+            color: #941919;
+        }
 
         .content {
             width: 100%;
-            max-width: 1280px;
-
-            margin: 0 auto;
-
-            padding: 32px 34px 50px;
+            max-width: 1300px;
+            margin: auto;
+            padding: 30px 32px 45px;
         }
 
         .page-heading {
-            margin-bottom: 26px;
-
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: space-between;
-            gap: 20px;
-        }
-
-        .heading-label {
-            margin-bottom: 7px;
-
-            color: #ed1c24;
-
-            font-size: 12px;
-            font-weight: 700;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .page-heading h2 {
-            font-size: 30px;
-            font-weight: 700;
-
-            line-height: 1.2;
-
-            color: #181818;
+            font-size: 29px;
         }
 
         .page-heading p {
-            margin-top: 7px;
-
-            color: #8a8a8a;
-
+            margin-top: 6px;
+            color: #888;
             font-size: 13px;
         }
 
         .primary-button {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 7px;
-
-            min-height: 41px;
-
-            padding: 0 18px;
-
-            border: 0;
+            gap: 8px;
+            padding: 12px 17px;
             border-radius: 8px;
-
             background: #ed1c24;
-            color: #ffffff;
-
+            color: white;
             font-size: 12px;
-            font-weight: 700;
-
-            transition: .2s ease;
+            font-weight: bold;
         }
 
         .primary-button:hover {
             background: #c9181f;
-            transform: translateY(-1px);
         }
 
-
-        /* =========================================================
-           STATISTICS
-        ========================================================= */
-
+        /* STATISTIK */
         .stats-grid {
             display: grid;
-
-            grid-template-columns: repeat(4, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 30px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
             position: relative;
-
-            min-height: 155px;
-
-            padding: 21px;
-
-            background: #ffffff;
-
-            border: 1px solid #e5e5e5;
-
-            border-radius: 14px;
+            min-height: 145px;
+            padding: 19px;
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 13px;
         }
 
         .stat-card.red {
@@ -455,277 +291,190 @@
 
         .stat-title {
             color: #777;
-
             font-size: 12px;
         }
 
         .stat-icon {
             position: absolute;
-
-            top: 20px;
-            right: 20px;
-
-            width: 43px;
-            height: 43px;
-
+            top: 17px;
+            right: 17px;
+            width: 39px;
+            height: 39px;
             border-radius: 10px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
+            display: grid;
+            place-items: center;
             font-size: 17px;
         }
 
-        .stat-card.red .stat-icon {
+        .red .stat-icon {
             background: #fff0f1;
-            color: #65358b;
+            color: #b52d2d;
         }
 
-        .stat-card.blue .stat-icon {
+        .blue .stat-icon {
             background: #edf4ff;
-            color: #65358b;
+            color: #3974c6;
         }
 
-        .stat-card.orange .stat-icon {
+        .orange .stat-icon {
             background: #fff3e7;
-            color: #9a6b35;
+            color: #bd7935;
         }
 
-        .stat-card.green .stat-icon {
+        .green .stat-icon {
             background: #eaf8f0;
             color: #1c9b55;
         }
 
         .stat-number {
-            margin-top: 31px;
-
-            font-size: 29px;
-            font-weight: 700;
-
-            color: #181818;
+            margin-top: 28px;
+            font-size: 28px;
+            font-weight: bold;
         }
 
         .stat-description {
-            margin-top: 8px;
-
+            margin-top: 6px;
             color: #999;
-
-            font-size: 11px;
+            font-size: 10px;
         }
 
-
-        /* =========================================================
-           MAIN DASHBOARD GRID
-        ========================================================= */
-
+        /* DASHBOARD GRID */
         .dashboard-grid {
             display: grid;
-
-            grid-template-columns: minmax(0, 1.65fr) minmax(300px, .9fr);
-
-            gap: 22px;
-
+            grid-template-columns: minmax(0, 1.6fr) minmax(280px, .9fr);
+            gap: 20px;
             align-items: start;
         }
 
         .panel {
-            background: #ffffff;
-
-            border: 1px solid #e3e3e3;
-
-            border-radius: 14px;
-
             overflow: hidden;
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 13px;
         }
 
         .panel-header {
-            min-height: 78px;
-
-            padding: 18px 24px;
-
-            border-bottom: 1px solid #eeeeee;
-
+            padding: 18px 22px;
+            border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .panel-header h3 {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 15px;
         }
 
         .panel-header p {
             margin-top: 5px;
-
-            font-size: 11px;
-
             color: #999;
+            font-size: 11px;
         }
 
         .panel-link {
             color: #ed1c24;
-
             font-size: 11px;
-            font-weight: 700;
+            font-weight: bold;
         }
 
-
-        /* =========================================================
-           PRODUCT LIST
-        ========================================================= */
-
+        /* PRODUK TERBARU */
         .product-list {
-            padding: 0 24px;
+            padding: 0 22px;
         }
 
         .product-row {
-            min-height: 82px;
-
+            min-height: 76px;
             display: flex;
             align-items: center;
-            gap: 14px;
-
-            border-bottom: 1px solid #eeeeee;
+            gap: 12px;
+            border-bottom: 1px solid #eee;
         }
 
         .product-row:last-child {
-            border-bottom: 0;
+            border: 0;
         }
 
         .product-thumbnail {
             width: 48px;
             height: 48px;
-
             flex-shrink: 0;
-
-            border-radius: 9px;
-
-            background: #f5f6f7;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
             overflow: hidden;
+            border-radius: 9px;
+            background: #f3f3f3;
+            display: grid;
+            place-items: center;
         }
 
         .product-thumbnail img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
-        }
-
-        .product-placeholder {
-            font-size: 22px;
         }
 
         .product-data {
             flex: 1;
-
             min-width: 0;
         }
 
-        .product-data strong {
+        .product-data strong,
+        .product-price strong {
             display: block;
-
-            margin-bottom: 4px;
-
-            font-size: 13px;
-
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 12px;
         }
 
-        .product-data span {
+        .product-data span,
+        .product-price span {
             display: block;
-
-            font-size: 10px;
-
+            margin-top: 4px;
             color: #999;
+            font-size: 10px;
         }
 
         .product-price {
             text-align: right;
         }
 
-        .product-price strong {
-            display: block;
-
-            font-size: 12px;
-        }
-
         .product-price span {
-            display: block;
-
-            margin-top: 4px;
-
             color: #ed1c24;
-
-            font-size: 10px;
         }
 
         .empty-product {
-            padding: 35px 20px;
-
-            text-align: center;
-
+            padding: 30px;
             color: #999;
-
             font-size: 12px;
+            text-align: center;
         }
 
-
-        /* =========================================================
-           QUICK ACTIONS
-        ========================================================= */
-
+        /* AKSES CEPAT */
         .quick-actions {
-            padding: 8px 20px 15px;
+            padding: 7px 18px 12px;
         }
 
         .quick-action {
-            min-height: 68px;
-
             display: flex;
             align-items: center;
-            gap: 12px;
-
-            padding: 10px;
-
-            border-bottom: 1px solid #eeeeee;
-
-            transition: .2s ease;
+            gap: 11px;
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
         }
 
         .quick-action:last-child {
-            border-bottom: 0;
+            border: 0;
         }
 
         .quick-action:hover {
-            background: #fafafa;
+            background: #fffafa;
         }
 
         .quick-action-icon {
-            width: 39px;
-            height: 39px;
-
+            width: 38px;
+            height: 38px;
             flex-shrink: 0;
-
             border-radius: 9px;
-
             background: #fff0f1;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
             color: #ed1c24;
-
-            font-size: 16px;
+            display: grid;
+            place-items: center;
         }
 
         .quick-action-content {
@@ -734,36 +483,90 @@
 
         .quick-action-content strong {
             display: block;
-
             font-size: 12px;
-            font-weight: 700;
-
-            color: #333;
         }
 
         .quick-action-content span {
             display: block;
-
             margin-top: 4px;
-
             color: #999;
-
             font-size: 10px;
         }
 
         .quick-action-arrow {
-            color: #bbb;
-
-            font-size: 17px;
+            color: #aaa;
         }
 
+        /* POPUP LOGOUT */
+        .logout-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(35, 15, 15, .55);
+        }
 
-        /* =========================================================
-           RESPONSIVE
-        ========================================================= */
+        .logout-modal.show {
+            display: flex;
+        }
 
-        @media (max-width: 1150px) {
+        .logout-dialog {
+            width: 100%;
+            max-width: 380px;
+            padding: 30px 25px;
+            border-radius: 18px;
+            background: #fffaf3;
+            text-align: center;
+            box-shadow: 0 15px 45px #0003;
+        }
 
+        .logout-modal-icon {
+            margin-bottom: 18px;
+            color: #941919;
+            font-size: 28px;
+        }
+
+        .logout-dialog h3 {
+            margin-bottom: 10px;
+            font-size: 21px;
+        }
+
+        .logout-dialog p {
+            margin-bottom: 24px;
+            color: #81716a;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .logout-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-modal-actions button {
+            flex: 1;
+            min-height: 42px;
+            border: 0;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .cancel-logout {
+            background: #eee;
+            color: #59453d;
+        }
+
+        .confirm-logout {
+            background: #941919;
+            color: white;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1050px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -773,18 +576,50 @@
             }
         }
 
-        @media (max-width: 800px) {
-
+        @media (max-width: 700px) {
             .sidebar {
-                width: 220px;
+                width: 72px;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 18px 5px;
+            }
+
+            .brand-content,
+            .menu-title,
+            .menu-link span,
+            .admin-info {
+                display: none;
+            }
+
+            .sidebar-menu {
+                padding: 18px 8px;
+            }
+
+            .menu-link {
+                justify-content: center;
+                padding: 14px 5px;
+            }
+
+            .sidebar-bottom {
+                padding: 12px 8px;
+            }
+
+            .admin-profile {
+                justify-content: center;
             }
 
             .main-wrapper {
-                margin-left: 220px;
+                margin-left: 72px;
+            }
+
+            .topbar {
+                padding: 0 15px;
             }
 
             .content {
-                padding: 25px 20px 40px;
+                padding: 22px 15px;
             }
 
             .page-heading {
@@ -793,949 +628,391 @@
             }
         }
 
-        @media (max-width: 600px) {
-
-            .sidebar {
-                position: relative;
-
-                width: 100%;
-                min-height: auto;
-            }
-
-            .main-wrapper {
-                margin-left: 0;
-            }
-
-            .admin-layout {
-                display: block;
-            }
-
-            .topbar {
-                padding: 0 18px;
-            }
-
-            .content {
-                padding: 22px 15px 35px;
-            }
-
+        @media (max-width: 480px) {
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
             .page-heading h2 {
-                font-size: 25px;
+                font-size: 24px;
             }
         }
-        
-/* ===== TEMA DASHBOARD PIZZAMOZZA ===== */
-
-/* ===== WARNA SIDEBAR ADMIN PIZZAMOZZA ===== */
-
-:root {
-    --dashboard-red: #941919;
-    --dashboard-red-hover: #b52d2d;
-    --dashboard-bg: #fffaf3;
-    --dashboard-border: #f0e1d5;
-    --dashboard-text: #34241f;
-}
-
-/* Latar sidebar merah marun */
-.sidebar {
-    background: #941919;
-    border-right: none;
-}
-
-/* Garis pemisah brand */
-.brand {
-    border-bottom-color: rgba(255, 255, 255, 0.15);
-}
-
-/* Logo dan judul */
-.brand-icon {
-    background: #b52d2d;
-    color: #ffffff;
-}
-
-.brand-content h1 {
-    color: #ffffff;
-}
-
-.brand-content p,
-.menu-title {
-    color: #f5dede;
-}
-
-/* Menu biasa */
-.menu-link {
-    color: #ffffff;
-    background: transparent;
-}
-
-/* Hover dan tombol menu aktif */
-.menu-link:hover,
-.menu-link.active {
-    background: #b52d2d;
-    color: #ffffff;
-}
-
-/* Bagian profil admin */
-.sidebar-bottom {
-    border-top-color: rgba(255, 255, 255, 0.15);
-}
-
-.admin-info strong {
-    color: #ffffff;
-}
-
-.admin-info span {
-    color: #f5dede;
-}
-
-.admin-avatar {
-    background: #b52d2d;
-    color: #ffffff;
-}
-
-/* Tombol keluar */
-.logout-button {
-    border-color: rgba(255, 255, 255, 0.4);
-    background: #ffffff;
-    color: #941919;
-}
-
-.logout-button:hover {
-    background: #f5dede;
-    color: #941919;
-}
-
-
-@media (max-width: 600px) {
-    .sidebar {
-        position: relative;
-        width: 100%;
-        min-height: auto;
-    }
-
-    .main-wrapper {
-        margin-left: 0;
-    }
-}
-
-
-/* ===== POPUP KONFIRMASI LOGOUT ===== */
-.logout-modal {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(35, 15, 15, 0.55);
-}
-
-.logout-modal.show {
-    display: flex;
-}
-
-.logout-dialog {
-    width: 100%;
-    max-width: 380px;
-    padding: 30px 25px;
-    text-align: center;
-    background: #fffaf3;
-    border: 1px solid #f0e1d5;
-    border-radius: 18px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-    animation: popupFadeIn 0.2s ease;
-}
-
-.logout-modal-icon {
-    width: 65px;
-    height: 65px;
-    margin: 0 auto 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #f8e5e2;
-    color: #941919;
-    font-size: 28px;
-}
-
-.logout-dialog h3 {
-    margin-bottom: 10px;
-    color: #34241f;
-    font-size: 21px;
-}
-
-.logout-dialog p {
-    margin-bottom: 24px;
-    color: #81716a;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.logout-modal-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.logout-modal-actions button {
-    flex: 1;
-    min-height: 42px;
-    border-radius: 9px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.cancel-logout {
-    border: 1px solid #e5d4c9;
-    background: #ffffff;
-    color: #59453d;
-}
-
-.cancel-logout:hover {
-    background: #f5ebe3;
-}
-
-.confirm-logout {
-    border: none;
-    background: #941919;
-    color: #ffffff;
-}
-
-.confirm-logout:hover {
-    background: #b52d2d;
-}
-
-@keyframes popupFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
     </style>
 </head>
 
-
 <body>
 
-<div class="admin-layout">
+    <div class="admin-layout">
 
-    {{-- =========================================================
-         SIDEBAR
-    ========================================================== --}}
+        {{-- SIDEBAR --}}
+        <aside class="sidebar">
 
-    <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="bi bi-pizza"></i>
+                </div>
 
-        {{-- BRAND --}}
-        <div class="brand">
-
-            <div class="brand-icon">
-    <i class="fa-solid fa-pizza-slice"></i>
-</div>
-
-            <div class="brand-content">
-
-                <h1>
-                    PizzaMozza
-                </h1>
-
-                <p>
-                    Admin Dashboard
-                </p>
-
+                <div class="brand-content">
+                    <h1>PizzaMozza</h1>
+                    <p>Admin Dashboard</p>
+                </div>
             </div>
 
-        </div>
+            <nav class="sidebar-menu">
+                <p class="menu-title">MAIN MENU</p>
 
+                <ul class="menu-list">
 
-        {{-- MENU --}}
-        <nav class="sidebar-menu">
+                    <li class="menu-item">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="bi bi-grid-1x2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
 
-            <div class="menu-title">
-                Main Menu
+                    <li class="menu-item">
+                        <a href="{{ route('admin.employees.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
+                            <i class="bi bi-people"></i>
+                            <span>Data Karyawan</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{ route('admin.customers.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
+                            <i class="bi bi-person-vcard"></i>
+                            <span>Data Pelanggan</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{ route('admin.products.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Data Produk</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{ route('admin.orders.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+                            <i class="bi bi-receipt"></i>
+                            <span>Pesanan</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{ url('/admin/laporan-penjualan') }}"
+                            class="menu-link {{ request()->is('admin/laporan-penjualan*') ? 'active' : '' }}">
+                            <i class="bi bi-bar-chart-line"></i>
+                            <span>Laporan Penjualan</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <div class="sidebar-bottom">
+
+                <div class="admin-profile">
+                    <div class="admin-avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div class="admin-info">
+                        <strong>{{ auth()->user()->name ?? 'Admin PizzaMozza' }}</strong>
+                        <span>Administrator</span>
+                    </div>
+                </div>
+
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+
+                    <button type="button" class="logout-button" onclick="openLogoutModal()">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Keluar
+                    </button>
+                </form>
+
             </div>
+        </aside>
 
-            <ul class="menu-list">
+        {{-- MAIN CONTENT --}}
+        <div class="main-wrapper">
+
+            <header class="topbar">
+                <div class="topbar-admin">
+                    <div>
+                        <strong>{{ auth()->user()->name ?? 'Admin PizzaMozza' }}</strong>
+                        <span>Administrator</span>
+                    </div>
+
+                    <div class="topbar-avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content">
+
+                {{-- JUDUL HALAMAN --}}
+                <div class="page-heading">
+                    <div>
+                        <h2>Dashboard</h2>
+                        <p>Kelola operasional PizzaMozza dari satu tempat.</p>
+                    </div>
+
+                    <a href="{{ route('admin.products.create') }}" class="primary-button">
+                        <i class="bi bi-plus-lg"></i>
+                        Tambah Produk
+                    </a>
+                </div>
+
+                {{-- STATISTIK --}}
+                <section class="stats-grid">
+
+                    <div class="stat-card red">
+                        <span class="stat-title">Total Admin</span>
+                        <div class="stat-icon"><i class="bi bi-person"></i></div>
+                        <div class="stat-number">{{ $totalAdmin }}</div>
+                        <p class="stat-description">Administrator sistem</p>
+                    </div>
+
+                    <div class="stat-card blue">
+                        <span class="stat-title">Total Karyawan</span>
+                        <div class="stat-icon"><i class="bi bi-people"></i></div>
+                        <div class="stat-number">{{ $totalKaryawan }}</div>
+                        <p class="stat-description">Data karyawan aktif</p>
+                    </div>
+
+                    <div class="stat-card orange">
+                        <span class="stat-title">Total Produk</span>
+                        <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
+                        <div class="stat-number">{{ $totalProduk }}</div>
+                        <p class="stat-description">Menu yang tersedia</p>
+                    </div>
+
+                    <div class="stat-card green">
+                        <span class="stat-title">Ready Stock</span>
+                        <div class="stat-icon"><i class="bi bi-check-lg"></i></div>
+                        <div class="stat-number">{{ $readyStock }}</div>
+                        <p class="stat-description">Produk siap dijual</p>
+                    </div>
+
+                </section>
 
                 {{-- DASHBOARD --}}
-                <li class="menu-item">
-
-                    <a
-                        href="{{ route('admin.dashboard') }}"
-                        class="menu-link active"
-                    >
-
-                        <span class="menu-icon">
-    <i class="bi bi-grid-1x2"></i>
-</span>
-
-                        <span>
-                            Dashboard
-                        </span>
-
-                    </a>
-
-                </li>
-
-
-                {{-- DATA KARYAWAN --}}
-                <li class="menu-item">
-
-                    <a
-                        href="{{ route('admin.employees.index') }}"
-                        class="menu-link"
-                    >
-
-                        <span class="menu-icon">
-    <i class="bi bi-people"></i>
-</span>
-
-                        <span>
-                            Data Karyawan
-                        </span>
-
-                    </a>
-
-                </li>
-
-
-                {{-- DATA PELANGGAN --}}
-                <li class="menu-item">
-
-                    <a
-                        href="{{ route('admin.customers.index') }}"
-                        class="menu-link"
-                    >
-
-                        <span class="menu-icon">
-    <i class="bi bi-people"></i>
-</span>
-
-                        <span>
-                            Data Pelanggan
-                        </span>
-
-                    </a>
-
-                </li>
-
-
-                {{-- DATA PRODUK --}}
-                <li class="menu-item">
-
-                    <a
-                        href="{{ route('admin.products.index') }}"
-                        class="menu-link"
-                    >
-
-                        <span class="menu-icon">
-    <i class="bi bi-box-seam"></i>
-</span>
-
-                        <span>
-                            Data Produk
-                        </span>
-
-                    </a>
-
-                </li>
-
-
-                {{-- PESANAN --}}
-                <li class="menu-item">
-
-                    <a
-                        href="{{ route('admin.orders.index') }}"
-                        class="menu-link"
-                    >
-
-                        <span class="menu-icon">
-    <i class="bi bi-receipt"></i>
-</span>
-
-                        <span>
-                            Pesanan
-                        </span>
-
-                    </a>
-
-                </li>
-
-            </ul>
-
-        </nav>
-
-
-        {{-- SIDEBAR BOTTOM --}}
-        <div class="sidebar-bottom">
-
-            <div class="admin-profile">
-
-                <div class="admin-avatar">
-    <i class="bi bi-person"></i>
-</div>
-
-                <div class="admin-info">
-
-                    <strong>
-                        {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
-                    </strong>
-
-                    <span>
-                        PizzaMozza
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <form
-                action="{{ route('logout') }}"
-                method="POST"
-            >
-
-                @csrf
-
-                <button type="button" class="logout-button" onclick="openLogoutModal()">
-    <i class="bi bi-box-arrow-right"></i>
-    Keluar
-</button>
-
-            </form>
-
-        </div>
-
-    </aside>
-
-
-    {{-- =========================================================
-         MAIN
-    ========================================================== --}}
-
-    <div class="main-wrapper">
-
-        {{-- TOPBAR --}}
-<header class="topbar">
-
-    <div class="topbar-title">
-        
-    </div>
-
-    <div class="topbar-admin">
-
-        <div class="topbar-admin-info">
-
-            <strong>
-                {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
-            </strong>
-
-            <span>
-                {{ auth()->user()->role === 'admin' ? 'Administrator' : 'Karyawan' }}
-            </span>
-
-        </div>
-
-        <div class="topbar-avatar">
-            <i class="bi bi-person"></i>
-        </div>
-
-    </div>
-
-</header>
-
-
-        {{-- CONTENT --}}
-        <main class="content">
-
-            {{-- PAGE HEADING --}}
-            <div class="page-heading">
-
-                <div>
-
-
-                    <h2>
-                        Dashboard
-                    </h2>
-
-                    <p>
-                        Kelola operasional PizzaMozza dari satu tempat.
-                    </p>
-
-                </div>
-
-
-                <a
-                    href="{{ route('admin.products.create') }}"
-                    class="primary-button"
-                >
-                    <span>＋</span>
-                    <span>Tambah Produk</span>
-                </a>
-
-            </div>
-
-
-            {{-- =================================================
-                 STATISTICS
-            ================================================== --}}
-
-            <section class="stats-grid">
-
-                {{-- TOTAL ADMIN --}}
-                <div class="stat-card red">
-
-                    <div class="stat-title">
-                        Total Admin
-                    </div>
-
-                    <div class="stat-icon">
-                        👤
-                    </div>
-
-                    <div class="stat-number">
-                        {{ $totalAdmin }}
-                    </div>
-
-                    <div class="stat-description">
-                        Administrator sistem
-                    </div>
-
-                </div>
-
-
-                {{-- TOTAL KARYAWAN --}}
-                <div class="stat-card blue">
-
-                    <div class="stat-title">
-                        Total Karyawan
-                    </div>
-
-                    <div class="stat-icon">
-                        👥
-                    </div>
-
-                    <div class="stat-number">
-                        {{ $totalKaryawan }}
-                    </div>
-
-                    <div class="stat-description">
-                        Data karyawan aktif
-                    </div>
-
-                </div>
-
-
-                {{-- TOTAL PRODUK --}}
-                <div class="stat-card orange">
-
-                    <div class="stat-title">
-                        Total Produk
-                    </div>
-
-                    <div class="stat-icon">
-                        📋
-                    </div>
-
-                    <div class="stat-number">
-                        {{ $totalProduk }}
-                    </div>
-
-                    <div class="stat-description">
-                        Menu yang tersedia
-                    </div>
-
-                </div>
-
-
-                {{-- READY STOCK --}}
-                <div class="stat-card green">
-
-                    <div class="stat-title">
-                        Ready Stock
-                    </div>
-
-                    <div class="stat-icon">
-                        ✓
-                    </div>
-
-                    <div class="stat-number">
-                        {{ $readyStock }}
-                    </div>
-
-                    <div class="stat-description">
-                        Produk siap dijual
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {{-- =================================================
-                 LOWER DASHBOARD
-            ================================================== --}}
-
-            <section class="dashboard-grid">
-
-                {{-- =================================================
-                     PRODUK TERBARU
-                ================================================== --}}
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h3>
-                                Produk Terbaru
-                            </h3>
-
-                            <p>
-                                Menu yang terakhir ditambahkan
-                            </p>
-
+                <section class="dashboard-grid">
+
+                    {{-- PRODUK TERBARU --}}
+                    <div class="panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h3>Produk Terbaru</h3>
+                                <p>Menu yang terakhir ditambahkan</p>
+                            </div>
+
+                            <a href="{{ route('admin.products.index') }}" class="panel-link">
+                                Lihat semua
+                            </a>
                         </div>
 
+                        <div class="product-list">
 
-                        <a
-                            href="{{ route('admin.products.index') }}"
-                            class="panel-link"
-                        >
-                            Lihat semua
-                        </a>
+                            @forelse($produkTerbaru as $product)
 
-                    </div>
+                                @php
+                                    $variant = $product->variants->first() ?? null;
+                                    $price = $variant?->price ?? $product->price ?? 0;
+                                @endphp
 
+                                <div class="product-row">
 
-                    <div class="product-list">
-
-                        @forelse($produkTerbaru as $product)
-
-                            @php
-
-                                $variant = $product->variants->first() ?? null;
-
-                                $price = $variant?->price
-                                    ?? $product->price
-                                    ?? 0;
-
-                            @endphp
-
-
-                            <div class="product-row">
-
-                                {{-- IMAGE --}}
-                                <div class="product-thumbnail">
-
-                                    @if(!empty($product->image))
-
-                                        <img
-                                            src="{{ asset('image/' . $product->image) }}"
-                                            alt="{{ $product->name }}"
-                                        >
-
-                                    @else
-
-                                        <div class="product-placeholder">
+                                    <div class="product-thumbnail">
+                                        @if($product->image)
+                                            <img src="{{ asset('image/' . $product->image) }}"
+                                                alt="{{ $product->name }}">
+                                        @else
                                             🍕
-                                        </div>
+                                        @endif
+                                    </div>
 
-                                    @endif
+                                    <div class="product-data">
+                                        <strong>{{ $product->name }}</strong>
+                                        <span>Pizza</span>
+                                    </div>
 
-                                </div>
-
-
-                                {{-- PRODUCT INFO --}}
-                                <div class="product-data">
-
-                                    <strong>
-                                        {{ $product->name }}
-                                    </strong>
-
-                                    <span>
-                                        Pizza
-                                    </span>
+                                    <div class="product-price">
+                                        <strong>Rp {{ number_format($price, 0, ',', '.') }}</strong>
+                                        <span>Pre-order</span>
+                                    </div>
 
                                 </div>
 
+                            @empty
 
-                                {{-- PRICE --}}
-                                <div class="product-price">
-
-                                    <strong>
-                                        Rp {{ number_format($price, 0, ',', '.') }}
-                                    </strong>
-
-                                    <span>
-                                        Pre-order
-                                    </span>
-
+                                <div class="empty-product">
+                                    Belum ada produk.
                                 </div>
 
-                            </div>
-
-                        @empty
-
-                            <div class="empty-product">
-                                Belum ada produk.
-                            </div>
-
-                        @endforelse
-
-                    </div>
-
-                </div>
-
-
-                {{-- =================================================
-                     QUICK ACTIONS
-                ================================================== --}}
-
-                <div class="panel">
-
-                    <div class="panel-header">
-
-                        <div>
-
-                            <h3>
-                                Quick Actions
-                            </h3>
-
-                            <p>
-                                Akses cepat pengelolaan data
-                            </p>
+                            @endforelse
 
                         </div>
-
                     </div>
 
+                    {{-- AKSES CEPAT --}}
+                    <div class="panel">
 
-                    <div class="quick-actions">
-
-                        {{-- TAMBAH PRODUK --}}
-                        <a
-                            href="{{ route('admin.products.create') }}"
-                            class="quick-action"
-                        >
-
-                            <div class="quick-action-icon">
-                                ＋
+                        <div class="panel-header">
+                            <div>
+                                <h3>Akses Cepat</h3>
+                                <p>Pengelolaan data PizzaMozza</p>
                             </div>
+                        </div>
 
-                            <div class="quick-action-content">
+                        <div class="quick-actions">
 
-                                <strong>
-                                    Tambah Produk
-                                </strong>
+                            <a href="{{ route('admin.products.create') }}" class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-plus-lg"></i>
+                                </div>
 
-                                <span>
-                                    Tambahkan menu baru
-                                </span>
+                                <div class="quick-action-content">
+                                    <strong>Tambah Produk</strong>
+                                    <span>Tambahkan menu baru</span>
+                                </div>
 
-                            </div>
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
 
-                            <div class="quick-action-arrow">
-                                ›
-                            </div>
+                            <a href="{{ route('admin.employees.index') }}" class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-people"></i>
+                                </div>
 
-                        </a>
+                                <div class="quick-action-content">
+                                    <strong>Kelola Karyawan</strong>
+                                    <span>Data karyawan PizzaMozza</span>
+                                </div>
 
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
 
-                        {{-- KELOLA KARYAWAN --}}
-                        <a
-                            href="{{ route('admin.employees.index') }}"
-                            class="quick-action"
-                        >
+                            <a href="{{ route('admin.customers.index') }}" class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-person-vcard"></i>
+                                </div>
 
-                            <div class="quick-action-icon">
-                                👥
-                            </div>
+                                <div class="quick-action-content">
+                                    <strong>Kelola Pelanggan</strong>
+                                    <span>Master data pelanggan</span>
+                                </div>
 
-                            <div class="quick-action-content">
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
 
-                                <strong>
-                                    Kelola Karyawan
-                                </strong>
+                            <a href="{{ route('admin.orders.index') }}" class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
 
-                                <span>
-                                    Data karyawan PizzaMozza
-                                </span>
+                                <div class="quick-action-content">
+                                    <strong>Kelola Pesanan</strong>
+                                    <span>Lihat dan proses pesanan</span>
+                                </div>
 
-                            </div>
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
 
-                            <div class="quick-action-arrow">
-                                ›
-                            </div>
+                            <a href="{{ route('admin.products.index') }}" class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
 
-                        </a>
+                                <div class="quick-action-content">
+                                    <strong>Data Produk</strong>
+                                    <span>Kelola seluruh menu</span>
+                                </div>
 
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
 
-                        {{-- KELOLA PELANGGAN --}}
-                        <a
-                            href="{{ route('admin.customers.index') }}"
-                            class="quick-action"
-                        >
+                            <a href="{{ url('/admin/laporan-penjualan') }}" class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="bi bi-bar-chart-line"></i>
+                                </div>
 
-                            <div class="quick-action-icon">
-                                👤
-                            </div>
+                                <div class="quick-action-content">
+                                    <strong>Laporan Penjualan</strong>
+                                    <span>Lihat laporan transaksi</span>
+                                </div>
 
-                            <div class="quick-action-content">
+                                <i class="bi bi-chevron-right quick-action-arrow"></i>
+                            </a>
 
-                                <strong>
-                                    Kelola Pelanggan
-                                </strong>
-
-                                <span>
-                                    Master data pelanggan
-                                </span>
-
-                            </div>
-
-                            <div class="quick-action-arrow">
-                                ›
-                            </div>
-
-                        </a>
-
-
-                        {{-- KELOLA PESANAN --}}
-                        <a
-                            href="{{ route('admin.orders.index') }}"
-                            class="quick-action"
-                        >
-
-                            <div class="quick-action-icon">
-                                🛒
-                            </div>
-
-                            <div class="quick-action-content">
-
-                                <strong>
-                                    Kelola Pesanan
-                                </strong>
-
-                                <span>
-                                    Lihat dan proses pesanan
-                                </span>
-
-                            </div>
-
-                            <div class="quick-action-arrow">
-                                ›
-                            </div>
-
-                        </a>
-
-
-                        {{-- KELOLA PRODUK --}}
-                        <a
-                            href="{{ route('admin.products.index') }}"
-                            class="quick-action"
-                        >
-
-                            <div class="quick-action-icon">
-                                📋
-                            </div>
-
-                            <div class="quick-action-content">
-
-                                <strong>
-                                    Data Produk
-                                </strong>
-
-                                <span>
-                                    Kelola seluruh menu
-                                </span>
-
-                            </div>
-
-                            <div class="quick-action-arrow">
-                                ›
-                            </div>
-
-                        </a>
-
+                        </div>
                     </div>
 
-                </div>
-
-            </section>
-
-        </main>
-
-    </div>
-
-</div>
-
-<!-- POPUP KONFIRMASI LOGOUT -->
-<div class="logout-modal" id="logoutModal">
-    <div class="logout-dialog" role="dialog"
-         aria-modal="true" aria-labelledby="logoutTitle">
-
-        <div class="logout-modal-icon">
-            <i class="bi bi-box-arrow-right"></i>
-        </div>
-
-        <h3 id="logoutTitle">Keluar dari Akun?</h3>
-
-        <p>
-            Apakah kamu yakin ingin keluar dari dashboard admin PizzaMozza?
-        </p>
-
-        <div class="logout-modal-actions">
-            <button type="button"
-                    class="cancel-logout"
-                    onclick="closeLogoutModal()">
-                Batal
-            </button>
-
-            <button type="button"
-                    class="confirm-logout"
-                    onclick="confirmLogout()">
-                Ya, Keluar
-            </button>
+                </section>
+            </main>
         </div>
     </div>
-</div>
 
-<script>
-    function openLogoutModal() {
-        document.getElementById('logoutModal').classList.add('show');
-    }
+    {{-- POPUP LOGOUT --}}
+    <div class="logout-modal" id="logoutModal">
+        <div class="logout-dialog" role="dialog" aria-modal="true">
 
-    function closeLogoutModal() {
-        document.getElementById('logoutModal').classList.remove('show');
-    }
+            <div class="logout-modal-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
 
-    function confirmLogout() {
-        document.querySelector('.sidebar-bottom form').submit();
-    }
+            <h3>Keluar dari Akun?</h3>
 
-    document.getElementById('logoutModal').addEventListener('click', function (event) {
-        if (event.target === this) {
-            closeLogoutModal();
+            <p>
+                Apakah kamu yakin ingin keluar dari dashboard admin PizzaMozza?
+            </p>
+
+            <div class="logout-modal-actions">
+                <button type="button" class="cancel-logout" onclick="closeLogoutModal()">
+                    Batal
+                </button>
+
+                <button type="button" class="confirm-logout" onclick="confirmLogout()">
+                    Ya, Keluar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('show');
         }
-    });
 
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            closeLogoutModal();
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').classList.remove('show');
         }
-    });
-</script>
+
+        function confirmLogout() {
+            document.querySelector('.sidebar-bottom form').submit();
+        }
+
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeLogoutModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLogoutModal();
+            }
+        });
+    </script>
 
 </body>
 
