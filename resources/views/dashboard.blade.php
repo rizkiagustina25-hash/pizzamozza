@@ -259,6 +259,13 @@
             margin-left: 265px;
         }
 
+        .topbar-title {
+            margin-left: 20px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #3b2925;
+}
+
         .topbar {
             min-height: 80px;
             position: sticky;
@@ -391,6 +398,31 @@
             color: #907d73;
             font-size: 13px;
         }
+
+        .btn-saya {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 17px;
+    border: none;
+    border-radius: 8px;
+    background: #c52c2c;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-saya:hover {
+    background: #a82020;
+    color: white;
+}
+
+.btn-saya i {
+    font-size: 17px;
+}
 
         /* ================= LANDING ================= */
 
@@ -1180,20 +1212,33 @@
 <body>
 
 @php
-    $menu = request()->query('menu', 'home');
-    $allOrders = isset($orders) ? collect($orders) : collect();
+    $menu = request('menu', 'home');
+    $currentMenu = $menu;
 
-    $processingCount = $allOrders->filter(
-        fn($order) => strtolower((string) $order->status) === 'processing'
-    )->count();
+    $pageTitles = [
+        'dashboard' => 'Dashboard',
+        'products' => 'Produk',
+        'orders' => 'Pesanan Saya',
+        'profile' => 'Akun Saya',
+    ];
 
-    $pendingCount = $allOrders->filter(
-        fn($order) => strtolower((string) $order->status) === 'pending'
-    )->count();
-
-    $latestOrders = $allOrders->sortByDesc('created_at')->take(6);
+    $pageDescriptions = [
+        'dashboard' => 'Selamat datang di PizzaMozza!',
+        'products' => 'Temukan pizza favorit kamu.',
+        'orders' => 'Lihat status dan riwayat pesanan kamu disini.',
+        'profile' => 'Informasi akun dan alamat pengiriman kamu.',
+    ];
 @endphp
 
+<div class="topbar-heading">
+    <div class="topbar-title">
+        {{ $pageTitles[$currentMenu] ?? 'Dashboard' }}
+    </div>
+
+    <div class="topbar-description">
+        {{ $pageDescriptions[$currentMenu] ?? '' }}
+    </div>
+</div>
 <div class="app">
 
     <!-- ================= SIDEBAR PELANGGAN ================= -->
@@ -1336,78 +1381,111 @@
 
             </button>
 
-            <form action="{{ route('products.index') }}"
-                  method="GET"
-                  class="search-box">
+            @php
+    $currentMenu = request('menu', 'dashboard');
 
-                <span class="search-icon">
-                    <i class="bi bi-search"></i>
+    $pageTitles = [
+        'dashboard' => 'Dashboard',
+        'products' => 'Produk',
+        'orders' => 'Pesanan Saya',
+        'profile' => 'Akun Saya',
+    ];
+
+    $pageTitle = $pageTitles[$currentMenu] ?? 'Dashboard';
+@endphp
+
+<div class="topbar-title">
+    {{ $pageTitle }}
+</div>
+
+           <header class="topbar">
+
+    <button type="button"
+            class="mobile-menu"
+            onclick="toggleSidebar()"
+            aria-label="Buka menu">
+
+        <i class="bi bi-list"></i>
+
+    </button>
+
+    <div class="topbar-actions">
+
+        <!-- Kode Cart, Saya, dan Logout tetap di sini -->
+
+    </div>
+
+</header>
+
+@if (request()->routeIs('products.index'))
+    <form action="{{ route('products.index') }}"
+          method="GET"
+          class="search-box">
+
+        <span class="search-icon">
+            <i class="bi bi-search"></i>
+        </span>
+
+        <input type="text"
+               name="search"
+               placeholder="Cari pizza favorit kamu..."
+               value="{{ request('search') }}">
+
+    </form>
+@endif
+
+<div class="topbar-actions">
+
+    <!-- Keranjang -->
+    <a href="{{ route('cart.index') }}"
+       class="cart-button"
+       aria-label="Keranjang">
+
+        <i class="bi bi-cart3"></i>
+
+        @auth
+            @php
+                $cartCount = session('cart')
+                    ? collect(session('cart'))->sum('quantity')
+                    : 0;
+            @endphp
+
+            @if($cartCount > 0)
+                <span class="cart-badge">
+                    {{ $cartCount }}
                 </span>
+            @endif
+        @endauth
 
-                <input type="text"
-                       name="search"
-                       placeholder="Cari pizza favorit kamu..."
-                       value="{{ request('search') }}">
+    </a>
 
-            </form>
+    @guest
+        <a href="{{ route('login') }}" class="login-button">
+            Login
+        </a>
+    @else
 
-            <div class="topbar-actions">
+        @if ($menu === 'profile')
+            <button type="button"
+                    class="btn-saya"
+                    onclick="openCustomerLogoutModal()">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </button>
+        @else
+            <a href="{{ route('dashboard', ['menu' => 'profile']) }}"
+               class="btn-saya">
+                <i class="bi bi-person-circle"></i>
+                <span>Saya</span>
+            </a>
+        @endif
 
-                <!-- Keranjang tetap berada di topbar -->
-                <a href="{{ route('cart.index') }}"
-                   class="cart-button"
-                   aria-label="Keranjang">
+    @endguest
 
-                    <i class="bi bi-cart3"></i>
+</div>
 
-                    @auth
-                        @php
-                            $cartCount = session('cart')
-                                ? collect(session('cart'))->sum('quantity')
-                                : 0;
-                        @endphp
+</header>
 
-                        @if($cartCount > 0)
-                            <span class="cart-badge">
-                                {{ $cartCount }}
-                            </span>
-                        @endif
-                    @endauth
-
-                </a>
-
-                @guest
-
-                    <a href="{{ route('login') }}" class="login-button">
-                        Login
-                    </a>
-
-                @else
-
-                    <form action="{{ route('logout') }}"
-                          method="POST"
-                          id="customerLogoutForm">
-
-                        @csrf
-
-                        <button type="button"
-                                class="login-button"
-                                onclick="openCustomerLogoutModal()">
-
-                            <i class="bi bi-box-arrow-right"
-                               style="margin-right: 8px;"></i>
-
-                            Logout
-
-                        </button>
-
-                    </form>
-
-                @endguest
-
-            </div>
-
-        </header>
 
         <!-- ================= CONTENT ================= -->
 
