@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -27,9 +28,7 @@ use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\CustomerController;
 
 // Karyawan
-// Dashboard karyawan masih menggunakan closure view.
-// Kalau nanti ingin dinormalisasi juga, kita bisa buat
-// Karyawan\DashboardController.
+use App\Http\Controllers\Karyawan\ProductController as KaryawanProductController;
 
 
 /*
@@ -38,19 +37,19 @@ use App\Http\Controllers\Admin\CustomerController;
 |--------------------------------------------------------------------------
 */
 
+// Landing page
+Route::get('/', [ProductController::class, 'index'])
+    ->name('home');
 
-// =====================================================
-// LANDING / DASHBOARD CUSTOMER
-// =====================================================
-
-Route::get('/', [ProductController::class, 'index'])->name('home');
-
-Route::get('/dashboard', [ProductController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [ProductController::class, 'index'])
+    ->name('dashboard');
 
 
-// =====================================================
-// AUTHENTICATION
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
@@ -58,42 +57,51 @@ Route::get('/login', [AuthController::class, 'showLogin'])
 Route::post('/login', [AuthController::class, 'login'])
     ->name('login.process');
 
-
 Route::get('/register', [AuthController::class, 'showRegister'])
     ->name('register');
 
 Route::post('/register', [AuthController::class, 'register'])
     ->name('register.process');
 
-Route::middleware('auth')->group(function () {
+
+/*
+|--------------------------------------------------------------------------
+| PROFILE
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+
     Route::get('/profil/edit', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
     Route::put('/profil', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-    Route::get('/reset-password', [
-        \App\Http\Controllers\AuthController::class,
-        'showResetPassword'
-        ])->name('password.reset.form');
+    Route::get('/reset-password', [AuthController::class, 'showResetPassword'])
+        ->name('password.reset.form');
 
-    Route::put('/reset-password', [
-        \App\Http\Controllers\AuthController::class,
-        'resetPassword'
-    ])->name('password.reset.update');
+    Route::put('/reset-password', [AuthController::class, 'resetPassword'])
+        ->name('password.reset.update');
+
 });
 
-// =====================================================
-// LOGOUT
-// =====================================================
+
+/*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 
-// =====================================================
-// PRODUK CUSTOMER
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| PRODUK CUSTOMER
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/produk', [ProductController::class, 'index'])
     ->name('products.index');
@@ -101,24 +109,38 @@ Route::get('/produk', [ProductController::class, 'index'])
 Route::get('/produk/{product}', [ProductController::class, 'show'])
     ->name('products.show');
 
+
 /*
 |--------------------------------------------------------------------------
-| CART / KERANJANG
+| CART / KERANJANG CUSTOMER
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/cart/{key}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/{key}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+
+    Route::get('/cart', [CartController::class, 'index'])
+        ->name('cart.index');
+
+    Route::post('/cart/add', [CartController::class, 'add'])
+        ->name('cart.add');
+
+    Route::put('/cart/{key}', [CartController::class, 'update'])
+        ->name('cart.update');
+
+    Route::delete('/cart/{key}', [CartController::class, 'remove'])
+        ->name('cart.remove');
+
+    Route::delete('/cart', [CartController::class, 'clear'])
+        ->name('cart.clear');
+
 });
 
 
-// =====================================================
-// PESANAN CUSTOMER
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| PESANAN CUSTOMER
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 
@@ -128,9 +150,11 @@ Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 });
 
 
-// =====================================================
-// CHECKOUT
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| CHECKOUT CUSTOMER
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 
@@ -143,9 +167,11 @@ Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 });
 
 
-// =====================================================
-// PAYMENT
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| PAYMENT CUSTOMER
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 
@@ -161,88 +187,44 @@ Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 });
 
 
-
 /*
 |--------------------------------------------------------------------------
 | ADMIN
 |--------------------------------------------------------------------------
 */
 
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+        // Dashboard Admin
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
 
+        // Data Karyawan
+        Route::resource('/employees', EmployeeController::class)
+            ->names('employees');
 
-    // =================================================
-    // DASHBOARD ADMIN
-    // =================================================
+        // Data Pelanggan
+        Route::resource('/customers', CustomerController::class)
+            ->names('customers');
 
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])
-        ->name('admin.dashboard');
+        // Data Produk
+        Route::resource('/products', AdminProductController::class)
+            ->names('products');
 
+        // Kelola Pesanan Admin
+        Route::get('/orders', [AdminOrderController::class, 'index'])
+            ->name('orders.index');
 
-    // =================================================
-    // DATA KARYAWAN
-    // =================================================
+        Route::get('/orders/{order}', [AdminOrderController::class, 'show'])
+            ->name('orders.show');
 
-    Route::resource('/admin/employees', EmployeeController::class)
-        ->names('admin.employees');
-
-
-    // =================================================
-    // DATA PELANGGAN
-    // =================================================
-
-    Route::resource('/admin/customers', CustomerController::class)
-        ->names('admin.customers');
-
-
-    // =================================================
-    // PESANAN
-    // =================================================
-
+        Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
 
 });
-
-
-/*
-|--------------------------------------------------------------------------
-| KELOLA PESANAN - ADMIN + KARYAWAN
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth', 'role:admin,karyawan'])->group(function () {
-
-    Route::get('/admin/orders', [AdminOrderController::class, 'index'])
-        ->name('admin.orders.index');
-
-    Route::get('/admin/orders/{order}', [AdminOrderController::class, 'show'])
-        ->name('admin.orders.show');
-
-    Route::put(
-        '/admin/orders/{order}/status',
-        [AdminOrderController::class, 'updateStatus']
-    )->name('admin.orders.updateStatus');
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN + KARYAWAN
-|--------------------------------------------------------------------------
-|
-| Admin dan karyawan sama-sama boleh mengelola produk.
-|
-*/
-
-
-Route::middleware(['auth', 'role:admin,karyawan'])->group(function () {
-
-    Route::resource('/admin/products', AdminProductController::class)
-        ->names('admin.products');
-
-});
-
 
 
 /*
@@ -251,15 +233,28 @@ Route::middleware(['auth', 'role:admin,karyawan'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
+Route::middleware(['auth', 'role:karyawan'])
+    ->prefix('karyawan')
+    ->name('karyawan.')
+    ->group(function () {
 
-Route::middleware(['auth', 'role:karyawan'])->group(function () {
+        // Dashboard Karyawan
+        Route::get('/dashboard', function () {
+            return view('karyawan.dashboard');
+        })->name('dashboard');
 
-    // =================================================
-    // DASHBOARD KARYAWAN
-    // =================================================
+        // Data Produk Karyawan (Hanya Melihat)
+        Route::get('/products', [KaryawanProductController::class, 'index'])
+            ->name('products.index');
 
-    Route::get('/karyawan/dashboard', function () {
-        return view('karyawan.dashboard');
-    })->name('karyawan.dashboard');
+        // Kelola Pesanan Karyawan
+        Route::get('/orders', [AdminOrderController::class, 'index'])
+            ->name('orders.index');
+
+        Route::get('/orders/{order}', [AdminOrderController::class, 'show'])
+            ->name('orders.show');
+
+        Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
 
 });

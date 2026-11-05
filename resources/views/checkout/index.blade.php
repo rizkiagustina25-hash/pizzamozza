@@ -1,4 +1,3 @@
-```blade
 <!DOCTYPE html>
 <html lang="id">
 
@@ -8,13 +7,18 @@
 
     <title>Checkout - PizzaMozza</title>
 
+    {{-- Bootstrap Icons --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
             background: #faf7f2;
             color: #222;
@@ -24,51 +28,75 @@
             text-decoration: none;
         }
 
-        /* SIDEBAR */
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* ================= SIDEBAR ================= */
+
         .sidebar {
-            width: 240px;
+            width: 265px;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            background: #fff;
-            border-right: 1px solid #eee;
+            background: #941919;
             display: flex;
             flex-direction: column;
             z-index: 100;
             transition: transform 0.3s ease;
+            overflow-y: auto;
         }
 
         .brand {
-            height: 80px;
+            height: 88px;
+            min-height: 88px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             padding: 0 25px;
-            border-bottom: 1px solid #f1f1f1;
-            color: #222;
-            font-size: 21px;
-            font-weight: bold;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
         }
 
         .brand-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: #e63946;
-            color: white;
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: white;
+            color: #941919;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 23px;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.75);
         }
 
         .menu-title {
-            padding: 25px 25px 10px;
-            color: #999;
+            padding: 28px 25px 12px;
+            color: rgba(255, 255, 255, 0.55);
             font-size: 11px;
             font-weight: bold;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
         }
 
         .menu {
@@ -78,42 +106,51 @@
         .menu a {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 13px;
             padding: 13px 15px;
-            margin-bottom: 5px;
-            border-radius: 10px;
-            color: #666;
+            margin-bottom: 6px;
+            border-radius: 9px;
+            color: rgba(255, 255, 255, 0.82);
             font-size: 14px;
             transition: 0.2s;
         }
 
+        .menu a i {
+            width: 20px;
+            font-size: 17px;
+            text-align: center;
+        }
+
         .menu a:hover,
         .menu a.active {
-            background: #e63946;
+            background: #b52d2d;
             color: white;
         }
 
         .sidebar-bottom {
             margin-top: auto;
             padding: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 11px;
+            margin-bottom: 18px;
+            min-width: 0;
         }
 
         .user-avatar {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: #ffe5e5;
-            color: #e63946;
+            background: white;
+            color: #941919;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 15px;
             font-weight: bold;
             flex-shrink: 0;
             overflow: hidden;
@@ -125,27 +162,73 @@
             object-fit: cover;
         }
 
+        .user-info {
+            min-width: 0;
+        }
+
         .user-name {
+            color: white;
             font-size: 13px;
             font-weight: bold;
             overflow-wrap: anywhere;
         }
 
         .user-role {
-            margin-top: 4px;
-            color: #999;
+            margin-top: 5px;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 11px;
         }
 
-        /* MAIN */
+        .logout-form {
+            width: 100%;
+        }
+
+        .logout-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 11px 15px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: #941919;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logout-button:hover {
+            background: #f5e5e5;
+        }
+
+        .login-sidebar-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            width: 100%;
+            padding: 11px 15px;
+            border-radius: 8px;
+            background: white;
+            color: #941919;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* ================= MAIN ================= */
+
         .main-wrapper {
-            margin-left: 240px;
+            margin-left: 265px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* HEADER */
+        /* ================= TOPBAR ================= */
+
         .topbar {
             height: 80px;
             padding: 0 35px;
@@ -199,6 +282,7 @@
             background: transparent;
             cursor: pointer;
             font-size: 16px;
+            color: #555;
         }
 
         .topbar-right {
@@ -209,43 +293,41 @@
 
         .cart-link {
             position: relative;
-            color: #333;
-            font-size: 23px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            color: #941919;
+            background: #fceaea;
+            font-size: 21px;
+            transition: 0.2s;
+        }
+
+        .cart-link:hover {
+            background: #f5dada;
         }
 
         .cart-badge {
             position: absolute;
-            top: -7px;
-            right: -10px;
+            top: -5px;
+            right: -5px;
             min-width: 18px;
             height: 18px;
             padding: 0 4px;
             border-radius: 20px;
-            background: #e63946;
+            background: #941919;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 10px;
-        }
-
-        .auth-button {
-            display: inline-block;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            background: #e63946;
-            color: white;
-            font-size: 13px;
             font-weight: bold;
-            cursor: pointer;
         }
 
-        .auth-button:hover {
-            background: #c62828;
-        }
+        /* ================= CHECKOUT CONTENT ================= */
 
-        /* CHECKOUT CONTENT */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -255,19 +337,22 @@
         }
 
         .back-button {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 20px;
             padding: 10px 18px;
             background: white;
-            color: #c62828;
-            border: 1px solid #c62828;
+            color: #941919;
+            border: 1px solid #941919;
             border-radius: 8px;
             font-weight: bold;
+            font-size: 13px;
             transition: 0.2s;
         }
 
         .back-button:hover {
-            background: #c62828;
+            background: #941919;
             color: white;
         }
 
@@ -299,8 +384,15 @@
         }
 
         .card h2 {
+            display: flex;
+            align-items: center;
+            gap: 9px;
             margin: 0 0 20px;
             font-size: 19px;
+        }
+
+        .card h2 i {
+            color: #941919;
         }
 
         .user-info {
@@ -345,7 +437,7 @@
         }
 
         .item-total {
-            color: #c62828;
+            color: #941919;
             font-weight: bold;
             margin-top: 8px;
         }
@@ -374,7 +466,7 @@
 
         .form-group textarea:focus {
             outline: none;
-            border-color: #e63946;
+            border-color: #941919;
         }
 
         .error-message {
@@ -409,14 +501,14 @@
         }
 
         .total span:last-child {
-            color: #c62828;
+            color: #941919;
             text-align: right;
         }
 
         .payment-button {
             width: 100%;
             border: none;
-            background: #c62828;
+            background: #941919;
             color: white;
             padding: 15px;
             border-radius: 10px;
@@ -428,7 +520,12 @@
         }
 
         .payment-button:hover {
-            background: #a91f1f;
+            background: #b52d2d;
+        }
+
+        .payment-button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
         }
 
         .note {
@@ -459,7 +556,8 @@
             color: #a32020;
         }
 
-        /* FOOTER */
+        /* ================= FOOTER ================= */
+
         .footer {
             padding: 22px 35px;
             background: white;
@@ -469,7 +567,8 @@
             font-size: 12px;
         }
 
-        /* MOBILE */
+        /* ================= MOBILE ================= */
+
         .sidebar-overlay {
             display: none;
         }
@@ -502,7 +601,7 @@
                 display: block;
                 position: fixed;
                 inset: 0;
-                background: rgba(0, 0, 0, 0.35);
+                background: rgba(0, 0, 0, 0.4);
                 z-index: 90;
             }
 
@@ -530,11 +629,7 @@
             }
 
             .topbar-right {
-                gap: 14px;
-            }
-
-            .auth-button {
-                padding: 9px 11px;
+                gap: 12px;
             }
 
             .checkout-grid {
@@ -560,12 +655,13 @@
             }
 
             .topbar-right {
-                gap: 10px;
+                gap: 8px;
             }
 
-            .auth-button {
-                padding: 8px;
-                font-size: 12px;
+            .cart-link {
+                width: 38px;
+                height: 38px;
+                font-size: 19px;
             }
 
             .container {
@@ -592,38 +688,52 @@
 
     {{-- SIDEBAR --}}
     <aside class="sidebar" id="sidebar">
+
+        {{-- BRAND --}}
         <a href="{{ route('dashboard') }}" class="brand">
-            <span class="brand-icon">🍕</span>
-            <span>PizzaMozza</span>
+            <span class="brand-icon">
+                <i class="bi bi-pie-chart-fill"></i>
+            </span>
+
+            <span class="brand-text">
+                <span class="brand-name">PizzaMozza</span>
+                <span class="brand-subtitle">Pelanggan</span>
+            </span>
         </a>
 
+        {{-- MENU --}}
         <div class="menu-title">MAIN MENU</div>
 
         <nav class="menu">
+
             <a href="{{ route('dashboard') }}">
-                <span>🏠</span>
+                <i class="bi bi-grid-fill"></i>
                 <span>Dashboard</span>
             </a>
 
             <a href="{{ route('products.index') }}">
-                <span>🍕</span>
+                <i class="bi bi-shop"></i>
                 <span>Produk</span>
             </a>
 
-            <a href="{{ route('dashboard') }}">
-                <span>📦</span>
+            <a href="{{ route('dashboard') }}?menu=orders">
+                <i class="bi bi-receipt"></i>
                 <span>Pesanan Saya</span>
             </a>
 
-            <a href="{{ route('dashboard') }}">
-                <span>👤</span>
+            <a href="{{ route('dashboard') }}?menu=profile">
+                <i class="bi bi-person-circle"></i>
                 <span>Akun Saya</span>
             </a>
+
         </nav>
 
+        {{-- PROFILE DAN LOGOUT --}}
         <div class="sidebar-bottom">
+
             @auth
                 <div class="user-profile">
+
                     <div class="user-avatar">
                         @if (auth()->user()->foto_profile)
                             <img
@@ -635,18 +745,38 @@
                         @endif
                     </div>
 
-                    <div>
+                    <div class="user-info">
                         <div class="user-name">
                             {{ auth()->user()->name }}
                         </div>
-                        <div class="user-role">Pelanggan</div>
+
+                        <div class="user-role">
+                            Pelanggan
+                        </div>
                     </div>
+
                 </div>
+
+                <form
+                    action="{{ route('logout') }}"
+                    method="POST"
+                    class="logout-form"
+                >
+                    @csrf
+
+                    <button type="submit" class="logout-button">
+                        <i class="bi bi-box-arrow-left"></i>
+                        Logout
+                    </button>
+                </form>
+
             @else
-                <a href="{{ route('login') }}" class="auth-button">
+                <a href="{{ route('login') }}" class="login-sidebar-button">
+                    <i class="bi bi-box-arrow-in-right"></i>
                     Login
                 </a>
             @endauth
+
         </div>
     </aside>
 
@@ -655,9 +785,11 @@
     {{-- MAIN WRAPPER --}}
     <div class="main-wrapper">
 
-        {{-- HEADER --}}
+        {{-- TOPBAR --}}
         <header class="topbar">
+
             <div class="topbar-left">
+
                 <button
                     type="button"
                     class="mobile-menu-btn"
@@ -665,7 +797,7 @@
                     aria-label="Buka menu"
                     aria-expanded="false"
                 >
-                    ☰
+                    <i class="bi bi-list"></i>
                 </button>
 
                 <form
@@ -680,17 +812,23 @@
                         value="{{ request('search') }}"
                     >
 
-                    <button type="submit" aria-label="Cari">🔍</button>
+                    <button type="submit" aria-label="Cari">
+                        <i class="bi bi-search"></i>
+                    </button>
                 </form>
+
             </div>
 
             <div class="topbar-right">
+
+                {{-- IKON KERANJANG AKTIF --}}
                 <a
                     href="{{ route('cart.index') }}"
                     class="cart-link"
                     aria-label="Keranjang belanja"
+                    title="Keranjang belanja"
                 >
-                    🛒
+                    <i class="bi bi-cart3"></i>
 
                     @php
                         $cartCount = collect(session('cart', []))
@@ -704,26 +842,16 @@
                     @endif
                 </a>
 
-                @auth
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="auth-button">
-                            Logout
-                        </button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="auth-button">
-                        Login
-                    </a>
-                @endauth
             </div>
+
         </header>
 
         {{-- CHECKOUT CONTENT --}}
         <main class="container">
 
             <a href="{{ route('cart.index') }}" class="back-button">
-                ← Kembali ke Keranjang
+                <i class="bi bi-arrow-left"></i>
+                Kembali ke Keranjang
             </a>
 
             <h1>Checkout</h1>
@@ -732,22 +860,26 @@
                 Periksa informasi pengiriman dan pesanan kamu.
             </p>
 
+            {{-- NOTIFIKASI SUCCESS --}}
             @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
 
+            {{-- NOTIFIKASI ERROR --}}
             @if (session('error'))
                 <div class="alert alert-error">
                     {{ session('error') }}
                 </div>
             @endif
 
+            {{-- VALIDASI ERROR --}}
             @if ($errors->any())
                 <div class="alert alert-error">
                     <strong>Periksa kembali data yang kamu masukkan:</strong>
-                    <ul style="margin-bottom: 0;">
+
+                    <ul style="margin-bottom: 0; padding-left: 20px;">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -762,9 +894,14 @@
 
                     {{-- INFORMASI PELANGGAN --}}
                     <section class="card">
-                        <h2>📍 Informasi Pelanggan</h2>
+
+                        <h2>
+                            <i class="bi bi-geo-alt-fill"></i>
+                            Informasi Pelanggan
+                        </h2>
 
                         <div class="user-info">
+
                             <div class="customer-name">
                                 {{ auth()->user()->name }}
                             </div>
@@ -776,14 +913,21 @@
                             <div class="address">
                                 {{ auth()->user()->address ?: 'Alamat belum diisi.' }}
                             </div>
+
                         </div>
+
                     </section>
 
                     {{-- DAFTAR PESANAN --}}
                     <section class="card">
-                        <h2>🛒 Pesanan Kamu</h2>
+
+                        <h2>
+                            <i class="bi bi-cart-check-fill"></i>
+                            Pesanan Kamu
+                        </h2>
 
                         @forelse ($cart as $item)
+
                             <div class="item">
 
                                 <div class="item-name">
@@ -797,13 +941,16 @@
                                 </div>
 
                                 @if (!empty($item['toppings']) && count($item['toppings']) > 0)
+
                                     <div class="item-detail">
                                         Topping:
 
                                         @foreach ($item['toppings'] as $topping)
                                             {{ $topping['name'] }}@if (!$loop->last), @endif
                                         @endforeach
+
                                     </div>
+
                                 @endif
 
                                 <div class="item-total">
@@ -811,23 +958,33 @@
                                 </div>
 
                             </div>
+
                         @empty
+
                             <p class="item-detail">
                                 Keranjang kamu masih kosong.
                             </p>
 
                             <a href="{{ route('products.index') }}" class="back-button">
+                                <i class="bi bi-shop"></i>
                                 Lihat Produk
                             </a>
+
                         @endforelse
+
                     </section>
 
                 </div>
 
                 {{-- KOLOM KANAN: RINGKASAN --}}
                 <div>
+
                     <section class="card">
-                        <h2>Ringkasan Pembayaran</h2>
+
+                        <h2>
+                            <i class="bi bi-receipt"></i>
+                            Ringkasan Pembayaran
+                        </h2>
 
                         <form
                             action="{{ route('checkout.store') }}"
@@ -835,9 +992,12 @@
                         >
                             @csrf
 
+                            {{-- ALAMAT PENGIRIMAN --}}
                             <div class="form-group">
+
                                 <label for="address">
-                                    📍 Alamat Pengiriman
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    Alamat Pengiriman
                                 </label>
 
                                 <textarea
@@ -852,47 +1012,68 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+
                             </div>
 
+                            {{-- TOTAL PRODUK --}}
                             <div class="summary-row">
+
                                 <span>Total Produk</span>
 
                                 <span>
                                     Rp{{ number_format($total, 0, ',', '.') }}
                                 </span>
+
                             </div>
 
+                            {{-- ONGKOS KIRIM --}}
                             <div class="summary-row">
+
                                 <span>Ongkos Kirim</span>
-                                <span>Akan dihitung</span>
+
+                                <span>
+                                    Akan dihitung
+                                </span>
+
                             </div>
 
+                            {{-- TOTAL PEMBAYARAN --}}
                             <div class="total">
+
                                 <span>Total</span>
 
                                 <span>
                                     Rp{{ number_format($total, 0, ',', '.') }}
                                 </span>
+
                             </div>
 
+                            {{-- TOMBOL PEMBAYARAN --}}
                             <button
                                 type="submit"
                                 class="payment-button"
                                 @disabled(empty($cart))
                             >
-                                💳 Lanjut ke Pembayaran
+                                <i class="bi bi-credit-card-fill"></i>
+                                Lanjut ke Pembayaran
                             </button>
 
+                            {{-- CATATAN --}}
                             <div class="note">
-                                💡 Setelah checkout dikonfirmasi, pesanan
+                                <i class="bi bi-info-circle-fill"></i>
+                                Setelah checkout dikonfirmasi, pesanan
                                 akan dibuat dan kamu akan diarahkan ke
                                 halaman pembayaran.
                             </div>
+
                         </form>
+
                     </section>
+
                 </div>
 
             </div>
+
         </main>
 
         {{-- FOOTER --}}
@@ -902,6 +1083,7 @@
 
     </div>
 
+    {{-- JAVASCRIPT SIDEBAR MOBILE --}}
     <script>
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
@@ -938,4 +1120,3 @@
 
 </body>
 </html>
-```

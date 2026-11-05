@@ -227,6 +227,55 @@
                 padding: 25px;
             }
         }
+
+        .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border: 1px solid #8f1717;
+    border-radius: 12px;
+    color: #8f1717;
+    background: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    background: #fff0ed;
+}
+
+.nav-menu form {
+    margin: 0;
+}
+
+.logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 12px;
+    background: #941b1b;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+            
+
+.logout-button:hover {
+    background: #751414;
+}
     </style>
 </head>
 
@@ -242,35 +291,22 @@
         <div class="header-links">
 
             <a
-                href="{{ route('dashboard') }}"
-                class="header-link"
-            >
-                🏠 Home
-            </a>
-
-            <a
                 href="{{ route('dashboard') }}?menu=profile"
                 class="header-link"
             >
-                👤 Profile
+                < Back
             </a>
 
-            <form
-                method="POST"
-                action="{{ route('logout') }}"
-                style="display: inline;"
-            >
-                @csrf
-
+             <form action="{{ route('logout') }}" method="POST">
+        @csrf
                 <button
                     type="submit"
                     class="header-link logout-button"
                 >
                     Logout
-                </button>
-            </form>
-
-        </div>
+        </button>
+    </form>
+</div>
 
     </header>
 
@@ -426,6 +462,7 @@
                         class="form-input"
                         value="{{ old('no_hp', $user->no_hp) }}"
                         placeholder="Contoh: 081234567890"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     >
 
                 </div>

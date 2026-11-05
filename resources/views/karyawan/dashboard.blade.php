@@ -6,8 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard Karyawan - PizzaMozza</title>
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -15,10 +22,20 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --pm-maroon: #941919;
+            --pm-maroon-hover: #b52d2d;
+            --pm-cream: #fffaf3;
+            --pm-cream-dark: #f5ebe3;
+            --pm-border: #f0e1d5;
+            --pm-text: #34241f;
+            --pm-muted: #81716a;
+        }
+
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: #f5f6f8;
-            color: #202124;
+            background: var(--pm-cream);
+            color: var(--pm-text);
         }
 
         a {
@@ -26,174 +43,139 @@
             color: inherit;
         }
 
-        /* =====================================================
+        /* =========================================
            LAYOUT
-        ===================================================== */
+        ========================================= */
 
         .dashboard-wrapper {
             min-height: 100vh;
         }
 
-
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
+        /* =========================================
+           SIDEBAR - SAMA DENGAN DASHBOARD ADMIN
+        ========================================= */
 
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
-
             width: 265px;
-
-            background: #ffffff;
-
-            border-right: 1px solid #e1e4e8;
-
+            background: var(--pm-maroon);
+            border-right: none;
             z-index: 100;
-
             display: flex;
             flex-direction: column;
         }
 
-
-        /* LOGO */
+        /* BRAND */
 
         .sidebar-brand {
-            height: 154px;
-
-            padding: 25px 24px;
-
-            border-bottom: 1px solid #e5e7eb;
+            height: 88px;
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .brand-logo {
             display: flex;
             align-items: center;
-            gap: 3px;
-
+            gap: 10px;
             margin-bottom: 3px;
         }
 
         .brand-logo .pizza-icon {
-            font-size: 17px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pm-maroon);
+            font-size: 19px;
         }
 
         .brand-logo h1 {
-            font-size: 29px;
+            font-size: 22px;
             font-weight: 700;
-
-            color: #202124;
-
-            letter-spacing: -1.2px;
+            color: #ffffff;
+            letter-spacing: -0.5px;
         }
 
         .brand-subtitle {
-            font-size: 15px;
-
-            color: #333333;
-
-            margin-left: 1px;
+            font-size: 11px;
+            color: #f2cccc;
+            margin-left: 48px;
         }
-
 
         /* MENU */
 
         .sidebar-menu {
-            padding: 35px 16px;
+            padding: 24px 15px;
         }
 
         .menu-title {
-            font-size: 11px;
-
+            font-size: 10px;
             font-weight: 700;
-
-            color: #9aa0a6;
-
-            letter-spacing: .5px;
-
+            color: #e8bcbc;
+            letter-spacing: 0.8px;
             margin: 0 0 12px 12px;
         }
 
         .menu-item {
             display: flex;
-
             align-items: center;
-
             gap: 12px;
-
-            height: 45px;
-
-            padding: 0 16px;
-
+            min-height: 45px;
+            padding: 0 14px;
             margin-bottom: 6px;
-
-            border-radius: 9px;
-
-            color: #5f6368;
-
-            font-size: 14px;
-
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 13px;
             font-weight: 600;
-
             transition: .2s;
         }
 
         .menu-item:hover {
-            background: #f5f5f5;
-
-            color: #e52429;
+            background: var(--pm-maroon-hover);
+            color: #ffffff;
         }
 
         .menu-item.active {
-            background: #e52429;
-
+            background: var(--pm-maroon-hover);
             color: #ffffff;
         }
 
         .menu-icon {
             width: 20px;
-
             text-align: center;
-
-            font-size: 17px;
+            font-size: 16px;
         }
 
-
-        /* USER SIDEBAR */
+        /* PROFIL DAN LOGOUT */
 
         .sidebar-user {
             margin-top: auto;
-
-            border-top: 1px solid #e5e7eb;
-
-            padding: 18px 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 18px 16px;
         }
 
         .sidebar-user-inner {
             display: flex;
-
             align-items: center;
-
             gap: 12px;
         }
 
         .user-avatar {
-            width: 42px;
-            height: 42px;
-
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
             border-radius: 50%;
-
+            background: #ffffff;
+            color: var(--pm-maroon);
             display: flex;
-
             align-items: center;
             justify-content: center;
-
-            background: #fff0f1;
-
-            color: #4c277c;
-
             font-size: 18px;
         }
 
@@ -202,71 +184,76 @@
         }
 
         .user-name {
-            font-size: 13px;
-
+            font-size: 12px;
             font-weight: 700;
-
-            color: #5f6368;
-
+            color: #ffffff;
             white-space: nowrap;
-
             overflow: hidden;
-
             text-overflow: ellipsis;
         }
 
         .user-role {
-            font-size: 11px;
-
-            color: #9aa0a6;
-
+            font-size: 10px;
+            color: #e8bcbc;
             margin-top: 3px;
         }
 
+        .sidebar-user form button {
+            width: 100%;
+            height: 38px;
+            margin-top: 15px;
+            border: 1px solid #ffffff;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--pm-maroon);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: .2s;
+        }
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        .sidebar-user form button:hover {
+            background: #f5e5e5;
+            color: var(--pm-maroon);
+        }
+
+        /* =========================================
+           MAIN CONTENT
+        ========================================= */
 
         .main-content {
             margin-left: 265px;
-
             min-height: 100vh;
         }
 
-
-        /* =====================================================
-           TOP BAR
-        ===================================================== */
+        /* =========================================
+           TOPBAR
+        ========================================= */
 
         .topbar {
-            height: 89px;
-
+            min-height: 72px;
+            padding: 12px 34px;
             background: #ffffff;
-
-            border-bottom: 1px solid #e1e4e8;
-
+            border-bottom: 1px solid #e8e8e8;
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
-            padding: 0 32px;
+            gap: 15px;
         }
 
         .topbar-left {
-            color: #718096;
-
-            font-size: 14px;
+            font-size: 13px;
+            color: #777;
         }
 
         .topbar-right {
             display: flex;
-
             align-items: center;
-
-            gap: 12px;
+            gap: 10px;
         }
 
         .topbar-user {
@@ -274,304 +261,209 @@
         }
 
         .topbar-user-name {
-            font-size: 14px;
-
+            display: block;
+            font-size: 13px;
             font-weight: 700;
-
-            color: #333333;
+            color: #333;
         }
 
         .topbar-user-role {
-            font-size: 11px;
-
-            color: #9aa0a6;
-
-            margin-top: 4px;
+            display: block;
+            margin-top: 3px;
+            font-size: 10px;
+            color: #999;
         }
 
         .topbar-avatar {
-            width: 40px;
-            height: 40px;
-
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
-
-            background: #fff0f1;
-
+            background: #fff0f4;
             display: flex;
-
             align-items: center;
             justify-content: center;
-
-            color: #4c277c;
-
-            font-size: 17px;
+            color: var(--pm-maroon);
+            font-size: 16px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            PAGE
-        ===================================================== */
+        ========================================= */
 
         .page {
             padding: 34px 34px 50px;
+            background: var(--pm-cream);
         }
 
-
-        /* =====================================================
-           PAGE HEADER
-        ===================================================== */
+        /* PAGE HEADER */
 
         .page-heading {
             display: flex;
-
             justify-content: space-between;
-
             align-items: flex-end;
-
             margin-bottom: 27px;
         }
 
         .heading-label {
-            color: #e52429;
-
+            color: var(--pm-maroon);
             font-size: 13px;
-
             font-weight: 500;
-
             margin-bottom: 7px;
         }
 
         .page-heading h2 {
             font-size: 28px;
-
             line-height: 1.1;
-
-            color: #111827;
-
+            color: var(--pm-text);
             margin-bottom: 8px;
         }
 
         .page-description {
-            color: #8994a3;
-
+            color: var(--pm-muted);
             font-size: 14px;
         }
 
         .btn-primary {
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
-
             gap: 8px;
-
             height: 42px;
-
             padding: 0 22px;
-
             border-radius: 8px;
-
-            background: #e52429;
-
+            background: var(--pm-maroon);
             color: #ffffff;
-
             font-size: 13px;
-
             font-weight: 700;
-
             border: none;
-
             cursor: pointer;
-
             transition: .2s;
         }
 
         .btn-primary:hover {
-            background: #c91d22;
+            background: var(--pm-maroon-hover);
         }
 
-
-        /* =====================================================
+        /* =========================================
            STAT CARDS
-        ===================================================== */
+        ========================================= */
 
         .stats-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
-
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 20px;
-
             margin-bottom: 32px;
         }
 
         .stat-card {
             min-height: 162px;
-
             background: #ffffff;
-
             border-radius: 15px;
-
             padding: 24px 22px;
-
-            border: 1px solid #e2e5e9;
-
+            border: 1px solid var(--pm-border);
             position: relative;
         }
 
-        .stat-card.red {
-            border-color: #f4c5c7;
-        }
-
-        .stat-card.blue {
-            border-color: #cbdcf8;
-        }
-
-        .stat-card.orange {
-            border-color: #f0ddc7;
-        }
-
+        .stat-card.red,
+        .stat-card.blue,
+        .stat-card.orange,
         .stat-card.green {
-            border-color: #cce9d8;
+            border-color: var(--pm-border);
         }
 
         .stat-top {
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
         }
 
         .stat-title {
             font-size: 14px;
-
-            color: #718096;
+            color: var(--pm-muted);
         }
 
         .stat-icon {
             width: 43px;
             height: 43px;
-
             border-radius: 10px;
-
             display: flex;
-
             align-items: center;
             justify-content: center;
-
             font-size: 18px;
         }
 
-        .stat-card.red .stat-icon {
-            background: #fff0f1;
-
-            color: #4c277c;
-        }
-
+        .stat-card.red .stat-icon,
         .stat-card.blue .stat-icon {
-            background: #edf4ff;
-
-            color: #4c277c;
+            background: #f5e5df;
+            color: var(--pm-maroon);
         }
 
         .stat-card.orange .stat-icon {
-            background: #fff4e9;
-
-            color: #c87826;
+            background: #fff0df;
+            color: #a85e20;
         }
 
         .stat-card.green .stat-icon {
-            background: #edf9f2;
-
-            color: #229954;
+            background: #edf5e9;
+            color: #477746;
         }
 
         .stat-number {
             font-size: 29px;
-
             font-weight: 700;
-
-            color: #111827;
-
+            color: var(--pm-text);
             margin-top: 17px;
         }
 
         .stat-description {
             font-size: 12px;
-
-            color: #8994a3;
-
+            color: var(--pm-muted);
             margin-top: 8px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            CONTENT GRID
-        ===================================================== */
+        ========================================= */
 
         .content-grid {
             display: grid;
-
-            grid-template-columns:
-                minmax(0, 2fr)
-                minmax(300px, 1fr);
-
+            grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
             gap: 23px;
         }
 
-
-        /* =====================================================
-           PANEL
-        ===================================================== */
+        /* PANEL */
 
         .panel {
             background: #ffffff;
-
-            border: 1px solid #e0e4e8;
-
+            border: 1px solid var(--pm-border);
             border-radius: 15px;
-
             overflow: hidden;
         }
 
         .panel-header {
             min-height: 81px;
-
             padding: 20px 24px;
-
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--pm-border);
         }
 
         .panel-title {
             font-size: 16px;
-
             font-weight: 700;
-
-            color: #111827;
+            color: var(--pm-text);
         }
 
         .panel-subtitle {
-            color: #8994a3;
-
+            color: var(--pm-muted);
             font-size: 12px;
-
             margin-top: 5px;
         }
 
         .panel-link {
-            color: #e52429;
-
+            color: var(--pm-maroon);
             font-size: 12px;
-
             font-weight: 600;
         }
 
@@ -579,23 +471,17 @@
             text-decoration: underline;
         }
 
-
-        /* =====================================================
+        /* =========================================
            PRODUCT LIST
-        ===================================================== */
+        ========================================= */
 
         .product-item {
             min-height: 81px;
-
             padding: 16px 24px;
-
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
-            border-bottom: 1px solid #edf0f2;
+            border-bottom: 1px solid #f5ebe3;
         }
 
         .product-item:last-child {
@@ -604,97 +490,70 @@
 
         .product-left {
             display: flex;
-
             align-items: center;
-
             gap: 15px;
-
             min-width: 0;
         }
 
         .product-image {
             width: 47px;
             height: 47px;
-
             flex-shrink: 0;
-
             border-radius: 10px;
-
-            background: #f1f3f5;
-
+            background: var(--pm-cream);
             display: flex;
-
             align-items: center;
             justify-content: center;
-
             overflow: hidden;
-
             font-size: 22px;
         }
 
         .product-image img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
 
         .product-name {
             font-size: 14px;
-
             font-weight: 700;
-
-            color: #18202a;
-
+            color: var(--pm-text);
             margin-bottom: 5px;
         }
 
         .product-category {
             font-size: 11px;
-
-            color: #8994a3;
+            color: var(--pm-muted);
         }
 
         .product-right {
             text-align: right;
-
             margin-left: 15px;
         }
 
         .product-price {
             font-size: 13px;
-
             font-weight: 700;
-
-            color: #18202a;
+            color: var(--pm-text);
         }
 
         .product-status {
-            color: #e52429;
-
+            color: var(--pm-maroon);
             font-size: 10px;
-
             margin-top: 4px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            QUICK ACTIONS
-        ===================================================== */
+        ========================================= */
 
         .quick-action {
             min-height: 72px;
-
             padding: 14px 24px;
-
             display: flex;
-
             align-items: center;
-
             gap: 14px;
-
-            border-bottom: 1px solid #edf0f2;
-
+            border-bottom: 1px solid #f5ebe3;
             transition: .2s;
         }
 
@@ -703,26 +562,19 @@
         }
 
         .quick-action:hover {
-            background: #fafafa;
+            background: var(--pm-cream);
         }
 
         .quick-icon {
             width: 41px;
             height: 41px;
-
             flex-shrink: 0;
-
             border-radius: 10px;
-
-            background: #fff0f1;
-
-            color: #e52429;
-
+            background: #f5e5df;
+            color: var(--pm-maroon);
             display: flex;
-
             align-items: center;
             justify-content: center;
-
             font-size: 17px;
         }
 
@@ -732,24 +584,19 @@
 
         .quick-title {
             font-size: 13px;
-
             font-weight: 600;
-
             color: #27303b;
         }
 
         .quick-description {
             font-size: 11px;
-
             color: #a0a8b2;
-
             margin-top: 5px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            ORDER SECTION
-        ===================================================== */
+        ========================================= */
 
         .orders-section {
             margin-top: 24px;
@@ -761,34 +608,24 @@
 
         .orders-table {
             width: 100%;
-
             border-collapse: collapse;
         }
 
         .orders-table th {
             padding: 14px 20px;
-
             text-align: left;
-
             font-size: 11px;
-
-            color: #8994a3;
-
+            color: var(--pm-muted);
             font-weight: 600;
-
-            background: #fafafa;
-
-            border-bottom: 1px solid #e8eaed;
+            background: var(--pm-cream);
+            border-bottom: 1px solid var(--pm-border);
         }
 
         .orders-table td {
             padding: 15px 20px;
-
             font-size: 12px;
-
-            color: #4b5563;
-
-            border-bottom: 1px solid #edf0f2;
+            color: #59453d;
+            border-bottom: 1px solid #f5ebe3;
         }
 
         .orders-table tr:last-child td {
@@ -797,139 +634,106 @@
 
         .order-id {
             font-weight: 700;
-
-            color: #1f2937;
+            color: var(--pm-text);
         }
 
         .customer-name {
             font-weight: 600;
-
-            color: #374151;
+            color: var(--pm-text);
         }
 
         .order-total {
             font-weight: 700;
-
-            color: #1f2937;
+            color: var(--pm-text);
         }
-
 
         /* STATUS */
 
         .status {
             display: inline-flex;
-
             align-items: center;
-
             padding: 5px 9px;
-
             border-radius: 999px;
-
             font-size: 10px;
-
             font-weight: 700;
         }
 
         .status.pending {
-            background: #fff7df;
-
-            color: #a56b00;
+            background: #fff3d6;
+            color: #946200;
         }
 
         .status.processing {
-            background: #eaf2ff;
-
-            color: #3267b1;
+            background: #f5e5df;
+            color: var(--pm-maroon);
         }
 
         .status.shipped {
             background: #f0eaff;
-
             color: #6845a5;
         }
 
         .status.completed {
             background: #eaf8ef;
-
             color: #26864b;
         }
 
         .status.cancelled {
             background: #ffeded;
-
             color: #c43838;
         }
-
 
         /* DETAIL BUTTON */
 
         .detail-link {
-            color: #e52429;
-
+            color: var(--pm-maroon);
             font-weight: 600;
-
             font-size: 11px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            EMPTY STATE
-        ===================================================== */
+        ========================================= */
 
         .empty-state {
             padding: 45px 20px;
-
             text-align: center;
-
-            color: #9aa0a6;
-
+            color: var(--pm-muted);
             font-size: 13px;
         }
 
         .empty-icon {
             font-size: 32px;
-
             margin-bottom: 10px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            FOOTER
-        ===================================================== */
+        ========================================= */
 
         .footer {
             margin-top: 35px;
-
             padding: 20px 0;
-
-            border-top: 1px solid #e1e4e8;
-
-            color: #9aa0a6;
-
+            border-top: 1px solid var(--pm-border);
+            color: var(--pm-muted);
             font-size: 11px;
         }
 
-
-        /* =====================================================
+        /* =========================================
            RESPONSIVE
-        ===================================================== */
+        ========================================= */
 
         @media (max-width: 1100px) {
-
             .stats-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .content-grid {
                 grid-template-columns: 1fr;
             }
-
         }
 
-
         @media (max-width: 800px) {
-
             .sidebar {
                 width: 220px;
             }
@@ -943,29 +747,23 @@
             }
 
             .topbar {
-                padding: 0 20px;
+                padding: 12px 20px;
             }
-
         }
 
-
         @media (max-width: 650px) {
-
             .sidebar {
                 position: relative;
-
                 width: 100%;
-
                 height: auto;
             }
 
             .sidebar-brand {
-                height: auto;
+                height: 88px;
             }
 
             .sidebar-user {
                 position: static;
-
                 margin-top: 0;
             }
 
@@ -979,20 +777,15 @@
 
             .page-heading {
                 align-items: flex-start;
-
                 flex-direction: column;
-
                 gap: 15px;
             }
 
             .topbar {
                 height: auto;
-
-                padding: 18px;
-
+                padding: 12px 16px;
                 gap: 15px;
-
-                align-items: flex-start;
+                align-items: center;
             }
 
             .topbar-right {
@@ -1000,314 +793,25 @@
             }
         }
 
-        .brand-logo {
-    gap: 8px;
-}
+        .menu-icon i,
+        .stat-icon i,
+        .quick-icon i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.menu-item {
-    gap: 12px;
-}
+        .sidebar-user-inner .user-avatar i,
+        .topbar-avatar i {
+            font-size: 19px;
+        }
 
-.menu-icon i,
-.stat-icon i,
-.quick-icon i {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.sidebar-user-inner .user-avatar i,
-.topbar-avatar i {
-    font-size: 19px;
-}
-
-.product-image i,
-.empty-icon i {
-    font-size: 26px;
-}
-
-
-/* =========================================
-   TEMA PIZZAMOZZA - DASHBOARD KARYAWAN
-========================================= */
-
-:root {
-    --pm-maroon: #861b1b;
-    --pm-maroon-hover: #a52828;
-    --pm-cream: #fffaf3;
-    --pm-cream-dark: #f5ebe3;
-    --pm-border: #f0e1d5;
-    --pm-text: #34241f;
-    --pm-muted: #81716a;
-}
-
-/* Latar halaman */
-body {
-    background: var(--pm-cream);
-    color: var(--pm-text);
-}
-
-/* Sidebar */
-.sidebar {
-    background: var(--pm-maroon);
-    border-right: none;
-}
-
-.sidebar-brand {
-    border-bottom-color: rgba(255, 255, 255, 0.16);
-}
-
-.brand-logo h1 {
-    color: #ffffff;
-}
-
-.brand-logo .pizza-icon {
-    color: #ffffff;
-}
-
-.brand-subtitle {
-    color: #f5dede;
-}
-
-/* Menu sidebar */
-.menu-title {
-    color: #e8bcbc;
-}
-
-.menu-item {
-    color: #ffffff;
-}
-
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
-}
-
-.menu-item.active {
-    background: #ffffff;
-    color: var(--pm-maroon);
-}
-
-.menu-icon {
-    color: inherit;
-}
-
-/* Informasi pengguna sidebar */
-.sidebar-user {
-    border-top-color: rgba(255, 255, 255, 0.16);
-}
-
-.user-avatar,
-.topbar-avatar {
-    background: #f5e5df;
-    color: var(--pm-maroon);
-}
-
-.user-name {
-    color: #ffffff;
-}
-
-.user-role {
-    color: #e8bcbc;
-}
-
-/* Tombol keluar */
-.sidebar-user form button {
-    background: #ffffff !important;
-    color: var(--pm-maroon) !important;
-    border-color: #ffffff !important;
-}
-
-.sidebar-user form button:hover {
-    background: #f5dede !important;
-    color: var(--pm-maroon) !important;
-}
-
-/* Topbar */
-.topbar {
-    background: #ffffff;
-    border-bottom-color: var(--pm-border);
-}
-
-.topbar-left,
-.topbar-user-role {
-    color: var(--pm-muted);
-}
-
-.topbar-user-name {
-    color: var(--pm-text);
-}
-
-/* Area konten */
-.page {
-    background: var(--pm-cream);
-}
-
-.heading-label {
-    color: var(--pm-maroon);
-}
-
-.page-heading h2 {
-    color: var(--pm-text);
-}
-
-.page-description {
-    color: var(--pm-muted);
-}
-
-/* Tombol utama */
-.btn-primary {
-    background: var(--pm-maroon);
-}
-
-.btn-primary:hover {
-    background: var(--pm-maroon-hover);
-}
-
-/* Kartu statistik */
-.stat-card {
-    background: #ffffff;
-    border-color: var(--pm-border);
-}
-
-.stat-card.red,
-.stat-card.blue,
-.stat-card.orange,
-.stat-card.green {
-    border-color: var(--pm-border);
-}
-
-.stat-card.red .stat-icon,
-.stat-card.blue .stat-icon {
-    background: #f5e5df;
-    color: var(--pm-maroon);
-}
-
-.stat-card.orange .stat-icon {
-    background: #fff0df;
-    color: #a85e20;
-}
-
-.stat-card.green .stat-icon {
-    background: #edf5e9;
-    color: #477746;
-}
-
-.stat-title,
-.stat-description {
-    color: var(--pm-muted);
-}
-
-.stat-number {
-    color: var(--pm-text);
-}
-
-/* Panel dan daftar produk */
-.panel {
-    background: #ffffff;
-    border-color: var(--pm-border);
-}
-
-.panel-header {
-    border-bottom-color: var(--pm-border);
-}
-
-.panel-title,
-.product-name,
-.product-price,
-.order-id,
-.order-total {
-    color: var(--pm-text);
-}
-
-.panel-subtitle,
-.product-category {
-    color: var(--pm-muted);
-}
-
-.panel-link,
-.detail-link {
-    color: var(--pm-maroon);
-}
-
-.product-item,
-.quick-action {
-    border-bottom-color: #f5ebe3;
-}
-
-.product-image {
-    background: var(--pm-cream);
-}
-
-.product-status {
-    color: var(--pm-maroon);
-}
-
-/* Aksi cepat */
-.quick-action:hover {
-    background: var(--pm-cream);
-}
-
-.quick-icon {
-    background: #f5e5df;
-    color: var(--pm-maroon);
-}
-
-/* Tabel pesanan */
-.orders-table th {
-    background: var(--pm-cream);
-    color: var(--pm-muted);
-    border-bottom-color: var(--pm-border);
-}
-
-.orders-table td {
-    color: #59453d;
-    border-bottom-color: #f5ebe3;
-}
-
-.customer-name {
-    color: var(--pm-text);
-}
-
-/* Status pesanan tetap memiliki warna pembeda */
-.status.pending {
-    background: #fff3d6;
-    color: #946200;
-}
-
-.status.processing {
-    background: #f5e5df;
-    color: var(--pm-maroon);
-}
-
-.status.shipped {
-    background: #f0eaff;
-    color: #6845a5;
-}
-
-.status.completed {
-    background: #eaf8ef;
-    color: #26864b;
-}
-
-.status.cancelled {
-    background: #ffeded;
-    color: #c43838;
-}
-
-/* Kondisi kosong dan footer */
-.empty-state {
-    color: var(--pm-muted);
-}
-
-.footer {
-    border-top-color: var(--pm-border);
-    color: var(--pm-muted);
-}
-
+        .product-image i,
+        .empty-icon i {
+            font-size: 26px;
+        }
     </style>
 </head>
-
 
 <body>
 
@@ -1329,10 +833,7 @@ body {
 
     /*
     |--------------------------------------------------------------------------
-    | Ready Stock
-    |--------------------------------------------------------------------------
-    | Mengikuti konsep dashboard admin sebelumnya.
-    | Saat ini setiap produk dianggap tersedia.
+    | READY STOCK
     |--------------------------------------------------------------------------
     */
 
@@ -1365,10 +866,9 @@ body {
         'cancelled'
     )->count();
 
-
     /*
     |--------------------------------------------------------------------------
-    | Produk Terbaru
+    | PRODUK TERBARU
     |--------------------------------------------------------------------------
     */
 
@@ -1377,10 +877,9 @@ body {
         ->take(5)
         ->get();
 
-
     /*
     |--------------------------------------------------------------------------
-    | Pesanan Terbaru
+    | PESANAN TERBARU
     |--------------------------------------------------------------------------
     */
 
@@ -1395,16 +894,13 @@ body {
 
 @endphp
 
-
 <div class="dashboard-wrapper">
 
-
-    <!-- =====================================================
+    <!-- =========================================
          SIDEBAR
-    ====================================================== -->
+    ========================================== -->
 
     <aside class="sidebar">
-
 
         <!-- BRAND -->
 
@@ -1413,21 +909,18 @@ body {
             <div class="brand-logo">
 
                 <span class="pizza-icon">
-                    🍕
+                    <i class="fa-solid fa-pizza-slice"></i>
                 </span>
 
-                <h1>
-                    PizzaMozza
-                </h1>
+                <h1>PizzaMozza</h1>
 
             </div>
 
             <div class="brand-subtitle">
-                Employee Dashboard
+                Karyawan Dashboard
             </div>
 
         </div>
-
 
         <!-- MENU -->
 
@@ -1437,146 +930,94 @@ body {
                 MAIN MENU
             </div>
 
-
             <!-- DASHBOARD -->
 
-            <a
-                href="{{ route('karyawan.dashboard') }}"
-                class="menu-item active"
-            >
+            <a href="{{ route('karyawan.dashboard') }}"
+               class="menu-item active">
 
                 <span class="menu-icon">
-                    <i class="bi bi-house-door-fill"></i>
+                    <i class="bi bi-grid-fill"></i>
                 </span>
 
-                <span>
-                    Dashboard
-                </span>
+                <span>Dashboard</span>
 
             </a>
-
 
             <!-- DATA PRODUK -->
 
-            <a
-                href="{{ route('admin.products.index') }}"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    <i class="bi bi-box-seam"></i>
-                </span>
-
-                <span>
-                    Data Produk
-                </span>
-
-            </a>
-
+            <a href="{{ route('karyawan.products.index') }}" class="menu-item">
+    <i class="bi bi-box-seam"></i>
+    <span>Data Produk</span>
+</a>
 
             <!-- PESANAN -->
 
-            <a
-                href="{{ route('admin.orders.index') }}"
-                class="menu-item"
-            >
+            <a href="{{ route('karyawan.orders.index') }}"
+               class="menu-item">
 
                 <span class="menu-icon">
                     <i class="bi bi-bag-check"></i>
                 </span>
 
-                <span>
-                    Pesanan
-                </span>
+                <span>Pesanan</span>
 
             </a>
 
         </nav>
 
-
-        <!-- USER -->
+        <!-- PROFIL DAN LOGOUT -->
 
         <div class="sidebar-user">
 
-    <div class="sidebar-user-inner">
+            <div class="sidebar-user-inner">
 
-        <div class="user-avatar">
-            <i class="bi bi-person-circle"></i>
-        </div>
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
 
-        <div class="user-info">
+                <div class="user-info">
 
-            <div class="user-name">
-                {{ $user->name }}
+                    <div class="user-name">
+                        {{ $user->name }}
+                    </div>
+
+                    <div class="user-role">
+                        Karyawan
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="user-role">
-                PizzaMozza
-            </div>
+            <!-- LOGOUT -->
+
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+
+                <button type="submit">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Keluar</span>
+                </button>
+
+            </form>
 
         </div>
-
-    </div>
-
-
-    <!-- LOGOUT -->
-    <form
-        action="{{ route('logout') }}"
-        method="POST"
-        style="margin-top: 15px;"
-    >
-        @csrf
-
-        <button
-            type="submit"
-            style="
-                width: 100%;
-                height: 38px;
-                border: 1px solid #f1c5c7;
-                border-radius: 8px;
-                background: #fff5f5;
-                color: #e52429;
-                font-size: 12px;
-                font-weight: 600;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                transition: .2s;
-            "
-            onmouseover="this.style.background='#e52429'; this.style.color='#ffffff';"
-            onmouseout="this.style.background='#fff5f5'; this.style.color='#e52429';"
-        >
-            <span><i class="bi bi-box-arrow-right"></i></span>
-            <span>Keluar</span>
-        </button>
-
-    </form>
-
-</div>
 
     </aside>
 
-
-
-    <!-- =====================================================
+    <!-- =========================================
          MAIN CONTENT
-    ====================================================== -->
+    ========================================== -->
 
     <main class="main-content">
 
-
-        <!-- =================================================
-             TOP BAR
-        ================================================== -->
+        <!-- TOPBAR -->
 
         <header class="topbar">
 
             <div class="topbar-left">
-                Management System
+               
             </div>
-
 
             <div class="topbar-right">
 
@@ -1593,25 +1034,18 @@ body {
                 </div>
 
                 <div class="topbar-avatar">
-                    <i class="bi bi-person-circle"></i>
+                    <i class="bi bi-person"></i>
                 </div>
 
             </div>
 
         </header>
 
-
-
-        <!-- =================================================
-             PAGE
-        ================================================== -->
+        <!-- PAGE -->
 
         <div class="page">
 
-
-            <!-- =================================================
-                 PAGE HEADER
-            ================================================== -->
+            <!-- PAGE HEADER -->
 
             <div class="page-heading">
 
@@ -1621,9 +1055,7 @@ body {
                         Overview
                     </div>
 
-                    <h2>
-                        Dashboard
-                    </h2>
+                    <h2>Dashboard</h2>
 
                     <div class="page-description">
                         Kelola operasional Pizza Mozza dari satu tempat.
@@ -1631,34 +1063,22 @@ body {
 
                 </div>
 
-
                 <!-- TAMBAH PRODUK -->
 
-                <a
-                    href="{{ route('admin.products.create') }}"
-                    class="btn-primary"
-                >
+                <a href="{{ route('karyawan.products.index') }}"
+                   class="btn-primary">
 
-                    <span>
-                        +
-                    </span>
+                    <span>+</span>
 
-                    <span>
-                        Tambah Produk
-                    </span>
+                    <span>Lihat Data Produk</span>
 
                 </a>
 
             </div>
 
-
-
-            <!-- =================================================
-                 STATISTICS
-            ================================================== -->
+            <!-- STATISTICS -->
 
             <div class="stats-grid">
-
 
                 <!-- TOTAL PRODUK -->
 
@@ -1686,7 +1106,6 @@ body {
 
                 </div>
 
-
                 <!-- READY STOCK -->
 
                 <div class="stat-card blue">
@@ -1698,7 +1117,7 @@ body {
                         </div>
 
                         <div class="stat-icon">
-                            ✓
+                            <i class="bi bi-check-lg"></i>
                         </div>
 
                     </div>
@@ -1712,7 +1131,6 @@ body {
                     </div>
 
                 </div>
-
 
                 <!-- TOTAL PESANAN -->
 
@@ -1739,7 +1157,6 @@ body {
                     </div>
 
                 </div>
-
 
                 <!-- PENDING -->
 
@@ -1769,18 +1186,11 @@ body {
 
             </div>
 
-
-
-            <!-- =================================================
-                 PRODUCT + QUICK ACTION
-            ================================================== -->
+            <!-- PRODUK DAN QUICK ACTION -->
 
             <div class="content-grid">
 
-
-                <!-- =================================================
-                     PRODUK TERBARU
-                ================================================== -->
+                <!-- PRODUK TERBARU -->
 
                 <section class="panel">
 
@@ -1798,49 +1208,35 @@ body {
 
                         </div>
 
-
-                        <a
-                            href="{{ route('admin.products.index') }}"
-                            class="panel-link"
-                        >
+                        <a href="{{ route('karyawan.products.index') }}"
+                           class="panel-link">
                             Lihat semua
                         </a>
 
                     </div>
 
-
-                    @forelse(
-                        $produkTerbaru
-                        as $product
-                    )
+                    @forelse($produkTerbaru as $product)
 
                         <div class="product-item">
-
 
                             <div class="product-left">
 
                                 <div class="product-image">
 
-                                    @if(
-                                        !empty($product->image)
-                                    )
+                                    @if(!empty($product->image))
 
                                         <img
-                                            src="{{ asset(
-                                                'storage/' .
-                                                $product->image
-                                            ) }}"
+                                            src="{{ asset('storage/' . $product->image) }}"
                                             alt="{{ $product->name }}"
                                         >
 
                                     @else
 
-                                        🍕
+                                        <i class="fa-solid fa-pizza-slice"></i>
 
                                     @endif
 
                                 </div>
-
 
                                 <div>
 
@@ -1849,52 +1245,34 @@ body {
                                     </div>
 
                                     <div class="product-category">
-                                        {{ ucfirst(
-                                            $product->category
-                                            ?? 'Pizza'
-                                        ) }}
+                                        {{ ucfirst($product->category ?? 'Pizza') }}
                                     </div>
 
                                 </div>
 
                             </div>
 
-
                             <div class="product-right">
 
                                 @php
 
-                                    /*
-                                    |--------------------------------------------------------------------------
-                                    | Ambil harga termurah dari variant
-                                    |--------------------------------------------------------------------------
-                                    */
-
                                     $hargaProduk = null;
 
                                     if (
-                                        isset($product->variants)
-                                        &&
+                                        isset($product->variants) &&
                                         $product->variants->count()
                                     ) {
-
-                                        $hargaProduk =
-                                            $product->variants
-                                                ->min('price');
-
+                                        $hargaProduk = $product->variants
+                                            ->min('price');
                                     }
 
                                 @endphp
 
-
                                 <div class="product-price">
 
-                                    @if(
-                                        $hargaProduk !== null
-                                    )
+                                    @if($hargaProduk !== null)
 
-                                        Rp
-                                        {{ number_format(
+                                        Rp {{ number_format(
                                             $hargaProduk,
                                             0,
                                             ',',
@@ -1933,11 +1311,7 @@ body {
 
                 </section>
 
-
-
-                <!-- =================================================
-                     QUICK ACTIONS
-                ================================================== -->
+                <!-- QUICK ACTIONS -->
 
                 <section class="panel">
 
@@ -1957,13 +1331,10 @@ body {
 
                     </div>
 
-
                     <!-- TAMBAH PRODUK -->
 
-                    <a
-                        href="{{ route('admin.products.create') }}"
-                        class="quick-action"
-                    >
+                    <a href="{{ route('karyawan.products.index') }}"
+                       class="quick-action">
 
                         <div class="quick-icon">
                             <i class="bi bi-plus-lg"></i>
@@ -1972,24 +1343,21 @@ body {
                         <div class="quick-content">
 
                             <div class="quick-title">
-                                Tambah Produk
+                                Lihat Data Produk
                             </div>
 
                             <div class="quick-description">
-                                Tambahkan menu baru
+                                Lihat dan periksa data produk
                             </div>
 
                         </div>
 
                     </a>
 
-
                     <!-- KELOLA PESANAN -->
 
-                    <a
-                        href="{{ route('admin.orders.index') }}"
-                        class="quick-action"
-                    >
+                    <a href="{{ route('karyawan.orders.index') }}"
+                       class="quick-action">
 
                         <div class="quick-icon">
                             <i class="bi bi-bag-check"></i>
@@ -2009,13 +1377,10 @@ body {
 
                     </a>
 
-
                     <!-- PESANAN PENDING -->
 
-                    <a
-                        href="{{ route('admin.orders.index') }}?status=pending"
-                        class="quick-action"
-                    >
+                    <a href="{{ route('karyawan.orders.index') }}?status=pending"
+                       class="quick-action">
 
                         <div class="quick-icon">
                             <i class="bi bi-hourglass-split"></i>
@@ -2040,11 +1405,7 @@ body {
 
             </div>
 
-
-
-            <!-- =================================================
-                 PESANAN TERBARU
-            ================================================== -->
+            <!-- PESANAN TERBARU -->
 
             <section class="panel orders-section">
 
@@ -2062,16 +1423,12 @@ body {
 
                     </div>
 
-
-                    <a
-                        href="{{ route('admin.orders.index') }}"
-                        class="panel-link"
-                    >
+                    <a href="{{ route('karyawan.orders.index') }}"
+                       class="panel-link">
                         Lihat semua
                     </a>
 
                 </div>
-
 
                 <div class="orders-table-wrapper">
 
@@ -2080,92 +1437,40 @@ body {
                         <thead>
 
                             <tr>
-
-                                <th>
-                                    Pesanan
-                                </th>
-
-                                <th>
-                                    Pelanggan
-                                </th>
-
-                                <th>
-                                    Total
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
-                                <th>
-                                    Aksi
-                                </th>
-
+                                <th>Pesanan</th>
+                                <th>Pelanggan</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
                             </tr>
 
                         </thead>
 
-
                         <tbody>
 
-                            @forelse(
-                                $pesananTerbaru
-                                as $order
-                            )
+                            @forelse($pesananTerbaru as $order)
 
                                 @php
 
-                                    $statusClass =
-                                        match ($order->status) {
+                                    $statusClass = match ($order->status) {
+                                        'pending' => 'pending',
+                                        'processing' => 'processing',
+                                        'shipped' => 'shipped',
+                                        'completed' => 'completed',
+                                        'cancelled' => 'cancelled',
+                                        default => 'pending',
+                                    };
 
-                                            'pending'
-                                                => 'pending',
-
-                                            'processing'
-                                                => 'processing',
-
-                                            'shipped'
-                                                => 'shipped',
-
-                                            'completed'
-                                                => 'completed',
-
-                                            'cancelled'
-                                                => 'cancelled',
-
-                                            default
-                                                => 'pending',
-
-                                        };
-
-
-                                    $statusText =
-                                        match ($order->status) {
-
-                                            'pending'
-                                                => 'Pending',
-
-                                            'processing'
-                                                => 'Diproses',
-
-                                            'shipped'
-                                                => 'Dikirim',
-
-                                            'completed'
-                                                => 'Selesai',
-
-                                            'cancelled'
-                                                => 'Dibatalkan',
-
-                                            default
-                                                => ucfirst(
-                                                    $order->status
-                                                ),
-
-                                        };
+                                    $statusText = match ($order->status) {
+                                        'pending' => 'Pending',
+                                        'processing' => 'Diproses',
+                                        'shipped' => 'Dikirim',
+                                        'completed' => 'Selesai',
+                                        'cancelled' => 'Dibatalkan',
+                                        default => ucfirst($order->status),
+                                    };
 
                                 @endphp
-
 
                                 <tr>
 
@@ -2177,35 +1482,25 @@ body {
                                             #{{ $order->id }}
                                         </div>
 
-                                        <div
-                                            style="
-                                                margin-top:4px;
-                                                color:#9aa0a6;
-                                                font-size:10px;
-                                            "
-                                        >
-                                            {{ $order->created_at?->format(
-                                                'd M Y H:i'
-                                            ) }}
+                                        <div style="
+                                            margin-top:4px;
+                                            color:#9aa0a6;
+                                            font-size:10px;
+                                        ">
+                                            {{ $order->created_at?->format('d M Y H:i') }}
                                         </div>
 
                                     </td>
-
 
                                     <!-- CUSTOMER -->
 
                                     <td>
 
                                         <div class="customer-name">
-
-                                            {{ $order->user->name
-                                                ?? 'Pelanggan'
-                                            }}
-
+                                            {{ $order->user->name ?? 'Pelanggan' }}
                                         </div>
 
                                     </td>
-
 
                                     <!-- TOTAL -->
 
@@ -2213,8 +1508,7 @@ body {
 
                                         <div class="order-total">
 
-                                            Rp
-                                            {{ number_format(
+                                            Rp {{ number_format(
                                                 $order->total_price,
                                                 0,
                                                 ',',
@@ -2225,31 +1519,25 @@ body {
 
                                     </td>
 
-
                                     <!-- STATUS -->
 
                                     <td>
 
-                                        <span
-                                            class="status {{ $statusClass }}"
-                                        >
+                                        <span class="status {{ $statusClass }}">
                                             {{ $statusText }}
                                         </span>
 
                                     </td>
 
-
                                     <!-- DETAIL -->
 
                                     <td>
 
-                                        <a
-                                            href="{{ route(
-                                                'admin.orders.show',
-                                                $order->id
-                                            ) }}"
-                                            class="detail-link"
-                                        >
+                                        <a href="{{ route(
+                                            'admin.orders.show',
+                                            $order->id
+                                        ) }}"
+                                           class="detail-link">
                                             Detail
                                         </a>
 
@@ -2261,10 +1549,7 @@ body {
 
                                 <tr>
 
-                                    <td
-                                        colspan="5"
-                                        class="empty-state"
-                                    >
+                                    <td colspan="5" class="empty-state">
 
                                         <div class="empty-icon">
                                             <i class="bi bi-bag-check"></i>
@@ -2286,11 +1571,7 @@ body {
 
             </section>
 
-
-
-            <!-- =================================================
-                 FOOTER
-            ================================================== -->
+            <!-- FOOTER -->
 
             <footer class="footer">
 
@@ -2300,7 +1581,6 @@ body {
 
             </footer>
 
-
         </div>
 
     </main>
@@ -2308,5 +1588,4 @@ body {
 </div>
 
 </body>
-
 </html>

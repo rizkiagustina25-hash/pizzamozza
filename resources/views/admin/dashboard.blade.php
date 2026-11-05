@@ -7,7 +7,8 @@
 
     <title>Dashboard Admin - PizzaMozza</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
->
+>   <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <style>
         /* =========================================================
@@ -272,68 +273,64 @@
            TOPBAR
         ========================================================= */
 
-        .topbar {
-            height: 72px;
+        /* =========================================================
+   TOPBAR - SAMA DENGAN HALAMAN KELOLA PESANAN
+========================================================= */
 
-            padding: 0 34px;
+.topbar {
+    min-height: 72px;
+    padding: 12px 34px;
+    background: #ffffff;
+    border-bottom: 1px solid #e8e8e8;
 
-            background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
 
-            border-bottom: 1px solid #e8e8e8;
+.topbar-title {
+    font-size: 13px;
+    color: #777;
+}
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+.topbar-admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-        .topbar-title {
-            font-size: 13px;
-            color: #777;
-        }
+.topbar-admin-info {
+    text-align: right;
+}
 
-        .topbar-admin {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+.topbar-admin-info strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+}
 
-        .topbar-admin-info {
-            text-align: right;
-        }
+.topbar-admin-info span {
+    display: block;
+    margin-top: 3px;
+    font-size: 10px;
+    color: #999;
+}
 
-        .topbar-admin-info strong {
-            display: block;
+.topbar-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff0f4;
 
-            font-size: 13px;
-            font-weight: 700;
-        }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        .topbar-admin-info span {
-            display: block;
-
-            margin-top: 3px;
-
-            font-size: 10px;
-
-            color: #999;
-        }
-
-        .topbar-avatar {
-            width: 38px;
-            height: 38px;
-
-            border-radius: 50%;
-
-            background: #fff0f4;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #65358b;
-
-            font-size: 16px;
-        }
+    color: #941919;
+    font-size: 16px;
+}
 
 
         /* =========================================================
@@ -1043,7 +1040,7 @@
         <div class="brand">
 
             <div class="brand-icon">
-    <i class="bi bi-egg-fried"></i>
+    <i class="fa-solid fa-pizza-slice"></i>
 </div>
 
             <div class="brand-content">
@@ -1229,35 +1226,33 @@
     <div class="main-wrapper">
 
         {{-- TOPBAR --}}
-        <header class="topbar">
+<header class="topbar">
 
-            <div class="topbar-title">
-                Management System
-            </div>
+    <div class="topbar-title">
+        
+    </div>
 
+    <div class="topbar-admin">
 
-            <div class="topbar-admin">
+        <div class="topbar-admin-info">
 
-                <div class="topbar-admin-info">
+            <strong>
+                {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
+            </strong>
 
-                    <strong>
-                        {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
-                    </strong>
+            <span>
+                {{ auth()->user()->role === 'admin' ? 'Administrator' : 'Karyawan' }}
+            </span>
 
-                    <span>
-                        Administrator
-                    </span>
+        </div>
 
-                </div>
+        <div class="topbar-avatar">
+            <i class="bi bi-person"></i>
+        </div>
 
+    </div>
 
-                <div class="topbar-avatar">
-                    👤
-                </div>
-
-            </div>
-
-        </header>
+</header>
 
 
         {{-- CONTENT --}}
@@ -1268,9 +1263,6 @@
 
                 <div>
 
-                    <div class="heading-label">
-                        Overview
-                    </div>
 
                     <h2>
                         Dashboard
