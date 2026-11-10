@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -10,26 +9,28 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    {{-- Bootstrap Icons --}}
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    {{-- Font Awesome --}}
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <style>
         * {
             box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f8f8f8;
+            background: #f7f5f2;
+            color: #3d3029;
         }
 
-        /* SIDEBAR */
+        /* =====================================
+           SIDEBAR
+        ===================================== */
+
         .sidebar {
             position: fixed;
             top: 0;
@@ -37,33 +38,31 @@
             bottom: 0;
             width: 265px;
             background: #941919;
+            color: #fff;
             display: flex;
             flex-direction: column;
             z-index: 100;
-            color: white;
-            padding: 0;
         }
 
-        .sidebar-brand {
+        .brand {
             height: 88px;
             padding: 18px 24px;
             display: flex;
             align-items: center;
-            gap: 11px;
-            border-bottom: 1px solid rgba(255,255,255,.15);
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, .15);
             flex-shrink: 0;
         }
 
         .brand-icon {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            background: #b52d2d;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #b52d2d;
-            color: white;
-            font-size: 20px;
+            font-size: 19px;
             flex-shrink: 0;
         }
 
@@ -71,7 +70,6 @@
             font-size: 23px;
             font-weight: 700;
             line-height: 1.1;
-            color: white;
         }
 
         .brand-subtitle {
@@ -80,15 +78,15 @@
             color: #f5dede;
         }
 
-        .sidebar nav {
+        .sidebar-menu {
             padding: 24px 15px;
         }
 
         .menu-title {
             margin: 0 12px 12px;
+            color: #f5dede;
             font-size: 10px;
             font-weight: 700;
-            color: #f5dede;
             letter-spacing: .8px;
             text-transform: uppercase;
         }
@@ -110,506 +108,472 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            color: white;
+            color: #fff;
+            text-decoration: none;
             font-size: 13px;
             font-weight: 600;
-            text-decoration: none;
             transition: .2s ease;
         }
 
         .menu-link:hover,
         .menu-link.active {
             background: #b52d2d;
-            color: white;
+            color: #fff;
         }
 
         .menu-icon {
             width: 22px;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             font-size: 16px;
         }
 
-        /* SIDEBAR BOTTOM */
-.sidebar-bottom {
-    margin-top: auto;
-    padding: 18px 16px;
-    border-top: 1px solid rgba(255, 255, 255, .15);
-    flex-shrink: 0;
-}
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 18px 16px;
+            border-top: 1px solid rgba(255, 255, 255, .15);
+        }
 
-.admin-profile {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    margin-bottom: 15px;
-    padding: 5px 6px;
-}
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 15px;
+            padding: 5px 6px;
+        }
 
-.sidebar-bottom .admin-avatar {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    max-width: 40px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: #b52d2d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 17px;
-}
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #b52d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
 
-.admin-info {
-    min-width: 0;
-    display: block;
-}
+        .profile-info strong {
+            display: block;
+            color: #fff;
+            font-size: 12px;
+        }
 
-.admin-info strong {
-    display: block;
-    font-size: 12px;
-    color: white;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 155px;
-}
+        .profile-info span {
+            display: block;
+            margin-top: 4px;
+            color: #f5dede;
+            font-size: 10px;
+        }
 
-.admin-info span {
-    display: block;
-    margin-top: 4px;
-    font-size: 10px;
-    color: #f5dede;
-}
+        .logout-button {
+            width: 100%;
+            height: 38px;
+            border: none;
+            border-radius: 8px;
+            background: #fff;
+            color: #941919;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s ease;
+        }
 
-.logout-button {
-    width: 100%;
-    height: 38px;
-    border: 1px solid rgba(255, 255, 255, .4);
-    border-radius: 8px;
-    background: white;
-    color: #941919;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: .2s ease;
-}
+        .logout-button:hover {
+            background: #f5dede;
+        }
 
-.logout-button:hover {
-    background: #f5dede;
-    color: #941919;
-}
+        /* =====================================
+           MAIN CONTENT
+        ===================================== */
 
-        /* MAIN */
-        .main-wrapper {
+        .main {
             margin-left: 265px;
+            width: calc(100% - 265px);
             min-height: 100vh;
         }
 
-        /* TOPBAR - SAMA DENGAN HALAMAN LAIN */
-.topbar {
-    min-height: 72px;
-    padding: 12px 34px;
-    background: #ffffff;
-    border-bottom: 1px solid #e8e8e8;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.topbar-title {
-    font-size: 13px;
-    color: #777;
-}
-
-.topbar-admin {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.topbar-admin-info {
-    text-align: right;
-}
-
-.topbar-admin-info strong {
-    display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: #333;
-}
-
-.topbar-admin-info span {
-    display: block;
-    margin-top: 3px;
-    font-size: 10px;
-    color: #999;
-}
-
-.topbar-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #fff0f4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #941919;
-    font-size: 16px;
-}
-
-        /* CONTENT */
-        .content {
-            padding: 35px;
-        }
-
-        .page-heading {
+        .topbar {
+            min-height: 72px;
+            padding: 12px 34px;
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 28px;
+            justify-content: flex-end;
         }
 
-        .heading-label {
-            color: #941919;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .page-heading h1 {
-            font-size: 28px;
-            font-weight: bold;
-            color: #292929;
-        }
-
-        .page-heading p {
-            color: #888;
-            font-size: 14px;
-            margin-top: 6px;
-        }
-
-        .primary-button {
-            display: inline-flex;
+        .topbar-admin {
+            display: flex;
             align-items: center;
-            gap: 8px;
-            background: #941919;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 9px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: .2s;
-            white-space: nowrap;
+            gap: 12px;
         }
 
-        .primary-button:hover {
-            background: #b52d2d;
-            color: white;
+        .topbar-info {
+            text-align: right;
         }
 
-        /* ALERT */
-        .success-alert {
-            background: #dcfce7;
-            border: 1px solid #bbf7d0;
-            color: #15803d;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 22px;
-        }
-
-        .error-alert {
-            background: #fff0ef;
-            border: 1px solid #efc5c2;
-            color: #9b2424;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 22px;
-        }
-
-        /* TABLE */
-        .table-card {
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,.03);
-        }
-
-        .table-card-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .table-card-header h2 {
-            font-size: 18px;
-            font-weight: bold;
+        .topbar-info strong {
+            display: block;
+            font-size: 13px;
             color: #333;
         }
 
-        .table-card-header p {
+        .topbar-info span {
+            display: block;
+            margin-top: 4px;
+            font-size: 10px;
+            color: #999;
+        }
+
+        .topbar-avatar {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            background: #fff0f0;
+            color: #941919;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        /* =====================================
+           PAGE CONTENT
+        ===================================== */
+
+        .content {
+            padding: 30px 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            font-size: 25px;
+            font-weight: 700;
+            color: #342820;
+        }
+
+        .page-description {
+            margin-top: 8px;
             font-size: 13px;
-            color: #888;
-            margin-top: 5px;
+            color: #8a7d75;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background: #941919;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            background: #b52d2d;
+        }
+
+        /* =====================================
+           ALERT
+        ===================================== */
+
+        .alert-success {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #b9e5c5;
+            border-radius: 9px;
+            background: #e8f7ed;
+            color: #23733a;
+            font-size: 13px;
+        }
+
+        .alert-error {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #f1c7c3;
+            border-radius: 9px;
+            background: #fff0ef;
+            color: #a92820;
+            font-size: 13px;
+        }
+
+        /* =====================================
+           TABLE CARD
+        ===================================== */
+
+        .table-card {
+            background: #fff;
+            border: 1px solid #e5ded9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(61, 48, 41, .05);
+        }
+
+        .table-heading {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5ded9;
+        }
+
+        .table-heading h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #342820;
+        }
+
+        .table-heading p {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #8a7d75;
         }
 
         .table-wrapper {
+            width: 100%;
             overflow-x: auto;
         }
 
         .product-table {
             width: 100%;
+            min-width: 900px;
             border-collapse: collapse;
-            min-width: 850px;
+            background: #fff;
         }
 
         .product-table thead {
-            background: #faf1f1;
+            background: #f8efed;
         }
 
         .product-table th {
-            padding: 17px 22px;
+            padding: 15px 18px;
+            border: 1px solid #e5d8d3;
+            color: #5b4038;
             text-align: left;
-            font-size: 13px;
-            font-weight: bold;
-            color: #555;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         .product-table td {
-            padding: 17px 22px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
-            color: #555;
+            padding: 16px 18px;
+            border: 1px solid #e8e1dc;
+            color: #51443d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .product-table tbody tr:nth-child(even) {
+            background: #fffdfc;
         }
 
         .product-table tbody tr:hover {
-            background: #fffafa;
+            background: #fff2ee;
         }
 
-        .product-table tbody tr:last-child td {
-            border-bottom: none;
+        .product-name {
+            color: #342820;
+            font-size: 13px;
+            font-weight: 700;
         }
+
+        .product-id {
+            margin-top: 5px;
+            color: #8a7d75;
+            font-size: 12px;
+        }
+
+        .product-image {
+            width: 58px;
+            height: 58px;
+            border-radius: 9px;
+            border: 1px solid #eee3dd;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .product-placeholder {
+            width: 58px;
+            height: 58px;
+            border-radius: 9px;
+            background: #f8e9e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            flex-shrink: 0;
+        }
+
+        /* =====================================
+           CATEGORY
+        ===================================== */
 
         .category-badge {
             display: inline-block;
             padding: 6px 12px;
             border-radius: 20px;
-            background: #fce8e8;
-            color: #941919;
-            font-size: 12px;
-            font-weight: 600;
+            background: #fbe8e7;
+            color: #a92820;
+            font-size: 11px;
+            font-weight: 700;
         }
 
+        /* =====================================
+           STOCK
+        ===================================== */
+
         .stock-available {
-            color: #15803d;
-            font-weight: 600;
+            color: #198754;
+            font-weight: 700;
         }
 
         .stock-empty {
             display: inline-block;
-            padding: 6px 12px;
-            background: #fee2e2;
-            color: #dc2626;
+            padding: 5px 10px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            background: #fde5e5;
+            color: #b42318;
+            font-size: 11px;
+            font-weight: 700;
         }
 
-        .action-button {
+        /* =====================================
+           VARIANTS
+        ===================================== */
+
+        .variant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .variant-item {
+            color: #62544d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .variant-name {
+            font-weight: 600;
+            color: #45362e;
+        }
+
+        .no-variant {
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* =====================================
+           ACTION BUTTONS
+        ===================================== */
+
+        .action-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .action-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: 7px;
-            font-size: 12px;
+            border: none;
+            font-size: 11px;
             font-weight: 600;
             text-decoration: none;
-            border: none;
             cursor: pointer;
-            transition: .2s;
-            white-space: nowrap;
+            transition: .2s ease;
         }
 
-        .detail-button {
-            background: #dbeafe;
-            color: #2563eb;
+        .action-btn:hover {
+            opacity: .8;
+            transform: translateY(-1px);
         }
 
-        .detail-button:hover {
-            background: #bfdbfe;
-            color: #2563eb;
+        .btn-view {
+            background: #e2edff;
+            color: #2458a6;
         }
 
-        .edit-button {
-            background: #fef3c7;
-            color: #b45309;
+        .btn-edit {
+            background: #fff1d6;
+            color: #a76516;
         }
 
-        .edit-button:hover {
-            background: #fde68a;
-            color: #92400e;
+        .btn-delete {
+            background: #fde5e5;
+            color: #a92820;
         }
 
-        .delete-button {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .delete-button:hover {
-            background: #fecaca;
-            color: #dc2626;
-        }
+        /* =====================================
+           EMPTY DATA
+        ===================================== */
 
         .empty-state {
+            padding: 55px 20px;
             text-align: center;
-            padding: 55px 20px !important;
         }
 
-        .empty-state i {
+        .empty-state .icon {
+            margin-bottom: 14px;
+            color: #a92820;
             font-size: 42px;
-            color: #c9a0a0;
-            display: block;
-            margin-bottom: 12px;
         }
 
-        /* MODAL HAPUS DAN LOGOUT */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.5);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        .empty-state h3 {
+            color: #45362e;
+            font-size: 16px;
+            font-weight: 700;
         }
 
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-box {
-            background: white;
-            width: 100%;
-            max-width: 420px;
-            border-radius: 15px;
-            padding: 28px;
-            text-align: center;
-            box-shadow: 0 10px 35px rgba(0,0,0,.15);
-            animation: modalFade .2s ease;
-        }
-
-        @keyframes modalFade {
-            from {
-                opacity: 0;
-                transform: translateY(-10px) scale(.97);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-icon {
-            width: 58px;
-            height: 58px;
-            background: #fce8e8;
-            color: #941919;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            margin: 0 auto 16px;
-        }
-
-        .modal-box h3 {
-            font-size: 19px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .modal-box p {
-            color: #888;
+        .empty-state p {
+            margin-top: 7px;
+            color: #8a7d75;
             font-size: 13px;
-            margin-bottom: 23px;
-            line-height: 1.6;
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-        }
+        /* =====================================
+           FOOTER
+        ===================================== */
 
-        .modal-actions button {
-            flex: 1;
-            padding: 11px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .cancel-button {
-            background: #f3f4f6;
-            color: #555;
-            border: none;
-        }
-
-        .cancel-button:hover {
-            background: #e5e7eb;
-        }
-
-        .confirm-button {
-            background: #941919;
-            color: white;
-            border: none;
-        }
-
-        .confirm-button:hover {
-            background: #b52d2d;
-        }
-
-        /* FOOTER */
         .footer {
+            padding: 22px 0;
             text-align: center;
-            color: #888;
-            font-size: 12px;
-            margin-top: 30px;
+            color: #95877f;
+            font-size: 11px;
         }
 
-        /* RESPONSIVE */
-        @media (max-width: 1150px) {
-            .content {
-                padding: 25px;
-            }
-        }
+        /* =====================================
+           RESPONSIVE
+        ===================================== */
 
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
             .sidebar {
                 width: 220px;
             }
 
-            .main-wrapper {
+            .main {
                 margin-left: 220px;
+                width: calc(100% - 220px);
             }
 
             .content {
-                padding: 20px;
+                padding: 22px 18px;
             }
         }
 
@@ -617,41 +581,29 @@
             .sidebar {
                 position: relative;
                 width: 100%;
-                height: auto;
-                bottom: auto;
-            }
-
-            .sidebar-brand {
-                height: 75px;
-            }
-
-            .sidebar nav {
-                padding: 15px;
+                min-height: auto;
             }
 
             .sidebar-bottom {
                 margin-top: 0;
             }
 
-            .main-wrapper {
+            .main {
                 margin-left: 0;
+                width: 100%;
             }
 
-            .topbar {
-                padding: 12px 16px;
-            }
-
-            .content {
-                padding: 20px 12px;
-            }
-
-            .page-heading {
+            .page-header {
                 align-items: flex-start;
                 flex-direction: column;
             }
 
-            .page-heading h1 {
-                font-size: 23px;
+            .topbar {
+                padding: 12px 18px;
+            }
+
+            .content {
+                padding: 20px 14px;
             }
         }
     </style>
@@ -659,527 +611,647 @@
 
 <body>
 
-    {{-- SIDEBAR --}}
-    <aside class="sidebar">
+    <div class="min-h-screen">
 
-        {{-- BRAND --}}
-        <div class="sidebar-brand">
-            <div class="brand-icon">
-                <i class="fa-solid fa-pizza-slice"></i>
-            </div>
+        {{-- =====================================
+             SIDEBAR ADMIN
+        ====================================== --}}
 
-            <div class="brand-text">
-                <div class="brand-name">PizzaMozza</div>
-                <div class="brand-subtitle">Admin Dashboard</div>
-            </div>
-        </div>
+        <aside class="sidebar">
 
-        {{-- MENU --}}
-        <nav>
-            <div class="menu-title">Main Menu</div>
+            <div class="brand">
 
-            <ul class="menu-list">
-
-                <li class="menu-item">
-                    <a href="{{ route('admin.dashboard') }}" class="menu-link">
-                        <span class="menu-icon">
-                            <i class="bi bi-grid-1x2"></i>
-                        </span>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="{{ route('admin.employees.index') }}" class="menu-link">
-                        <span class="menu-icon">
-                            <i class="bi bi-people"></i>
-                        </span>
-                        <span>Data Karyawan</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="{{ route('admin.customers.index') }}" class="menu-link">
-                        <span class="menu-icon">
-                            <i class="bi bi-people"></i>
-                        </span>
-                        <span>Data Pelanggan</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="{{ route('admin.products.index') }}" class="menu-link active">
-                        <span class="menu-icon">
-                            <i class="bi bi-box-seam"></i>
-                        </span>
-                        <span>Data Produk</span>
-                    </a>
-                </li>
-
-                <li class="menu-item">
-                    <a href="{{ route('admin.orders.index') }}" class="menu-link">
-                        <span class="menu-icon">
-                            <i class="bi bi-receipt"></i>
-                        </span>
-                        <span>Pesanan</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
-
-        {{-- SIDEBAR BOTTOM --}}
-        <div class="sidebar-bottom">
-
-            <div class="admin-profile">
-                <div class="admin-avatar">
-                    <i class="bi bi-person"></i>
+                <div class="brand-icon">
+                    <i class="fa-solid fa-pizza-slice"></i>
                 </div>
-
-                <div class="admin-info">
-                    <strong>
-                        {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
-                    </strong>
-                    <span>PizzaMozza</span>
-                </div>
-            </div>
-
-            <button type="button"
-                    class="logout-button"
-                    onclick="openLogoutModal()">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Keluar</span>
-            </button>
-
-        </div>
-    </aside>
-
-    {{-- MAIN CONTENT --}}
-    <div class="main-wrapper">
-
-        {{-- TOPBAR --}}
-<header class="topbar">
-
-    <div class="topbar-title">
-       
-    </div>
-
-    <div class="topbar-admin">
-
-        <div class="topbar-admin-info">
-            <strong>
-                {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
-            </strong>
-
-            <span>
-                {{ auth()->user()->role === 'admin' ? 'Administrator' : 'Karyawan' }}
-            </span>
-        </div>
-
-        <div class="topbar-avatar">
-            <i class="bi bi-person"></i>
-        </div>
-
-    </div>
-
-</header>
-
-        {{-- CONTENT --}}
-        <main class="content">
-
-            {{-- PAGE HEADING --}}
-            <div class="page-heading">
 
                 <div>
-                    <div class="heading-label">
-                        Management
+                    <div class="brand-name">PizzaMozza</div>
+                    <div class="brand-subtitle">Admin Dashboard</div>
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <div class="menu-title">
+                    Main Menu
+                </div>
+
+                <ul class="menu-list">
+
+                    {{-- DASHBOARD --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-grid-1x2"></i>
+                            </span>
+
+                            <span>Dashboard</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- DATA KARYAWAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.employees.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-people"></i>
+                            </span>
+
+                            <span>Data Karyawan</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- DATA PELANGGAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.customers.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-person-vcard"></i>
+                            </span>
+
+                            <span>Data Pelanggan</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- DATA PRODUK --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.products.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </span>
+
+                            <span>Data Produk</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- PESANAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.orders.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-receipt"></i>
+                            </span>
+
+                            <span>Pesanan</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- LAPORAN PENJUALAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.sales-report.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.sales-report.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-bar-chart-line"></i>
+                            </span>
+
+                            <span>Laporan Penjualan</span>
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+
+            {{-- PROFIL ADMIN --}}
+            <div class="sidebar-bottom">
+
+                <div class="admin-profile">
+
+                    <div class="profile-avatar">
+                        <i class="bi bi-person"></i>
                     </div>
 
-                    <h1>Data Produk</h1>
+                    <div class="profile-info">
 
-                    <p>
-                        Kelola produk dan varian PizzaMozza.
-                    </p>
+                        <strong>
+                            {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
+                        </strong>
+
+                        <span>PizzaMozza</span>
+
+                    </div>
+
                 </div>
 
-                <a href="{{ route('admin.products.create') }}"
-                   class="primary-button">
-                    <i class="bi bi-plus-lg"></i>
-                    Tambah Produk
-                </a>
+
+                <form id="logoutForm"
+                    action="{{ route('logout') }}"
+                    method="POST">
+
+                    @csrf
+
+                    <button type="button"
+                        class="logout-button"
+                        onclick="openLogoutModal()">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Keluar
+
+                    </button>
+
+                </form>
 
             </div>
 
-            {{-- NOTIFIKASI BERHASIL --}}
-            @if (session('success'))
-                <div class="success-alert" role="status">
-                    <i class="bi bi-check-circle-fill mr-2"></i>
-                    {{ session('success') }}
-                </div>
-            @endif
+        </aside>
 
-            {{-- NOTIFIKASI ERROR --}}
-            @if (session('error'))
-                <div class="error-alert" role="alert">
-                    <i class="bi bi-exclamation-circle-fill mr-2"></i>
-                    {{ session('error') }}
-                </div>
-            @endif
 
-            {{-- VALIDASI ERROR --}}
-            @if ($errors->any())
-                <div class="error-alert" role="alert">
-                    <p class="font-semibold mb-2">
-                        Terdapat kesalahan:
-                    </p>
+        {{-- =====================================
+             MAIN CONTENT
+        ====================================== --}}
 
-                    <ul class="list-disc list-inside space-y-1 text-sm">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        <main class="main">
 
-            {{-- TABEL PRODUK --}}
-            <div class="table-card">
+            {{-- TOPBAR --}}
+            <header class="topbar">
 
-                <div class="table-card-header">
-                    <h2>Daftar Produk</h2>
-                    <p>
-                        Berikut daftar produk yang tersedia di PizzaMozza.
-                    </p>
+                <div class="topbar-admin">
+
+                    <div class="topbar-info">
+
+                        <strong>
+                            {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
+                        </strong>
+
+                        <span>Administrator</span>
+
+                    </div>
+
+                    <div class="topbar-avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
+
                 </div>
 
-                <div class="table-wrapper">
+            </header>
 
-                    <table class="product-table">
 
-                        <thead>
-                            <tr>
-                                <th>Produk</th>
-                                <th>Kategori</th>
-                                <th>Harga</th>
-                                <th>Stok</th>
-                                <th>Varian</th>
-                                <th class="text-center">Aksi</th>
-                            </tr>
-                        </thead>
+            <section class="content">
 
-                        <tbody>
+                {{-- PAGE HEADER --}}
+                <div class="page-header">
 
-                            @forelse ($products as $product)
+                    <div>
+
+                        <h1 class="page-title">
+                            Data Produk
+                        </h1>
+
+                        <p class="page-description">
+                            Kelola produk dan varian PizzaMozza.
+                        </p>
+
+                    </div>
+
+
+                    <a href="{{ route('admin.products.create') }}"
+                        class="btn-add">
+
+                        <i class="bi bi-plus-lg"></i>
+                        Tambah Produk
+
+                    </a>
+
+                </div>
+
+
+                {{-- PESAN SUKSES --}}
+                @if(session('success'))
+
+                    <div class="alert-success">
+                        <i class="bi bi-check-circle"></i>
+                        {{ session('success') }}
+                    </div>
+
+                @endif
+
+
+                {{-- PESAN ERROR --}}
+                @if(session('error'))
+
+                    <div class="alert-error">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {{ session('error') }}
+                    </div>
+
+                @endif
+
+
+                {{-- =====================================
+                     TABEL PRODUK
+                ====================================== --}}
+
+                <div class="table-card">
+
+                    <div class="table-heading">
+
+                        <h2>Daftar Produk</h2>
+
+                        <p>
+                            Berikut daftar produk yang tersedia di PizzaMozza.
+                        </p>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="product-table">
+
+                            <thead>
 
                                 <tr>
 
-                                    {{-- NAMA PRODUK --}}
-                                    <td>
-                                        <div>
-                                            <p class="font-bold text-gray-800">
-                                                {{ $product->name }}
-                                            </p>
+                                    <th>Produk</th>
 
-                                            <p class="text-sm text-gray-500 mt-1">
-                                                ID Produk: {{ $product->id }}
-                                            </p>
-                                        </div>
-                                    </td>
+                                    <th>Kategori</th>
 
-                                    {{-- KATEGORI --}}
-                                    <td>
-                                        <span class="category-badge">
-                                            {{ ucfirst($product->category) }}
-                                        </span>
-                                    </td>
+                                    <th>Harga</th>
 
-                                    {{-- HARGA --}}
-                                    <td class="font-semibold whitespace-nowrap">
-                                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                                    </td>
+                                    <th>Stok</th>
 
-                                    {{-- STOK --}}
-                                    <td>
-                                        @if ($product->stock > 0)
-                                            <span class="stock-available">
-                                                {{ $product->stock }}
-                                            </span>
-                                        @else
-                                            <span class="stock-empty">
-                                                Habis
-                                            </span>
-                                        @endif
-                                    </td>
+                                    <th>Varian</th>
 
-                                    {{-- VARIAN --}}
-                                    <td>
-                                        @if ($product->variants->count() > 0)
-                                            <div class="space-y-2">
-                                                @foreach ($product->variants as $variant)
-                                                    <div class="text-sm text-gray-600">
-                                                        <span class="font-medium">
-                                                            {{ $variant->name }}
-                                                        </span>
+                                    <th style="text-align: center;">
+                                        Aksi
+                                    </th>
 
-                                                        <span class="text-gray-400 mx-1">
-                                                            &mdash;
-                                                        </span>
+                                </tr>
 
-                                                        <span>
-                                                            Rp {{ number_format($variant->price, 0, ',', '.') }}
-                                                        </span>
+                            </thead>
+
+
+                            <tbody>
+
+                                @forelse($products as $product)
+
+                                    <tr>
+
+                                        {{-- PRODUK --}}
+                                        <td>
+
+                                            <div class="flex items-center gap-4">
+
+                                                @if($product->image)
+
+                                                    <img
+                                                        src="{{ asset('image/' . $product->image) }}"
+                                                        alt="{{ $product->name }}"
+                                                        class="product-image"
+                                                    >
+
+                                                @else
+
+                                                    <div class="product-placeholder">
+                                                        <i class="fa-solid fa-pizza-slice"></i>
                                                     </div>
-                                                @endforeach
+
+                                                @endif
+
+
+                                                <div>
+
+                                                    <p class="product-name">
+                                                        {{ $product->name }}
+                                                    </p>
+
+                                                    <p class="product-id">
+                                                        ID Produk: {{ $product->id }}
+                                                    </p>
+
+                                                </div>
+
                                             </div>
-                                        @else
-                                            <span class="text-gray-400 text-sm">
-                                                Tidak ada varian
+
+                                        </td>
+
+
+                                        {{-- KATEGORI --}}
+                                        <td>
+
+                                            <span class="category-badge">
+                                                {{ ucfirst($product->category) }}
                                             </span>
-                                        @endif
-                                    </td>
 
-                                    {{-- AKSI --}}
-                                    <td>
-                                        <div class="flex flex-wrap justify-center gap-2">
+                                        </td>
 
-                                            {{-- DETAIL --}}
-                                            <a href="{{ route('admin.products.show', $product) }}"
-                                               class="action-button detail-button">
-                                                <i class="bi bi-eye"></i>
-                                                Lihat
-                                            </a>
 
-                                            {{-- EDIT --}}
-                                            <a href="{{ route('admin.products.edit', $product) }}"
-                                               class="action-button edit-button">
-                                                <i class="bi bi-pencil-square"></i>
-                                                Edit
-                                            </a>
+                                        {{-- HARGA --}}
+                                        <td>
 
-                                            {{-- HAPUS --}}
-                                            <button
-                                                type="button"
-                                                data-action="{{ route('admin.products.destroy', $product) }}"
-                                                onclick="bukaModalHapus(
-                                                    this,
-                                                    {{ Illuminate\Support\Js::from($product->name) }}
-                                                )"
-                                                class="action-button delete-button">
-                                                <i class="bi bi-trash"></i>
-                                                Hapus
-                                            </button>
+                                            <span class="font-semibold text-gray-700">
 
-                                        </div>
-                                    </td>
+                                                Rp {{ number_format($product->price, 0, ',', '.') }}
 
-                                </tr>
+                                            </span>
 
-                            @empty
+                                        </td>
 
-                                <tr>
-                                    <td colspan="6" class="empty-state">
 
-                                        <i class="bi bi-box-seam"></i>
+                                        {{-- STOK --}}
+                                        <td>
 
-                                        <p class="font-bold text-gray-700">
-                                            Belum ada produk.
-                                        </p>
+                                            @if($product->stock > 0)
 
-                                        <p class="text-gray-400 text-sm mt-1">
-                                            Tambahkan produk pertama PizzaMozza.
-                                        </p>
+                                                <span class="stock-available">
+                                                    {{ $product->stock }}
+                                                </span>
 
-                                        <a href="{{ route('admin.products.create') }}"
-                                           class="inline-flex items-center gap-2 mt-5 primary-button">
-                                            <i class="bi bi-plus-lg"></i>
-                                            Tambah Produk
-                                        </a>
+                                            @else
 
-                                    </td>
-                                </tr>
+                                                <span class="stock-empty">
+                                                    Habis
+                                                </span>
 
-                            @endforelse
+                                            @endif
 
-                        </tbody>
-                    </table>
+                                        </td>
+
+
+                                        {{-- VARIAN --}}
+                                        <td>
+
+                                            @if($product->variants->count() > 0)
+
+                                                <div class="variant-list">
+
+                                                    @foreach($product->variants as $variant)
+
+                                                        <div class="variant-item">
+
+                                                            <span class="variant-name">
+                                                                {{ $variant->name }}
+                                                            </span>
+
+                                                            <span class="text-gray-400">
+                                                                —
+                                                            </span>
+
+                                                            Rp {{ number_format($variant->price, 0, ',', '.') }}
+
+                                                        </div>
+
+                                                    @endforeach
+
+                                                </div>
+
+                                            @else
+
+                                                <span class="no-variant">
+                                                    Tidak ada varian
+                                                </span>
+
+                                            @endif
+
+                                        </td>
+
+
+                                        {{-- AKSI --}}
+                                        <td>
+
+                                            <div class="action-group">
+
+                                                {{-- LIHAT --}}
+                                                <a
+                                                    href="{{ route('admin.products.show', $product) }}"
+                                                    class="action-btn btn-view">
+
+                                                    <i class="bi bi-eye"></i>
+                                                    Lihat
+
+                                                </a>
+
+
+                                                {{-- EDIT --}}
+                                                <a
+                                                    href="{{ route('admin.products.edit', $product) }}"
+                                                    class="action-btn btn-edit">
+
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    Edit
+
+                                                </a>
+
+
+                                                {{-- HAPUS --}}
+                                                <form
+                                                    action="{{ route('admin.products.destroy', $product) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button
+                                                        type="submit"
+                                                        class="action-btn btn-delete">
+
+                                                        <i class="bi bi-trash"></i>
+                                                        Hapus
+
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td colspan="6">
+
+                                            <div class="empty-state">
+
+                                                <div class="icon">
+                                                    <i class="fa-solid fa-pizza-slice"></i>
+                                                </div>
+
+                                                <h3>Belum Ada Produk</h3>
+
+                                                <p>
+                                                    Silakan tambahkan produk baru ke PizzaMozza.
+                                                </p>
+
+                                                <a href="{{ route('admin.products.create') }}"
+                                                    class="btn-add mt-5">
+
+                                                    <i class="bi bi-plus-lg"></i>
+                                                    Tambah Produk
+
+                                                </a>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                 </div>
-            </div>
 
-            {{-- FOOTER --}}
-            <footer class="footer">
-                &copy; {{ date('Y') }} PizzaMozza. All rights reserved.
-            </footer>
+
+                {{-- FOOTER --}}
+                <footer class="footer">
+
+                    © {{ date('Y') }} PizzaMozza.
+                    All rights reserved.
+
+                </footer>
+
+            </section>
 
         </main>
+
     </div>
 
-    {{-- MODAL KONFIRMASI HAPUS --}}
-    <div id="modalHapus" class="modal-overlay">
 
-        <div class="modal-box" onclick="event.stopPropagation()">
+    {{-- =====================================
+         MODAL LOGOUT
+    ====================================== --}}
 
-            <div class="modal-icon">
-                <i class="bi bi-trash"></i>
-            </div>
+    <div id="logoutModal"
+        class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/50 p-5">
 
-            <h3>Konfirmasi Hapus Produk</h3>
+        <div class="w-full max-w-sm rounded-2xl bg-white p-7 text-center shadow-2xl">
 
-            <p id="pesanModalHapus">
-                Apakah Anda yakin ingin menghapus produk ini?
-            </p>
+            <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-2xl text-red-800">
 
-            <p class="text-red-500 text-xs mb-5">
-                Produk yang dihapus tidak dapat dipulihkan.
-            </p>
-
-            <div class="modal-actions">
-
-                <button type="button"
-                        class="cancel-button"
-                        id="tombolBatalHapus"
-                        onclick="tutupModalHapus()">
-                    Tidak, Batal
-                </button>
-
-                <form id="formHapusProduk"
-                      action=""
-                      method="POST"
-                      style="flex: 1;">
-
-                    @csrf
-                    @method('DELETE')
-
-                    <button type="submit"
-                            class="confirm-button"
-                            style="width: 100%;">
-                        Ya, Hapus
-                    </button>
-
-                </form>
-
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL KONFIRMASI LOGOUT --}}
-    <div id="logoutModal" class="modal-overlay">
-
-        <div class="modal-box" onclick="event.stopPropagation()">
-
-            <div class="modal-icon">
                 <i class="bi bi-box-arrow-right"></i>
+
             </div>
 
-            <h3>Konfirmasi Keluar</h3>
+            <h3 class="text-xl font-bold text-gray-800">
+                Keluar dari Akun?
+            </h3>
 
-            <p>
-                Apakah Anda yakin ingin keluar dari akun?
+            <p class="mt-3 text-sm leading-relaxed text-gray-500">
+                Apakah kamu yakin ingin keluar dari dashboard admin PizzaMozza?
             </p>
 
-            <div class="modal-actions">
+            <div class="mt-6 flex gap-3">
 
                 <button type="button"
-                        class="cancel-button"
-                        onclick="closeLogoutModal()">
-                    Tidak
+                    onclick="closeLogoutModal()"
+                    class="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+
+                    Batal
+
                 </button>
 
-                <form action="{{ route('logout') }}"
-                      method="POST"
-                      style="flex: 1;">
+                <button type="button"
+                    onclick="confirmLogout()"
+                    class="flex-1 rounded-lg bg-[#941919] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b52d2d]">
 
-                    @csrf
+                    Ya, Keluar
 
-                    <button type="submit"
-                            class="confirm-button"
-                            style="width: 100%;">
-                        Ya, Keluar
-                    </button>
-
-                </form>
+                </button>
 
             </div>
+
         </div>
+
     </div>
 
-    {{-- JAVASCRIPT --}}
+
+    {{-- =====================================
+         JAVASCRIPT
+    ====================================== --}}
+
     <script>
-        const modalHapus = document.getElementById('modalHapus');
-        const formHapusProduk = document.getElementById('formHapusProduk');
-        const pesanModalHapus = document.getElementById('pesanModalHapus');
-        const tombolBatalHapus = document.getElementById('tombolBatalHapus');
-        const logoutModal = document.getElementById('logoutModal');
 
-        let tombolPemicuHapus = null;
-
-        // BUKA MODAL HAPUS
-        function bukaModalHapus(tombol, namaProduk) {
-            tombolPemicuHapus = tombol;
-
-            formHapusProduk.action = tombol.dataset.action;
-
-            pesanModalHapus.textContent =
-                'Apakah Anda yakin ingin menghapus produk "' +
-                namaProduk +
-                '"?';
-
-            modalHapus.classList.add('show');
-            document.body.style.overflow = 'hidden';
-
-            tombolBatalHapus.focus();
-        }
-
-        // TUTUP MODAL HAPUS
-        function tutupModalHapus() {
-            modalHapus.classList.remove('show');
-            document.body.style.overflow = '';
-
-            if (tombolPemicuHapus) {
-                tombolPemicuHapus.focus();
-            }
-
-            tombolPemicuHapus = null;
-        }
-
-        // BUKA MODAL LOGOUT
         function openLogoutModal() {
-            logoutModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
+
+            const modal = document.getElementById('logoutModal');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
         }
 
-        // TUTUP MODAL LOGOUT
+
         function closeLogoutModal() {
-            logoutModal.classList.remove('show');
-            document.body.style.overflow = '';
+
+            const modal = document.getElementById('logoutModal');
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
         }
 
-        // KLIK AREA LUAR MODAL HAPUS
-        modalHapus.addEventListener('click', function(event) {
-            if (event.target === modalHapus) {
-                tutupModalHapus();
-            }
-        });
 
-        // KLIK AREA LUAR MODAL LOGOUT
-        logoutModal.addEventListener('click', function(event) {
-            if (event.target === logoutModal) {
+        function confirmLogout() {
+
+            document.getElementById('logoutForm').submit();
+
+        }
+
+
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+
+            if (event.target === this) {
                 closeLogoutModal();
             }
+
         });
 
-        // TOMBOL ESCAPE
+
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                if (modalHapus.classList.contains('show')) {
-                    tutupModalHapus();
-                }
 
-                if (logoutModal.classList.contains('show')) {
-                    closeLogoutModal();
-                }
+            if (event.key === 'Escape') {
+                closeLogoutModal();
             }
+
         });
+
     </script>
 
 </body>
+
 </html>

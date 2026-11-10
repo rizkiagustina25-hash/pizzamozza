@@ -5,354 +5,1252 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Kelola Produk - PizzaMozza</title>
+    <title>Data Produk - PizzaMozza</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f7f5f2;
+            color: #3d3029;
+        }
+
+        /* =====================================
+           SIDEBAR
+        ===================================== */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 265px;
+            background: #941919;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .brand {
+            height: 88px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, .15);
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #b52d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-size: 23px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .brand-subtitle {
+            margin-top: 4px;
+            font-size: 11px;
+            color: #f5dede;
+        }
+
+        .sidebar-menu {
+            padding: 24px 15px;
+        }
+
+        .menu-title {
+            margin: 0 12px 12px;
+            color: #f5dede;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            margin-bottom: 5px;
+        }
+
+        .menu-link {
+            min-height: 45px;
+            padding: 0 14px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: .2s ease;
+        }
+
+        .menu-link:hover,
+        .menu-link.active {
+            background: #b52d2d;
+            color: #fff;
+        }
+
+        .menu-icon {
+            width: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 18px 16px;
+            border-top: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 15px;
+            padding: 5px 6px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #b52d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        .profile-info strong {
+            display: block;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .profile-info span {
+            display: block;
+            margin-top: 4px;
+            color: #f5dede;
+            font-size: 10px;
+        }
+
+        .logout-button {
+            width: 100%;
+            height: 38px;
+            border: none;
+            border-radius: 8px;
+            background: #fff;
+            color: #941919;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .logout-button:hover {
+            background: #f5dede;
+        }
+
+        /* =====================================
+           MAIN CONTENT
+        ===================================== */
+
+        .main {
+            margin-left: 265px;
+            width: calc(100% - 265px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            min-height: 72px;
+            padding: 12px 34px;
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .topbar-admin {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-info {
+            text-align: right;
+        }
+
+        .topbar-info strong {
+            display: block;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .topbar-info span {
+            display: block;
+            margin-top: 4px;
+            font-size: 10px;
+            color: #999;
+        }
+
+        .topbar-avatar {
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            background: #fff0f0;
+            color: #941919;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        /* =====================================
+           PAGE CONTENT
+        ===================================== */
+
+        .content {
+            padding: 30px 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            font-size: 25px;
+            font-weight: 700;
+            color: #342820;
+        }
+
+        .page-description {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #8a7d75;
+        }
+
+        .btn-add {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background: #941919;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            background: #b52d2d;
+        }
+
+        /* =====================================
+           ALERT
+        ===================================== */
+
+        .alert-success {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #b9e5c5;
+            border-radius: 9px;
+            background: #e8f7ed;
+            color: #23733a;
+            font-size: 13px;
+        }
+
+        .alert-error {
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            border: 1px solid #f1c7c3;
+            border-radius: 9px;
+            background: #fff0ef;
+            color: #a92820;
+            font-size: 13px;
+        }
+
+        /* =====================================
+           TABLE CARD
+        ===================================== */
+
+        .table-card {
+            background: #fff;
+            border: 1px solid #e5ded9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(61, 48, 41, .05);
+        }
+
+        .table-heading {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5ded9;
+        }
+
+        .table-heading h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #342820;
+        }
+
+        .table-heading p {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #8a7d75;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .product-table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        .product-table thead {
+            background: #f8efed;
+        }
+
+        .product-table th {
+            padding: 15px 18px;
+            border: 1px solid #e5d8d3;
+            color: #5b4038;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .product-table td {
+            padding: 16px 18px;
+            border: 1px solid #e8e1dc;
+            color: #51443d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .product-table tbody tr:nth-child(even) {
+            background: #fffdfc;
+        }
+
+        .product-table tbody tr:hover {
+            background: #fff2ee;
+        }
+
+        .product-name {
+            color: #342820;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .product-id {
+            margin-top: 5px;
+            color: #8a7d75;
+            font-size: 12px;
+        }
+
+        .product-image {
+            width: 58px;
+            height: 58px;
+            border-radius: 9px;
+            border: 1px solid #eee3dd;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .product-placeholder {
+            width: 58px;
+            height: 58px;
+            border-radius: 9px;
+            background: #f8e9e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            flex-shrink: 0;
+        }
+
+        /* =====================================
+           CATEGORY
+        ===================================== */
+
+        .category-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #fbe8e7;
+            color: #a92820;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =====================================
+           STOCK
+        ===================================== */
+
+        .stock-available {
+            color: #198754;
+            font-weight: 700;
+        }
+
+        .stock-empty {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #fde5e5;
+            color: #b42318;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =====================================
+           VARIANTS
+        ===================================== */
+
+        .variant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .variant-item {
+            color: #62544d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .variant-name {
+            font-weight: 600;
+            color: #45362e;
+        }
+
+        .no-variant {
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* =====================================
+           ACTION BUTTONS
+        ===================================== */
+
+        .action-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 12px;
+            border-radius: 7px;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .action-btn:hover {
+            opacity: .8;
+            transform: translateY(-1px);
+        }
+
+        .btn-view {
+            background: #e2edff;
+            color: #2458a6;
+        }
+
+        .btn-edit {
+            background: #fff1d6;
+            color: #a76516;
+        }
+
+        .btn-delete {
+            background: #fde5e5;
+            color: #a92820;
+        }
+
+        /* =====================================
+           EMPTY DATA
+        ===================================== */
+
+        .empty-state {
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        .empty-state .icon {
+            margin-bottom: 14px;
+            color: #a92820;
+            font-size: 42px;
+        }
+
+        .empty-state h3 {
+            color: #45362e;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            margin-top: 7px;
+            color: #8a7d75;
+            font-size: 13px;
+        }
+
+        /* =====================================
+           FOOTER
+        ===================================== */
+
+        .footer {
+            padding: 22px 0;
+            text-align: center;
+            color: #95877f;
+            font-size: 11px;
+        }
+
+        /* =====================================
+           RESPONSIVE
+        ===================================== */
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+            }
+
+            .content {
+                padding: 22px 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .sidebar-bottom {
+                margin-top: 0;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .topbar {
+                padding: 12px 18px;
+            }
+
+            .content {
+                padding: 20px 14px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-orange-50 min-h-screen">
+<body>
 
-    <main class="p-8 max-w-7xl mx-auto">
+    <div class="min-h-screen">
 
-        <!-- HEADER -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        {{-- =====================================
+             SIDEBAR ADMIN
+        ====================================== --}}
 
-            <div>
-                <p class="text-orange-600 font-semibold">
-                    PizzaMozza
-                </p>
+        <aside class="sidebar">
 
-                <h1 class="text-3xl font-bold text-gray-800 mt-1">
-                    🍕 Kelola Produk
-                </h1>
+            <div class="brand">
 
-                <p class="text-gray-500 mt-2">
-                    Kelola produk dan varian PizzaMozza.
-                </p>
-            </div>
+                <div class="brand-icon">
+                    <i class="fa-solid fa-pizza-slice"></i>
+                </div>
 
-            <div class="flex gap-3">
-
-                <!-- Kembali ke dashboard sesuai role -->
-                <a
-                    href="{{ auth()->user()->role === 'admin'
-                        ? route('admin.dashboard')
-                        : route('karyawan.dashboard') }}"
-                    class="bg-gray-800 text-white px-5 py-3 rounded-xl hover:bg-gray-700 transition"
-                >
-                    ← Dashboard
-                </a>
-
-                <!-- Tambah produk -->
-                <a
-                    href="{{ route('admin.products.create') }}"
-                    class="bg-orange-500 text-white px-5 py-3 rounded-xl hover:bg-orange-600 transition"
-                >
-                    + Tambah Produk
-                </a>
+                <div>
+                    <div class="brand-name">PizzaMozza</div>
+                    <div class="brand-subtitle">Admin Dashboard</div>
+                </div>
 
             </div>
 
-        </div>
+
+            <nav class="sidebar-menu">
+
+                <div class="menu-title">
+                    Main Menu
+                </div>
+
+                <ul class="menu-list">
+
+                    {{-- DASHBOARD --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-grid-1x2"></i>
+                            </span>
+
+                            <span>Dashboard</span>
+
+                        </a>
+
+                    </li>
 
 
-        <!-- PESAN SUKSES -->
-        @if(session('success'))
+                    {{-- DATA KARYAWAN --}}
+                    <li class="menu-item">
 
-            <div class="bg-green-100 border border-green-200 text-green-700 px-5 py-4 rounded-xl mb-6">
+                        <a href="{{ route('admin.employees.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
 
-                {{ session('success') }}
+                            <span class="menu-icon">
+                                <i class="bi bi-people"></i>
+                            </span>
+
+                            <span>Data Karyawan</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- DATA PELANGGAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.customers.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-person-vcard"></i>
+                            </span>
+
+                            <span>Data Pelanggan</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- DATA PRODUK --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.products.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </span>
+
+                            <span>Data Produk</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- PESANAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.orders.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-receipt"></i>
+                            </span>
+
+                            <span>Pesanan</span>
+
+                        </a>
+
+                    </li>
+
+
+                    {{-- LAPORAN PENJUALAN --}}
+                    <li class="menu-item">
+
+                        <a href="{{ route('admin.sales-report.index') }}"
+                            class="menu-link {{ request()->routeIs('admin.sales-report.*') ? 'active' : '' }}">
+
+                            <span class="menu-icon">
+                                <i class="bi bi-bar-chart-line"></i>
+                            </span>
+
+                            <span>Laporan Penjualan</span>
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+
+            {{-- PROFIL ADMIN --}}
+            <div class="sidebar-bottom">
+
+                <div class="admin-profile">
+
+                    <div class="profile-avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div class="profile-info">
+
+                        <strong>
+                            {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
+                        </strong>
+
+                        <span>PizzaMozza</span>
+
+                    </div>
+
+                </div>
+
+
+                <form id="logoutForm"
+                    action="{{ route('logout') }}"
+                    method="POST">
+
+                    @csrf
+
+                    <button type="button"
+                        class="logout-button"
+                        onclick="openLogoutModal()">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Keluar
+
+                    </button>
+
+                </form>
 
             </div>
 
-        @endif
+        </aside>
 
 
-        <!-- PESAN ERROR -->
-        @if(session('error'))
+        {{-- =====================================
+             MAIN CONTENT
+        ====================================== --}}
 
-            <div class="bg-red-100 border border-red-200 text-red-700 px-5 py-4 rounded-xl mb-6">
+        <main class="main">
 
-                {{ session('error') }}
+            {{-- TOPBAR --}}
+            <header class="topbar">
 
-            </div>
+                <div class="topbar-admin">
 
-        @endif
+                    <div class="topbar-info">
 
+                        <strong>
+                            {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
+                        </strong>
 
-        <!-- TABEL PRODUK -->
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+                        <span>Administrator</span>
 
-            <div class="overflow-x-auto">
+                    </div>
 
-                <table class="w-full">
+                    <div class="topbar-avatar">
+                        <i class="bi bi-person"></i>
+                    </div>
 
-                    <!-- HEADER TABLE -->
-                    <thead class="bg-gray-900 text-white">
+                </div>
 
-                        <tr>
+            </header>
 
-                            <th class="px-6 py-4 text-left">
-                                Produk
-                            </th>
 
-                            <th class="px-6 py-4 text-left">
-                                Kategori
-                            </th>
+            <section class="content">
 
-                            <th class="px-6 py-4 text-left">
-                                Harga
-                            </th>
+                {{-- PAGE HEADER --}}
+                <div class="page-header">
 
-                            <th class="px-6 py-4 text-left">
-                                Stok
-                            </th>
+                    <div>
 
-                            <th class="px-6 py-4 text-left">
-                                Varian
-                            </th>
+                        <h1 class="page-title">
+                            Data Produk
+                        </h1>
 
-                            <th class="px-6 py-4 text-center">
-                                Aksi
-                            </th>
+                        <p class="page-description">
+                            Kelola produk dan varian PizzaMozza.
+                        </p>
 
-                        </tr>
+                    </div>
 
-                    </thead>
 
+                    <a href="{{ route('admin.products.create') }}"
+                        class="btn-add">
 
-                    <!-- ISI TABLE -->
-                    <tbody class="divide-y">
+                        <i class="bi bi-plus-lg"></i>
+                        Tambah Produk
 
-                        @forelse($products as $product)
+                    </a>
 
-                            <tr class="hover:bg-orange-50 transition">
+                </div>
 
 
-                                <!-- PRODUK -->
-                                <td class="px-6 py-4">
+                {{-- PESAN SUKSES --}}
+                @if(session('success'))
 
-                                    <div class="flex items-center gap-4">
+                    <div class="alert-success">
+                        <i class="bi bi-check-circle"></i>
+                        {{ session('success') }}
+                    </div>
 
-                                        @if($product->image)
+                @endif
 
-                                            <img
-                                                src="{{ asset('image/' . $product->image) }}"
-                                                alt="{{ $product->name }}"
-                                                class="w-16 h-16 object-cover rounded-xl"
-                                            >
 
-                                        @else
+                {{-- PESAN ERROR --}}
+                @if(session('error'))
 
-                                            <div
-                                                class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center text-2xl"
-                                            >
-                                                🍕
-                                            </div>
+                    <div class="alert-error">
+                        <i class="bi bi-exclamation-circle"></i>
+                        {{ session('error') }}
+                    </div>
 
-                                        @endif
+                @endif
 
 
-                                        <div>
+                {{-- =====================================
+                     TABEL PRODUK
+                ====================================== --}}
 
-                                            <p class="font-bold text-gray-800">
-                                                {{ $product->name }}
-                                            </p>
+                <div class="table-card">
 
-                                            <p class="text-sm text-gray-500">
-                                                ID Produk: {{ $product->id }}
-                                            </p>
+                    <div class="table-heading">
 
-                                        </div>
+                        <h2>Daftar Produk</h2>
 
-                                    </div>
+                        <p>
+                            Berikut daftar produk yang tersedia di PizzaMozza.
+                        </p>
 
-                                </td>
+                    </div>
 
 
-                                <!-- KATEGORI -->
-                                <td class="px-6 py-4">
+                    <div class="table-wrapper">
 
-                                    <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm">
+                        <table class="product-table">
 
-                                        {{ ucfirst($product->category) }}
+                            <thead>
 
-                                    </span>
+                                <tr>
 
-                                </td>
+                                    <th>Produk</th>
 
+                                    <th>Kategori</th>
 
-                                <!-- HARGA -->
-                                <td class="px-6 py-4 font-semibold text-gray-700">
+                                    <th>Harga</th>
 
-                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                    <th>Stok</th>
 
-                                </td>
+                                    <th>Varian</th>
 
+                                    <th style="text-align: center;">
+                                        Aksi
+                                    </th>
 
-                                <!-- STOK -->
-                                <td class="px-6 py-4">
+                                </tr>
 
-                                    @if($product->stock > 0)
+                            </thead>
 
-                                        <span class="text-green-600 font-semibold">
 
-                                            {{ $product->stock }}
+                            <tbody>
 
-                                        </span>
+                                @forelse($products as $product)
 
-                                    @else
+                                    <tr>
 
-                                        <span class="text-red-600 font-semibold">
+                                        {{-- PRODUK --}}
+                                        <td>
 
-                                            Habis
+                                            <div class="flex items-center gap-4">
 
-                                        </span>
+                                                @if($product->image)
 
-                                    @endif
+                                                    <img
+                                                        src="{{ asset('image/' . $product->image) }}"
+                                                        alt="{{ $product->name }}"
+                                                        class="product-image"
+                                                    >
 
-                                </td>
+                                                @else
 
+                                                    <div class="product-placeholder">
+                                                        <i class="fa-solid fa-pizza-slice"></i>
+                                                    </div>
 
-                                <!-- VARIAN -->
-                                <td class="px-6 py-4">
+                                                @endif
 
-                                    @if($product->variants->count() > 0)
 
-                                        <div class="space-y-1">
+                                                <div>
 
-                                            @foreach($product->variants as $variant)
+                                                    <p class="product-name">
+                                                        {{ $product->name }}
+                                                    </p>
 
-                                                <div class="text-sm text-gray-600">
-
-                                                    <span class="font-medium">
-                                                        {{ $variant->name }}
-                                                    </span>
-
-                                                    —
-
-                                                    Rp {{ number_format($variant->price, 0, ',', '.') }}
+                                                    <p class="product-id">
+                                                        ID Produk: {{ $product->id }}
+                                                    </p>
 
                                                 </div>
 
-                                            @endforeach
+                                            </div>
 
-                                        </div>
-
-                                    @else
-
-                                        <span class="text-gray-400 text-sm">
-
-                                            Tidak ada varian
-
-                                        </span>
-
-                                    @endif
-
-                                </td>
+                                        </td>
 
 
-                                <!-- AKSI -->
-                                <td class="px-6 py-4">
+                                        {{-- KATEGORI --}}
+                                        <td>
 
-                                    <div class="flex justify-center gap-2">
+                                            <span class="category-badge">
+                                                {{ ucfirst($product->category) }}
+                                            </span>
 
-                                        <!-- LIHAT -->
-                                        <a
-                                            href="{{ route('admin.products.show', $product) }}"
-                                            class="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-                                        >
-                                            Lihat
-                                        </a>
+                                        </td>
 
 
-                                        <!-- EDIT -->
-                                        <a
-                                            href="{{ route('admin.products.edit', $product) }}"
-                                            class="bg-orange-500 text-white px-3 py-2 rounded-lg hover:bg-orange-600 transition"
-                                        >
-                                            Edit
-                                        </a>
+                                        {{-- HARGA --}}
+                                        <td>
+
+                                            <span class="font-semibold text-gray-700">
+
+                                                Rp {{ number_format($product->price, 0, ',', '.') }}
+
+                                            </span>
+
+                                        </td>
 
 
-                                        <!-- HAPUS -->
-                                        <form
-                                            action="{{ route('admin.products.destroy', $product) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('Yakin ingin menghapus produk ini?')"
-                                        >
+                                        {{-- STOK --}}
+                                        <td>
 
-                                            @csrf
+                                            @if($product->stock > 0)
 
-                                            @method('DELETE')
+                                                <span class="stock-available">
+                                                    {{ $product->stock }}
+                                                </span>
 
-                                            <button
-                                                type="submit"
-                                                class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition"
-                                            >
-                                                Hapus
-                                            </button>
+                                            @else
 
-                                        </form>
+                                                <span class="stock-empty">
+                                                    Habis
+                                                </span>
 
-                                    </div>
+                                            @endif
 
-                                </td>
-
-                            </tr>
+                                        </td>
 
 
-                        @empty
+                                        {{-- VARIAN --}}
+                                        <td>
 
-                            <!-- JIKA BELUM ADA PRODUK -->
+                                            @if($product->variants->count() > 0)
 
-                            <tr>
+                                                <div class="variant-list">
 
-                                <td
-                                    colspan="6"
-                                    class="px-6 py-12 text-center"
-                                >
+                                                    @foreach($product->variants as $variant)
 
-                                    <div class="text-5xl mb-4">
-                                        🍕
-                                    </div>
+                                                        <div class="variant-item">
 
-                                    <p class="text-gray-500 text-lg">
-                                        Belum ada produk.
-                                    </p>
+                                                            <span class="variant-name">
+                                                                {{ $variant->name }}
+                                                            </span>
 
-                                    <a
-                                        href="{{ route('admin.products.create') }}"
-                                        class="inline-block mt-4 bg-orange-500 text-white px-5 py-3 rounded-xl hover:bg-orange-600"
-                                    >
-                                        + Tambah Produk
-                                    </a>
+                                                            <span class="text-gray-400">
+                                                                —
+                                                            </span>
 
-                                </td>
+                                                            Rp {{ number_format($variant->price, 0, ',', '.') }}
 
-                            </tr>
+                                                        </div>
 
-                        @endforelse
+                                                    @endforeach
 
-                    </tbody>
+                                                </div>
 
-                </table>
+                                            @else
+
+                                                <span class="no-variant">
+                                                    Tidak ada varian
+                                                </span>
+
+                                            @endif
+
+                                        </td>
+
+
+                                        {{-- AKSI --}}
+                                        <td>
+
+                                            <div class="action-group">
+
+                                                {{-- LIHAT --}}
+                                                <a
+                                                    href="{{ route('admin.products.show', $product) }}"
+                                                    class="action-btn btn-view">
+
+                                                    <i class="bi bi-eye"></i>
+                                                    Lihat
+
+                                                </a>
+
+
+                                                {{-- EDIT --}}
+                                                <a
+                                                    href="{{ route('admin.products.edit', $product) }}"
+                                                    class="action-btn btn-edit">
+
+                                                    <i class="bi bi-pencil-square"></i>
+                                                    Edit
+
+                                                </a>
+
+
+                                                {{-- HAPUS --}}
+                                                <form
+                                                    action="{{ route('admin.products.destroy', $product) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button
+                                                        type="submit"
+                                                        class="action-btn btn-delete">
+
+                                                        <i class="bi bi-trash"></i>
+                                                        Hapus
+
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td colspan="6">
+
+                                            <div class="empty-state">
+
+                                                <div class="icon">
+                                                    <i class="fa-solid fa-pizza-slice"></i>
+                                                </div>
+
+                                                <h3>Belum Ada Produk</h3>
+
+                                                <p>
+                                                    Silakan tambahkan produk baru ke PizzaMozza.
+                                                </p>
+
+                                                <a href="{{ route('admin.products.create') }}"
+                                                    class="btn-add mt-5">
+
+                                                    <i class="bi bi-plus-lg"></i>
+                                                    Tambah Produk
+
+                                                </a>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                {{-- FOOTER --}}
+                <footer class="footer">
+
+                    © {{ date('Y') }} PizzaMozza.
+                    All rights reserved.
+
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    {{-- =====================================
+         MODAL LOGOUT
+    ====================================== --}}
+
+    <div id="logoutModal"
+        class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/50 p-5">
+
+        <div class="w-full max-w-sm rounded-2xl bg-white p-7 text-center shadow-2xl">
+
+            <div class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-2xl text-red-800">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+            </div>
+
+            <h3 class="text-xl font-bold text-gray-800">
+                Keluar dari Akun?
+            </h3>
+
+            <p class="mt-3 text-sm leading-relaxed text-gray-500">
+                Apakah kamu yakin ingin keluar dari dashboard admin PizzaMozza?
+            </p>
+
+            <div class="mt-6 flex gap-3">
+
+                <button type="button"
+                    onclick="closeLogoutModal()"
+                    class="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100">
+
+                    Batal
+
+                </button>
+
+                <button type="button"
+                    onclick="confirmLogout()"
+                    class="flex-1 rounded-lg bg-[#941919] px-4 py-3 text-sm font-semibold text-white hover:bg-[#b52d2d]">
+
+                    Ya, Keluar
+
+                </button>
 
             </div>
 
         </div>
 
+    </div>
 
-        <!-- FOOTER -->
 
-        <footer class="text-center text-gray-500 text-sm mt-8">
+    {{-- =====================================
+         JAVASCRIPT
+    ====================================== --}}
 
-            © {{ date('Y') }} PizzaMozza.
-            All rights reserved.
+    <script>
 
-        </footer>
+        function openLogoutModal() {
 
-    </main>
+            const modal = document.getElementById('logoutModal');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+        }
+
+
+        function closeLogoutModal() {
+
+            const modal = document.getElementById('logoutModal');
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+        }
+
+
+        function confirmLogout() {
+
+            document.getElementById('logoutForm').submit();
+
+        }
+
+
+        document.getElementById('logoutModal').addEventListener('click', function(event) {
+
+            if (event.target === this) {
+                closeLogoutModal();
+            }
+
+        });
+
+
+        document.addEventListener('keydown', function(event) {
+
+            if (event.key === 'Escape') {
+                closeLogoutModal();
+            }
+
+        });
+
+    </script>
 
 </body>
 

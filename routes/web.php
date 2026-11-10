@@ -1,11 +1,10 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Controllers
+| CONTROLLERS
 |--------------------------------------------------------------------------
 */
 
@@ -26,6 +25,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\SalesReportController;
 
 // Karyawan
 use App\Http\Controllers\Karyawan\ProductController as KaryawanProductController;
@@ -37,7 +37,6 @@ use App\Http\Controllers\Karyawan\ProductController as KaryawanProductController
 |--------------------------------------------------------------------------
 */
 
-// Landing page
 Route::get('/', [ProductController::class, 'index'])
     ->name('home');
 
@@ -202,17 +201,21 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
+
         // Data Karyawan
         Route::resource('/employees', EmployeeController::class)
             ->names('employees');
+
 
         // Data Pelanggan
         Route::resource('/customers', CustomerController::class)
             ->names('customers');
 
+
         // Data Produk
         Route::resource('/products', AdminProductController::class)
             ->names('products');
+
 
         // Kelola Pesanan Admin
         Route::get('/orders', [AdminOrderController::class, 'index'])
@@ -224,7 +227,16 @@ Route::middleware(['auth', 'role:admin'])
         Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('orders.updateStatus');
 
-});
+
+        // Laporan Penjualan
+        Route::get('/laporan-penjualan', [SalesReportController::class, 'index'])
+            ->name('sales-report.index');
+
+        // Refresh Laporan Penjualan
+        Route::get('/laporan-penjualan/refresh', [SalesReportController::class, 'refresh'])
+            ->name('sales-report.refresh');
+
+    });
 
 
 /*
@@ -243,9 +255,11 @@ Route::middleware(['auth', 'role:karyawan'])
             return view('karyawan.dashboard');
         })->name('dashboard');
 
-        // Data Produk Karyawan (Hanya Melihat)
+
+        // Data Produk Karyawan
         Route::get('/products', [KaryawanProductController::class, 'index'])
             ->name('products.index');
+
 
         // Kelola Pesanan Karyawan
         Route::get('/orders', [AdminOrderController::class, 'index'])
@@ -257,4 +271,4 @@ Route::middleware(['auth', 'role:karyawan'])
         Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('orders.updateStatus');
 
-});
+    });

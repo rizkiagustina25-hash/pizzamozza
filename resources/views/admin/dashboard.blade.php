@@ -7,6 +7,7 @@
     <title>Dashboard Admin - PizzaMozza</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <style>
         * {
@@ -35,7 +36,7 @@
         .sidebar {
             position: fixed;
             inset: 0 auto 0 0;
-            width: 250px;
+            width: 265px;
             background: #941919;
             color: white;
             display: flex;
@@ -47,22 +48,26 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 22px;
+            padding: 18px 24px;
+            min-height: 88px;
             border-bottom: 1px solid #ffffff25;
         }
 
         .brand-icon {
             width: 42px;
             height: 42px;
+            min-width: 42px;
             border-radius: 50%;
             background: #b52d2d;
             display: grid;
             place-items: center;
-            font-size: 21px;
+            font-size: 20px;
+            color: white;
         }
 
         .brand-content h1 {
-            font-size: 21px;
+            font-size: 23px;
+            font-weight: 700;
             color: white;
         }
 
@@ -115,6 +120,7 @@
         .menu-link:hover,
         .menu-link.active {
             background: #b52d2d;
+            color: white;
         }
 
         /* PROFIL ADMIN */
@@ -151,6 +157,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: white;
         }
 
         .admin-info span {
@@ -178,7 +185,8 @@
         /* MAIN CONTENT */
         .main-wrapper {
             min-height: 100vh;
-            margin-left: 250px;
+            width: calc(100% - 265px);
+            margin-left: 265px;
         }
 
         .topbar {
@@ -232,6 +240,7 @@
 
         .page-heading h2 {
             font-size: 29px;
+            font-weight: 700;
         }
 
         .page-heading p {
@@ -240,20 +249,24 @@
             font-size: 13px;
         }
 
+        /* TOMBOL TAMBAH PRODUK */
         .primary-button {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             padding: 12px 17px;
             border-radius: 8px;
-            background: #ed1c24;
+            background: #941919;
             color: white;
             font-size: 12px;
             font-weight: bold;
+            transition: .2s;
         }
 
         .primary-button:hover {
-            background: #c9181f;
+            background: #b52d2d;
+            color: white;
         }
 
         /* STATISTIK */
@@ -308,7 +321,7 @@
 
         .red .stat-icon {
             background: #fff0f1;
-            color: #b52d2d;
+            color: #941919;
         }
 
         .blue .stat-icon {
@@ -363,6 +376,7 @@
 
         .panel-header h3 {
             font-size: 15px;
+            font-weight: 700;
         }
 
         .panel-header p {
@@ -372,7 +386,7 @@
         }
 
         .panel-link {
-            color: #ed1c24;
+            color: #941919;
             font-size: 11px;
             font-weight: bold;
         }
@@ -435,7 +449,7 @@
         }
 
         .product-price span {
-            color: #ed1c24;
+            color: #941919;
         }
 
         .empty-product {
@@ -456,6 +470,7 @@
             gap: 11px;
             padding: 12px 8px;
             border-bottom: 1px solid #eee;
+            transition: .2s;
         }
 
         .quick-action:last-child {
@@ -472,7 +487,7 @@
             flex-shrink: 0;
             border-radius: 9px;
             background: #fff0f1;
-            color: #ed1c24;
+            color: #941919;
             display: grid;
             place-items: center;
         }
@@ -578,40 +593,14 @@
 
         @media (max-width: 700px) {
             .sidebar {
-                width: 72px;
-            }
-
-            .brand {
-                justify-content: center;
-                padding: 18px 5px;
-            }
-
-            .brand-content,
-            .menu-title,
-            .menu-link span,
-            .admin-info {
-                display: none;
-            }
-
-            .sidebar-menu {
-                padding: 18px 8px;
-            }
-
-            .menu-link {
-                justify-content: center;
-                padding: 14px 5px;
-            }
-
-            .sidebar-bottom {
-                padding: 12px 8px;
-            }
-
-            .admin-profile {
-                justify-content: center;
+                width: 265px;
+                min-width: 265px;
+                max-width: 265px;
             }
 
             .main-wrapper {
-                margin-left: 72px;
+                width: calc(100% - 265px);
+                margin-left: 265px;
             }
 
             .topbar {
@@ -637,6 +626,162 @@
                 font-size: 24px;
             }
         }
+
+        /* =========================================================
+           KONSISTENSI DASHBOARD DENGAN HALAMAN ADMIN LAIN
+        ========================================================= */
+
+        :root {
+            --sidebar-width: 265px;
+            --primary-red: #941919;
+            --primary-red-hover: #b52d2d;
+        }
+
+        html,
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        .sidebar {
+            width: 265px !important;
+            min-width: 265px !important;
+            max-width: 265px !important;
+            background: var(--primary-red) !important;
+        }
+
+        .main-wrapper {
+            width: calc(100% - 265px) !important;
+            margin-left: 265px !important;
+        }
+
+        .brand {
+            min-height: 88px;
+            padding: 18px 24px;
+            border-bottom-color: rgba(255, 255, 255, .15);
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            background: var(--primary-red-hover) !important;
+            color: #fff !important;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+
+        .brand-content h1 {
+            color: #fff !important;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .brand-content p,
+        .menu-title {
+            color: #f5dede !important;
+        }
+
+        .menu-link {
+            color: #fff !important;
+            font-family: Arial, Helvetica, sans-serif !important;
+        }
+
+        .menu-link:hover,
+        .menu-link.active {
+            background: var(--primary-red-hover) !important;
+            color: #fff !important;
+        }
+
+        .admin-info strong {
+            color: #fff !important;
+        }
+
+        .admin-info span {
+            color: #f5dede !important;
+        }
+
+        .admin-avatar {
+            background: var(--primary-red-hover) !important;
+            color: #fff !important;
+        }
+
+        .logout-button {
+            background: #fff !important;
+            color: var(--primary-red) !important;
+        }
+
+        .logout-button:hover {
+            background: #f5dede !important;
+        }
+
+        .primary-button {
+            background: var(--primary-red) !important;
+            color: #fff !important;
+            font-family: Arial, Helvetica, sans-serif !important;
+            font-weight: 700;
+        }
+
+        .primary-button:hover {
+            background: var(--primary-red-hover) !important;
+        }
+
+        .panel-link,
+        .product-price span {
+            color: var(--primary-red) !important;
+        }
+
+        .quick-action-icon {
+            color: var(--primary-red) !important;
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 265px !important;
+                min-width: 265px !important;
+                max-width: 265px !important;
+            }
+
+            .brand {
+                justify-content: flex-start;
+                padding: 18px 24px;
+            }
+
+            .brand-content,
+            .menu-title,
+            .menu-link span,
+            .admin-info {
+                display: block;
+            }
+
+            .sidebar-menu {
+                padding: 24px 14px;
+            }
+
+            .menu-link {
+                justify-content: flex-start;
+                padding: 13px 14px;
+            }
+
+            .sidebar-bottom {
+                padding: 17px;
+            }
+
+            .admin-profile {
+                justify-content: flex-start;
+            }
+
+            .main-wrapper {
+                width: calc(100% - 265px) !important;
+                margin-left: 265px !important;
+            }
+        }
+
     </style>
 </head>
 
@@ -649,7 +794,7 @@
 
             <div class="brand">
                 <div class="brand-icon">
-                    <i class="bi bi-pizza"></i>
+                    <i class="fa-solid fa-pizza-slice"></i>
                 </div>
 
                 <div class="brand-content">

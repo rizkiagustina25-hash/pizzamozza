@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Master Data Pelanggan - Pizza Mozza</title>
+    <title>Master Data Pelanggan - PizzaMozza</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -28,90 +28,242 @@
             min-height: 100vh;
         }
 
-        /* SIDEBAR - DISESUAIKAN DENGAN DASHBOARD ADMIN */
-        .sidebar{position:fixed;top:0;left:0;bottom:0;width:265px;background:#941919;color:#fff;display:flex;flex-direction:column;z-index:100}
-        .brand{height:88px;padding:18px 24px;display:flex;align-items:center;gap:11px;border-bottom:1px solid rgba(255,255,255,.15);flex-shrink:0}
-        .brand-icon{width:38px;height:38px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#b52d2d;color:#fff;font-size:20px}
-        .brand-content h1{color:#fff;font-size:23px;font-weight:700;line-height:1.1}
-        .brand-content p{margin-top:4px;color:#f5dede;font-size:11px}
-        .sidebar-menu{padding:24px 15px}
-        .menu-title{margin:0 12px 12px;color:#f5dede;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
-        .menu-list{list-style:none}
-        .menu-item{margin-bottom:5px}
-        .menu-link{min-height:45px;padding:0 14px;border-radius:9px;display:flex;align-items:center;gap:12px;color:#fff;font-size:13px;font-weight:600;text-decoration:none;transition:.2s ease}
-        .menu-link:hover,.menu-link.active{background:#b52d2d;color:#fff}
-        .menu-icon{width:22px;display:flex;align-items:center;justify-content:center;font-size:16px}
-        .sidebar-bottom{margin-top:auto;padding:18px 16px;border-top:1px solid rgba(255,255,255,.15)}
-        .admin-profile{display:flex;align-items:center;gap:11px;margin-bottom:15px;padding:5px 6px}
-        .profile-avatar{width:40px;height:40px;flex-shrink:0;border-radius:50%;background:#b52d2d;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px}
-        .profile-info{min-width:0}
-        .profile-info strong{display:block;color:#fff;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .profile-info span{display:block;margin-top:4px;color:#f5dede;font-size:10px}
-        .logout-button{width:100%;height:38px;border:1px solid rgba(255,255,255,.4);border-radius:8px;background:#fff;color:#941919;font-size:12px;font-weight:600;cursor:pointer;transition:.2s ease}
-        .logout-button:hover{background:#f5dede;color:#941919}
+        /* =====================================
+           SIDEBAR ADMIN
+        ===================================== */
 
-        /* MAIN */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 265px;
+            background: #941919;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .brand {
+            height: 88px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            border-bottom: 1px solid rgba(255, 255, 255, .15);
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #b52d2d;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .brand-content h1 {
+            color: #fff;
+            font-size: 23px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .brand-content p {
+            margin-top: 4px;
+            color: #f5dede;
+            font-size: 11px;
+        }
+
+        .sidebar-menu {
+            padding: 24px 15px;
+        }
+
+        .menu-title {
+            margin: 0 12px 12px;
+            color: #f5dede;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            margin-bottom: 5px;
+        }
+
+        .menu-link {
+            min-height: 45px;
+            padding: 0 14px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .menu-link:hover,
+        .menu-link.active {
+            background: #b52d2d;
+            color: #fff;
+        }
+
+        .menu-icon {
+            width: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 18px 16px;
+            border-top: 1px solid rgba(255, 255, 255, .15);
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 15px;
+            padding: 5px 6px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #b52d2d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 17px;
+        }
+
+        .profile-info {
+            min-width: 0;
+        }
+
+        .profile-info strong {
+            display: block;
+            color: #fff;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-info span {
+            display: block;
+            margin-top: 4px;
+            color: #f5dede;
+            font-size: 10px;
+        }
+
+        .logout-button {
+            width: 100%;
+            height: 38px;
+            border: 1px solid rgba(255, 255, 255, .4);
+            border-radius: 8px;
+            background: #fff;
+            color: #941919;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .logout-button:hover {
+            background: #f5dede;
+            color: #941919;
+        }
+
+        /* =====================================
+           MAIN CONTENT
+        ===================================== */
+
         .main {
             margin-left: 265px;
             width: calc(100% - 265px);
             min-height: 100vh;
         }
 
-        /* TOPBAR - SAMA DENGAN HALAMAN KELOLA PESANAN */
-.topbar {
-    min-height: 72px;
-    padding: 12px 34px;
-    background: #ffffff;
-    border-bottom: 1px solid #e8e8e8;
+        /* =====================================
+           TOPBAR
+        ===================================== */
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
+        .topbar {
+            min-height: 72px;
+            padding: 12px 34px;
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
 
-.topbar-title {
-    font-size: 13px;
-    color: #777;
-}
+        .topbar-title {
+            font-size: 13px;
+            color: #777;
+        }
 
-.topbar-admin {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .topbar-admin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.topbar-admin-info {
-    text-align: right;
-}
+        .topbar-admin-info {
+            text-align: right;
+        }
 
-.topbar-admin-info strong {
-    display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: #333;
-}
+        .topbar-admin-info strong {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+        }
 
-.topbar-admin-info span {
-    display: block;
-    margin-top: 3px;
-    font-size: 10px;
-    color: #999;
-}
+        .topbar-admin-info span {
+            display: block;
+            margin-top: 3px;
+            font-size: 10px;
+            color: #999;
+        }
 
-.topbar-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: #fff0f4;
+        .topbar-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #fff0f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #941919;
+            font-size: 16px;
+        }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #941919;
-    font-size: 16px;
-}
+        /* =====================================
+           CONTENT
+        ===================================== */
 
         .content {
             padding: 30px 35px;
@@ -140,28 +292,37 @@
             color: #a92820;
         }
 
+        /* =====================================
+           BUTTON
+        ===================================== */
+
         .btn-primary {
             border: none;
             background: #a92820;
-            color: white;
+            color: #fff;
             padding: 11px 18px;
             border-radius: 7px;
             cursor: pointer;
             font-weight: 600;
             font-size: 13px;
+            transition: .2s ease;
         }
 
         .btn-primary:hover {
             background: #8d201a;
         }
 
-        /* FILTER */
+        /* =====================================
+           FILTER PELANGGAN
+        ===================================== */
+
         .filter-box {
-            background: white;
+            background: #fff;
+            border: 1px solid #eee5e0;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
         }
 
         .filter-form {
@@ -183,7 +344,7 @@
             padding: 0 13px;
             outline: none;
             font-size: 13px;
-            background: white;
+            background: #fff;
         }
 
         .search-wrapper input:focus,
@@ -201,22 +362,37 @@
             border: none;
             border-radius: 7px;
             background: #a92820;
-            color: white;
+            color: #fff;
             cursor: pointer;
             font-weight: 600;
+            transition: .2s ease;
         }
 
-        /* TABLE */
+        .btn-search:hover {
+            background: #8d201a;
+        }
+
+        /* =====================================
+           TABEL PELANGGAN
+        ===================================== */
+
         .table-card {
-            background: white;
-            border-radius: 10px;
+            background: #fff;
+            border: 1px solid #e1d8d3;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,.04);
+            box-shadow: 0 3px 10px rgba(61, 48, 41, .05);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 950px;
         }
 
         thead {
@@ -229,18 +405,24 @@
             font-size: 12px;
             color: #75675f;
             font-weight: 700;
-            border-bottom: 1px solid #eee6e1;
+            border: 1px solid #e3d9d3;
+            white-space: nowrap;
         }
 
         td {
             padding: 15px 14px;
             font-size: 13px;
-            border-bottom: 1px solid #f0ebe7;
+            border: 1px solid #e8e1dc;
             vertical-align: middle;
+            background: #fff;
         }
 
-        tbody tr:hover {
-            background: #fffaf7;
+        tbody tr:nth-child(even) td {
+            background: #fffdfc;
+        }
+
+        tbody tr:hover td {
+            background: #fff2ee;
         }
 
         .customer-name {
@@ -257,6 +439,10 @@
             color: #71655e;
             line-height: 1.4;
         }
+
+        /* =====================================
+           STATUS PELANGGAN
+        ===================================== */
 
         .status {
             display: inline-block;
@@ -276,9 +462,14 @@
             color: #a92820;
         }
 
+        /* =====================================
+           TOMBOL AKSI
+        ===================================== */
+
         .actions {
             display: flex;
             gap: 6px;
+            align-items: center;
         }
 
         .action-btn {
@@ -291,6 +482,7 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
+            transition: .2s ease;
         }
 
         .btn-detail {
@@ -310,9 +502,13 @@
 
         .action-btn:hover {
             opacity: .75;
+            transform: translateY(-1px);
         }
 
-        /* EMPTY */
+        /* =====================================
+           DATA KOSONG
+        ===================================== */
+
         .empty {
             text-align: center;
             padding: 50px 20px;
@@ -324,12 +520,16 @@
             margin-bottom: 10px;
         }
 
-        /* PAGINATION */
+        /* =====================================
+           PAGINATION
+        ===================================== */
+
         .pagination-area {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 18px 20px;
+            gap: 15px;
         }
 
         .pagination-info {
@@ -355,12 +555,12 @@
             text-decoration: none;
             font-size: 12px;
             color: #5d514a;
-            background: white;
+            background: #fff;
         }
 
         .pagination .active {
             background: #a92820;
-            color: white;
+            color: #fff;
             border-color: #a92820;
         }
 
@@ -368,7 +568,10 @@
             opacity: .45;
         }
 
-        /* ALERT */
+        /* =====================================
+           ALERT
+        ===================================== */
+
         .alert {
             padding: 13px 16px;
             border-radius: 8px;
@@ -386,7 +589,10 @@
             color: #a92820;
         }
 
-        /* MODAL */
+        /* =====================================
+           MODAL
+        ===================================== */
+
         .modal {
             display: none;
             position: fixed;
@@ -405,9 +611,9 @@
         .modal-box {
             width: 100%;
             max-width: 560px;
-            background: white;
+            background: #fff;
             border-radius: 12px;
-            box-shadow: 0 15px 50px rgba(0,0,0,.2);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, .2);
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -490,7 +696,7 @@
 
         .btn-secondary {
             border: 1px solid #ddd3ce;
-            background: white;
+            background: #fff;
             color: #5d514a;
             padding: 10px 17px;
             border-radius: 7px;
@@ -498,25 +704,27 @@
             font-weight: 600;
         }
 
-        /* DETAIL */
+        /* =====================================
+           DETAIL PELANGGAN
+        ===================================== */
+
         .profile-detail {
             text-align: center;
             margin-bottom: 25px;
         }
 
-        /* AVATAR KHUSUS MODAL DETAIL PELANGGAN */
-.profile-detail .profile-avatar {
-    width: 75px;
-    height: 75px;
-    background: #f2e4dc;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    font-size: 30px;
-    color: #a92820;
-}
+        .profile-detail .profile-avatar {
+            width: 75px;
+            height: 75px;
+            background: #f2e4dc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            font-size: 30px;
+            color: #a92820;
+        }
 
         .profile-name {
             margin-top: 12px;
@@ -552,7 +760,115 @@
             text-align: right;
         }
 
-        @media(max-width: 900px) {
+        /* =====================================
+           MODAL LOGOUT
+        ===================================== */
+
+        .logout-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(35, 15, 15, .55);
+        }
+
+        .logout-modal.show {
+            display: flex;
+        }
+
+        .logout-dialog {
+            width: 100%;
+            max-width: 380px;
+            padding: 30px 25px;
+            text-align: center;
+            background: #fffaf3;
+            border: 1px solid #f0e1d5;
+            border-radius: 18px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .2);
+            animation: popupFadeIn .2s ease;
+        }
+
+        .logout-modal-icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f8e5e2;
+            color: #941919;
+            font-size: 28px;
+        }
+
+        .logout-dialog h3 {
+            margin-bottom: 10px;
+            color: #34241f;
+            font-size: 21px;
+        }
+
+        .logout-dialog p {
+            margin-bottom: 24px;
+            color: #81716a;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .logout-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-modal-actions button {
+            flex: 1;
+            min-height: 42px;
+            border-radius: 9px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .cancel-logout {
+            border: 1px solid #e5d4c9;
+            background: #fff;
+            color: #59453d;
+        }
+
+        .cancel-logout:hover {
+            background: #f5ebe3;
+        }
+
+        .confirm-logout {
+            border: none;
+            background: #941919;
+            color: #fff;
+        }
+
+        .confirm-logout:hover {
+            background: #b52d2d;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* =====================================
+           RESPONSIVE
+        ===================================== */
+
+        @media (max-width: 900px) {
             .sidebar {
                 width: 220px;
             }
@@ -586,29 +902,56 @@
                 min-width: 950px;
             }
         }
-        @media(max-width: 600px) {
-            .layout{display:block}
-            .sidebar{position:relative;width:100%;min-height:auto;bottom:auto}
-            .sidebar-menu{padding:15px}
-            .main{margin-left:0;width:100%}
-            .sidebar-bottom{margin-top:0}
-            .topbar{padding:0 18px}
-            .content{padding:20px 15px}
-        }
 
-        .logout-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(35,15,15,.55)}
-        .logout-modal.show{display:flex}
-        .logout-dialog{width:100%;max-width:380px;padding:30px 25px;text-align:center;background:#fffaf3;border:1px solid #f0e1d5;border-radius:18px;box-shadow:0 15px 45px rgba(0,0,0,.2);animation:popupFadeIn .2s ease}
-        .logout-modal-icon{width:65px;height:65px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f8e5e2;color:#941919;font-size:28px}
-        .logout-dialog h3{margin-bottom:10px;color:#34241f;font-size:21px}
-        .logout-dialog p{margin-bottom:24px;color:#81716a;font-size:13px;line-height:1.6}
-        .logout-modal-actions{display:flex;gap:10px}
-        .logout-modal-actions button{flex:1;min-height:42px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s ease}
-        .cancel-logout{border:1px solid #e5d4c9;background:#fff;color:#59453d}
-        .cancel-logout:hover{background:#f5ebe3}
-        .confirm-logout{border:none;background:#941919;color:#fff}
-        .confirm-logout:hover{background:#b52d2d}
-        @keyframes popupFadeIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+        @media (max-width: 600px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+                bottom: auto;
+            }
+
+            .sidebar-menu {
+                padding: 15px;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar-bottom {
+                margin-top: 0;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                gap: 12px;
+                flex-direction: column;
+            }
+
+            .pagination-area {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
     </style>
 </head>
 
@@ -616,99 +959,190 @@
 
 <div class="layout">
 
-    {{-- SIDEBAR ADMIN --}}
+    {{-- =====================================
+         SIDEBAR ADMIN
+    ====================================== --}}
+
     <aside class="sidebar">
+
         {{-- BRAND --}}
         <div class="brand">
-            <div class="brand-icon"><i class="fa-solid fa-pizza-slice"></i></div>
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-pizza-slice"></i>
+            </div>
+
             <div class="brand-content">
                 <h1>PizzaMozza</h1>
                 <p>Admin Dashboard</p>
             </div>
+
         </div>
 
         {{-- MENU --}}
         <nav class="sidebar-menu">
-            <div class="menu-title">Main Menu</div>
+
+            <div class="menu-title">
+                Main Menu
+            </div>
+
             <ul class="menu-list">
+
+                {{-- DASHBOARD --}}
                 <li class="menu-item">
-                    <a href="{{ route('admin.dashboard') }}" class="menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="bi bi-grid-1x2"></i></span><span>Dashboard</span>
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+
+                        <span class="menu-icon">
+                            <i class="bi bi-grid-1x2"></i>
+                        </span>
+
+                        <span>Dashboard</span>
                     </a>
                 </li>
+
+                {{-- DATA KARYAWAN --}}
                 <li class="menu-item">
-                    <a href="{{ route('admin.employees.index') }}" class="menu-link {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="bi bi-people"></i></span><span>Data Karyawan</span>
+                    <a href="{{ route('admin.employees.index') }}"
+                        class="menu-link {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
+
+                        <span class="menu-icon">
+                            <i class="bi bi-people"></i>
+                        </span>
+
+                        <span>Data Karyawan</span>
                     </a>
                 </li>
+
+                {{-- DATA PELANGGAN --}}
                 <li class="menu-item">
-                    <a href="{{ route('admin.customers.index') }}" class="menu-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="bi bi-people"></i></span><span>Data Pelanggan</span>
+                    <a href="{{ route('admin.customers.index') }}"
+                        class="menu-link {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
+
+                        <span class="menu-icon">
+                            <i class="bi bi-people"></i>
+                        </span>
+
+                        <span>Data Pelanggan</span>
                     </a>
                 </li>
+
+                {{-- DATA PRODUK --}}
                 <li class="menu-item">
-                    <a href="{{ route('admin.products.index') }}" class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="bi bi-box-seam"></i></span><span>Data Produk</span>
+                    <a href="{{ route('admin.products.index') }}"
+                        class="menu-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+
+                        <span class="menu-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </span>
+
+                        <span>Data Produk</span>
                     </a>
                 </li>
+
+                {{-- PESANAN --}}
                 <li class="menu-item">
-                    <a href="{{ route('admin.orders.index') }}" class="menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                        <span class="menu-icon"><i class="bi bi-receipt"></i></span><span>Pesanan</span>
+                    <a href="{{ route('admin.orders.index') }}"
+                        class="menu-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+
+                        <span class="menu-icon">
+                            <i class="bi bi-receipt"></i>
+                        </span>
+
+                        <span>Pesanan</span>
                     </a>
                 </li>
+
+                {{-- LAPORAN PENJUALAN --}}
+                <li class="menu-item">
+                    <a href="{{ route('admin.sales-report.index') }}"
+                        class="menu-link {{ request()->routeIs('admin.sales-report.*') ? 'active' : '' }}">
+
+                        <span class="menu-icon">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </span>
+
+                        <span>Laporan Penjualan</span>
+                    </a>
+                </li>
+
             </ul>
+
         </nav>
 
         {{-- SIDEBAR BOTTOM --}}
         <div class="sidebar-bottom">
+
             <div class="admin-profile">
-                <div class="profile-avatar"><i class="bi bi-person"></i></div>
-                <div class="profile-info">
-                    <strong>{{ auth()->user()->name ?? 'Admin PizzaMozza' }}</strong>
-                    <span>PizzaMozza</span>
+
+                <div class="profile-avatar">
+                    <i class="bi bi-person"></i>
                 </div>
+
+                <div class="profile-info">
+
+                    <strong>
+                        {{ auth()->user()->name ?? 'Admin PizzaMozza' }}
+                    </strong>
+
+                    <span>PizzaMozza</span>
+
+                </div>
+
             </div>
+
             <form id="logoutForm" action="{{ route('logout') }}" method="POST">
+
                 @csrf
-                <button type="button" class="logout-button" onclick="openLogoutModal()">
-                    <i class="bi bi-box-arrow-right"></i> Keluar
+
+                <button type="button"
+                    class="logout-button"
+                    onclick="openLogoutModal()">
+
+                    <i class="bi bi-box-arrow-right"></i>
+                    Keluar
+
                 </button>
+
             </form>
+
         </div>
+
     </aside>
 
 
-    {{-- MAIN --}}
+    {{-- =====================================
+         MAIN CONTENT
+    ====================================== --}}
+
     <main class="main">
 
         {{-- TOPBAR --}}
-<header class="topbar">
+        <header class="topbar">
 
-    <div class="topbar-title">
-       
-    </div>
+            <div class="topbar-title"></div>
 
-    <div class="topbar-admin">
+            <div class="topbar-admin">
 
-        <div class="topbar-admin-info">
+                <div class="topbar-admin-info">
 
-            <strong>
-                {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
-            </strong>
+                    <strong>
+                        {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
+                    </strong>
 
-            <span>
-                {{ auth()->user()->role === 'admin' ? 'Administrator' : 'Karyawan' }}
-            </span>
+                    <span>
+                        {{ auth()->user()->role === 'admin' ? 'Administrator' : 'Karyawan' }}
+                    </span>
 
-        </div>
+                </div>
 
-        <div class="topbar-avatar">
-            <i class="bi bi-person"></i>
-        </div>
+                <div class="topbar-avatar">
+                    <i class="bi bi-person"></i>
+                </div>
 
-    </div>
+            </div>
 
-</header>
+        </header>
 
 
         <section class="content">
@@ -717,19 +1151,18 @@
             <div class="page-header">
 
                 <div>
-
                     <h1 class="page-title">
                         Master Data Pelanggan
                     </h1>
-
                 </div>
 
-                <button
-                    type="button"
+                <button type="button"
                     class="btn-primary"
-                    onclick="openModal('addModal')"
-                >
-                    + Tambah Pelanggan
+                    onclick="openModal('addModal')">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Tambah Pelanggan
+
                 </button>
 
             </div>
@@ -737,11 +1170,13 @@
 
             {{-- BREADCRUMB --}}
             <div class="breadcrumb">
+
                 Dashboard
                 &nbsp;›&nbsp;
                 Master Data
                 &nbsp;›&nbsp;
                 <span>Pelanggan</span>
+
             </div>
 
 
@@ -762,7 +1197,7 @@
 
                     <strong>Data belum berhasil disimpan.</strong>
 
-                    <ul style="margin-top:8px; margin-left:18px;">
+                    <ul style="margin-top: 8px; margin-left: 18px;">
 
                         @foreach($errors->all() as $error)
 
@@ -777,23 +1212,22 @@
             @endif
 
 
-            {{-- FILTER --}}
+            {{-- =====================================
+                 FILTER PELANGGAN
+            ====================================== --}}
+
             <div class="filter-box">
 
-                <form
-                    method="GET"
+                <form method="GET"
                     action="{{ route('admin.customers.index') }}"
-                    class="filter-form"
-                >
+                    class="filter-form">
 
                     <div class="search-wrapper">
 
-                        <input
-                            type="text"
+                        <input type="text"
                             name="search"
                             placeholder="Cari nama, email, atau no. HP..."
-                            value="{{ request('search') }}"
-                        >
+                            value="{{ request('search') }}">
 
                     </div>
 
@@ -805,17 +1239,13 @@
                                 Semua
                             </option>
 
-                            <option
-                                value="active"
-                                {{ request('status') === 'active' ? 'selected' : '' }}
-                            >
+                            <option value="active"
+                                {{ request('status') === 'active' ? 'selected' : '' }}>
                                 Aktif
                             </option>
 
-                            <option
-                                value="inactive"
-                                {{ request('status') === 'inactive' ? 'selected' : '' }}
-                            >
+                            <option value="inactive"
+                                {{ request('status') === 'inactive' ? 'selected' : '' }}>
                                 Tidak Aktif
                             </option>
 
@@ -823,10 +1253,8 @@
 
                     </div>
 
-                    <button
-                        type="submit"
-                        class="btn-search"
-                    >
+                    <button type="submit" class="btn-search">
+                        <i class="bi bi-search"></i>
                         Cari
                     </button>
 
@@ -835,151 +1263,144 @@
             </div>
 
 
-            {{-- TABLE --}}
+            {{-- =====================================
+                 TABEL DATA PELANGGAN
+            ====================================== --}}
+
             <div class="table-card">
 
                 @if($customers->count() > 0)
 
-                    <table>
+                    <div class="table-wrapper">
 
-                        <thead>
+                        <table>
 
-                            <tr>
-
-                                <th width="50">No</th>
-
-                                <th>Nama</th>
-
-                                <th>Email</th>
-
-                                <th>No. HP</th>
-
-                                <th>Alamat</th>
-
-                                <th>Tanggal Daftar</th>
-
-                                <th>Status</th>
-
-                                <th width="120">Aksi</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @foreach($customers as $customer)
-
+                            <thead>
                                 <tr>
+                                    <th width="50">No</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>No. HP</th>
+                                    <th>Alamat</th>
+                                    <th>Tanggal Daftar</th>
+                                    <th>Status</th>
+                                    <th width="120">Aksi</th>
+                                </tr>
+                            </thead>
 
-                                    <td>
-                                        {{ $customers->firstItem() + $loop->index }}
-                                    </td>
+                            <tbody>
 
-                                    <td>
-                                        <div class="customer-name">
-                                            {{ $customer->name }}
-                                        </div>
-                                    </td>
+                                @foreach($customers as $customer)
 
-                                    <td>
-                                        <div class="email">
-                                            {{ $customer->email }}
-                                        </div>
-                                    </td>
+                                    <tr>
 
-                                    <td>
-                                        {{ $customer->no_hp ?? '-' }}
-                                    </td>
+                                        <td>
+                                            {{ $customers->firstItem() + $loop->index }}
+                                        </td>
 
-                                    <td>
-                                        <div class="address">
-                                            {{ $customer->address ?? '-' }}
-                                        </div>
-                                    </td>
+                                        <td>
+                                            <div class="customer-name">
+                                                {{ $customer->name }}
+                                            </div>
+                                        </td>
 
-                                    <td>
-                                        {{ $customer->created_at
-                                            ? $customer->created_at->format('d-m-Y')
-                                            : '-' }}
-                                    </td>
+                                        <td>
+                                            <div class="email">
+                                                {{ $customer->email }}
+                                            </div>
+                                        </td>
 
-                                    <td>
+                                        <td>
+                                            {{ $customer->no_hp ?? '-' }}
+                                        </td>
 
-                                        @if($customer->status === 'active')
+                                        <td>
+                                            <div class="address">
+                                                {{ $customer->address ?? '-' }}
+                                            </div>
+                                        </td>
 
-                                            <span class="status status-active">
-                                                Aktif
-                                            </span>
+                                        <td>
+                                            {{ $customer->created_at
+                                                ? $customer->created_at->format('d-m-Y')
+                                                : '-' }}
+                                        </td>
 
-                                        @else
+                                        <td>
 
-                                            <span class="status status-inactive">
-                                                Tidak Aktif
-                                            </span>
+                                            @if($customer->status === 'active')
 
-                                        @endif
+                                                <span class="status status-active">
+                                                    Aktif
+                                                </span>
 
-                                    </td>
+                                            @else
 
-                                    <td>
+                                                <span class="status status-inactive">
+                                                    Tidak Aktif
+                                                </span>
 
-                                        <div class="actions">
+                                            @endif
 
-                                            {{-- DETAIL --}}
-                                            <button
-                                                type="button"
-                                                class="action-btn btn-detail"
-                                                title="Detail"
-                                                onclick="openModal('detailModal{{ $customer->id }}')"
-                                            >
-                                                👁
-                                            </button>
+                                        </td>
 
+                                        <td>
 
-                                            {{-- EDIT --}}
-                                            <button
-                                                type="button"
-                                                class="action-btn btn-edit"
-                                                title="Edit"
-                                                onclick="openModal('editModal{{ $customer->id }}')"
-                                            >
-                                                ✎
-                                            </button>
+                                            <div class="actions">
 
+                                                {{-- DETAIL --}}
+                                                <button type="button"
+                                                    class="action-btn btn-detail"
+                                                    title="Detail"
+                                                    onclick="openModal('detailModal{{ $customer->id }}')">
 
-                                            {{-- DELETE --}}
-                                            <form
-                                                method="POST"
-                                                action="{{ route('admin.customers.destroy', $customer->id) }}"
-                                                onsubmit="return confirm('Yakin ingin menghapus pelanggan ini?')"
-                                            >
+                                                    <i class="bi bi-eye"></i>
 
-                                                @csrf
-
-                                                @method('DELETE')
-
-                                                <button
-                                                    type="submit"
-                                                    class="action-btn btn-delete"
-                                                    title="Hapus"
-                                                >
-                                                    🗑
                                                 </button>
 
-                                            </form>
 
-                                        </div>
+                                                {{-- EDIT --}}
+                                                <button type="button"
+                                                    class="action-btn btn-edit"
+                                                    title="Edit"
+                                                    onclick="openModal('editModal{{ $customer->id }}')">
 
-                                    </td>
+                                                    <i class="bi bi-pencil-fill"></i>
 
-                                </tr>
+                                                </button>
 
-                            @endforeach
 
-                        </tbody>
+                                                {{-- DELETE --}}
+                                                <form method="POST"
+                                                    action="{{ route('admin.customers.destroy', $customer->id) }}"
+                                                    onsubmit="return confirm('Yakin ingin menghapus pelanggan ini?')">
 
-                    </table>
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button type="submit"
+                                                        class="action-btn btn-delete"
+                                                        title="Hapus">
+
+                                                        <i class="bi bi-trash"></i>
+
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforeach
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
 
                     {{-- PAGINATION --}}
@@ -1060,14 +1481,14 @@
                     <div class="empty">
 
                         <div class="empty-icon">
-                            👥
+                            <i class="bi bi-people"></i>
                         </div>
 
                         <h3>
                             Belum ada data pelanggan
                         </h3>
 
-                        <p style="margin-top:7px;">
+                        <p style="margin-top: 7px;">
                             Silakan tambahkan pelanggan baru.
                         </p>
 
@@ -1084,15 +1505,13 @@
 </div>
 
 
-{{-- ========================================================= --}}
-{{-- MODAL TAMBAH PELANGGAN --}}
-{{-- ========================================================= --}}
+{{-- =====================================
+     MODAL TAMBAH PELANGGAN
+====================================== --}}
 
-<div
-    class="modal"
+<div class="modal"
     id="addModal"
-    onclick="closeOutside(event, 'addModal')"
->
+    onclick="closeOutside(event, 'addModal')">
 
     <div class="modal-box">
 
@@ -1102,20 +1521,19 @@
                 Tambah Pelanggan
             </div>
 
-            <button
+            <button type="button"
                 class="close"
-                onclick="closeModal('addModal')"
-            >
+                onclick="closeModal('addModal')">
+
                 ×
+
             </button>
 
         </div>
 
 
-        <form
-            method="POST"
-            action="{{ route('admin.customers.store') }}"
-        >
+        <form method="POST"
+            action="{{ route('admin.customers.store') }}">
 
             @csrf
 
@@ -1123,16 +1541,12 @@
 
                 <div class="form-group">
 
-                    <label>
-                        Nama Lengkap
-                    </label>
+                    <label>Nama Lengkap</label>
 
-                    <input
-                        type="text"
+                    <input type="text"
                         name="name"
                         value="{{ old('name') }}"
-                        required
-                    >
+                        required>
 
                 </div>
 
@@ -1141,32 +1555,23 @@
 
                     <div class="form-group">
 
-                        <label>
-                            Email
-                        </label>
+                        <label>Email</label>
 
-                        <input
-                            type="email"
+                        <input type="email"
                             name="email"
                             value="{{ old('email') }}"
-                            required
-                        >
+                            required>
 
                     </div>
 
-
                     <div class="form-group">
 
-                        <label>
-                            No. HP
-                        </label>
+                        <label>No. HP</label>
 
-                        <input
-                            type="text"
+                        <input type="text"
                             name="no_hp"
                             value="{{ old('no_hp') }}"
-                            required
-                        >
+                            required>
 
                     </div>
 
@@ -1175,14 +1580,9 @@
 
                 <div class="form-group">
 
-                    <label>
-                        Alamat
-                    </label>
+                    <label>Alamat</label>
 
-                    <textarea
-                        name="address"
-                        required
-                    >{{ old('address') }}</textarea>
+                    <textarea name="address" required>{{ old('address') }}</textarea>
 
                 </div>
 
@@ -1191,30 +1591,21 @@
 
                     <div class="form-group">
 
-                        <label>
-                            Password
-                        </label>
+                        <label>Password</label>
 
-                        <input
-                            type="password"
+                        <input type="password"
                             name="password"
-                            required
-                        >
+                            required>
 
                     </div>
 
-
                     <div class="form-group">
 
-                        <label>
-                            Konfirmasi Password
-                        </label>
+                        <label>Konfirmasi Password</label>
 
-                        <input
-                            type="password"
+                        <input type="password"
                             name="password_confirmation"
-                            required
-                        >
+                            required>
 
                     </div>
 
@@ -1223,9 +1614,7 @@
 
                 <div class="form-group">
 
-                    <label>
-                        Status
-                    </label>
+                    <label>Status</label>
 
                     <select name="status" required>
 
@@ -1246,18 +1635,15 @@
 
             <div class="modal-footer">
 
-                <button
-                    type="button"
+                <button type="button"
                     class="btn-secondary"
-                    onclick="closeModal('addModal')"
-                >
+                    onclick="closeModal('addModal')">
+
                     Batal
+
                 </button>
 
-                <button
-                    type="submit"
-                    class="btn-primary"
-                >
+                <button type="submit" class="btn-primary">
                     Simpan Pelanggan
                 </button>
 
@@ -1270,18 +1656,16 @@
 </div>
 
 
-{{-- ========================================================= --}}
-{{-- MODAL DETAIL + EDIT --}}
-{{-- ========================================================= --}}
+{{-- =====================================
+     MODAL DETAIL DAN EDIT PELANGGAN
+====================================== --}}
 
 @foreach($customers as $customer)
 
-    {{-- DETAIL --}}
-    <div
-        class="modal"
+    {{-- MODAL DETAIL --}}
+    <div class="modal"
         id="detailModal{{ $customer->id }}"
-        onclick="closeOutside(event, 'detailModal{{ $customer->id }}')"
-    >
+        onclick="closeOutside(event, 'detailModal{{ $customer->id }}')">
 
         <div class="modal-box">
 
@@ -1291,11 +1675,12 @@
                     Detail Pelanggan
                 </div>
 
-                <button
+                <button type="button"
                     class="close"
-                    onclick="closeModal('detailModal{{ $customer->id }}')"
-                >
+                    onclick="closeModal('detailModal{{ $customer->id }}')">
+
                     ×
+
                 </button>
 
             </div>
@@ -1306,7 +1691,7 @@
                 <div class="profile-detail">
 
                     <div class="profile-avatar">
-                        👤
+                        <i class="bi bi-person"></i>
                     </div>
 
                     <div class="profile-name">
@@ -1396,12 +1781,12 @@
 
             <div class="modal-footer">
 
-                <button
-                    type="button"
+                <button type="button"
                     class="btn-secondary"
-                    onclick="closeModal('detailModal{{ $customer->id }}')"
-                >
+                    onclick="closeModal('detailModal{{ $customer->id }}')">
+
                     Tutup
+
                 </button>
 
             </div>
@@ -1411,12 +1796,10 @@
     </div>
 
 
-    {{-- EDIT --}}
-    <div
-        class="modal"
+    {{-- MODAL EDIT --}}
+    <div class="modal"
         id="editModal{{ $customer->id }}"
-        onclick="closeOutside(event, 'editModal{{ $customer->id }}')"
-    >
+        onclick="closeOutside(event, 'editModal{{ $customer->id }}')">
 
         <div class="modal-box">
 
@@ -1426,39 +1809,33 @@
                     Edit Pelanggan
                 </div>
 
-                <button
+                <button type="button"
                     class="close"
-                    onclick="closeModal('editModal{{ $customer->id }}')"
-                >
+                    onclick="closeModal('editModal{{ $customer->id }}')">
+
                     ×
+
                 </button>
 
             </div>
 
 
-            <form
-                method="POST"
-                action="{{ route('admin.customers.update', $customer->id) }}"
-            >
+            <form method="POST"
+                action="{{ route('admin.customers.update', $customer->id) }}">
 
                 @csrf
-
                 @method('PUT')
 
                 <div class="modal-body">
 
                     <div class="form-group">
 
-                        <label>
-                            Nama Lengkap
-                        </label>
+                        <label>Nama Lengkap</label>
 
-                        <input
-                            type="text"
+                        <input type="text"
                             name="name"
                             value="{{ $customer->name }}"
-                            required
-                        >
+                            required>
 
                     </div>
 
@@ -1467,32 +1844,23 @@
 
                         <div class="form-group">
 
-                            <label>
-                                Email
-                            </label>
+                            <label>Email</label>
 
-                            <input
-                                type="email"
+                            <input type="email"
                                 name="email"
                                 value="{{ $customer->email }}"
-                                required
-                            >
+                                required>
 
                         </div>
 
-
                         <div class="form-group">
 
-                            <label>
-                                No. HP
-                            </label>
+                            <label>No. HP</label>
 
-                            <input
-                                type="text"
+                            <input type="text"
                                 name="no_hp"
                                 value="{{ $customer->no_hp }}"
-                                required
-                            >
+                                required>
 
                         </div>
 
@@ -1501,14 +1869,9 @@
 
                     <div class="form-group">
 
-                        <label>
-                            Alamat
-                        </label>
+                        <label>Alamat</label>
 
-                        <textarea
-                            name="address"
-                            required
-                        >{{ $customer->address }}</textarea>
+                        <textarea name="address" required>{{ $customer->address }}</textarea>
 
                     </div>
 
@@ -1517,52 +1880,38 @@
 
                         <label>
                             Password Baru
-                            <small style="font-weight:normal;color:#999;">
+                            <small style="font-weight: normal; color: #999;">
                                 (kosongkan jika tidak ingin mengubah)
                             </small>
                         </label>
 
-                        <input
-                            type="password"
-                            name="password"
-                        >
+                        <input type="password" name="password">
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label>
-                            Konfirmasi Password Baru
-                        </label>
+                        <label>Konfirmasi Password Baru</label>
 
-                        <input
-                            type="password"
-                            name="password_confirmation"
-                        >
+                        <input type="password" name="password_confirmation">
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label>
-                            Status
-                        </label>
+                        <label>Status</label>
 
                         <select name="status" required>
 
-                            <option
-                                value="active"
-                                {{ $customer->status === 'active' ? 'selected' : '' }}
-                            >
+                            <option value="active"
+                                {{ $customer->status === 'active' ? 'selected' : '' }}>
                                 Aktif
                             </option>
 
-                            <option
-                                value="inactive"
-                                {{ $customer->status === 'inactive' ? 'selected' : '' }}
-                            >
+                            <option value="inactive"
+                                {{ $customer->status === 'inactive' ? 'selected' : '' }}>
                                 Tidak Aktif
                             </option>
 
@@ -1575,18 +1924,15 @@
 
                 <div class="modal-footer">
 
-                    <button
-                        type="button"
+                    <button type="button"
                         class="btn-secondary"
-                        onclick="closeModal('editModal{{ $customer->id }}')"
-                    >
+                        onclick="closeModal('editModal{{ $customer->id }}')">
+
                         Batal
+
                     </button>
 
-                    <button
-                        type="submit"
-                        class="btn-primary"
-                    >
+                    <button type="submit" class="btn-primary">
                         Simpan Perubahan
                     </button>
 
@@ -1601,21 +1947,61 @@
 @endforeach
 
 
-<!-- POPUP KONFIRMASI LOGOUT -->
+{{-- =====================================
+     POPUP KONFIRMASI LOGOUT
+====================================== --}}
+
 <div class="logout-modal" id="logoutModal">
-    <div class="logout-dialog" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
-        <div class="logout-modal-icon"><i class="bi bi-box-arrow-right"></i></div>
-        <h3 id="logoutTitle">Keluar dari Akun?</h3>
-        <p>Apakah kamu yakin ingin keluar dari dashboard admin PizzaMozza?</p>
-        <div class="logout-modal-actions">
-            <button type="button" class="cancel-logout" onclick="closeLogoutModal()">Batal</button>
-            <button type="button" class="confirm-logout" onclick="confirmLogout()">Ya, Keluar</button>
+
+    <div class="logout-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="logoutTitle">
+
+        <div class="logout-modal-icon">
+            <i class="bi bi-box-arrow-right"></i>
         </div>
+
+        <h3 id="logoutTitle">
+            Keluar dari Akun?
+        </h3>
+
+        <p>
+            Apakah kamu yakin ingin keluar dari dashboard admin PizzaMozza?
+        </p>
+
+        <div class="logout-modal-actions">
+
+            <button type="button"
+                class="cancel-logout"
+                onclick="closeLogoutModal()">
+
+                Batal
+
+            </button>
+
+            <button type="button"
+                class="confirm-logout"
+                onclick="confirmLogout()">
+
+                Ya, Keluar
+
+            </button>
+
+        </div>
+
     </div>
+
 </div>
+
+
+{{-- =====================================
+     JAVASCRIPT
+====================================== --}}
 
 <script>
 
+    // Membuka modal
     function openModal(id) {
         const modal = document.getElementById(id);
 
@@ -1626,6 +2012,7 @@
     }
 
 
+    // Menutup modal
     function closeModal(id) {
         const modal = document.getElementById(id);
 
@@ -1636,15 +2023,15 @@
     }
 
 
+    // Menutup modal ketika klik area luar
     function closeOutside(event, id) {
-
         if (event.target.id === id) {
             closeModal(id);
         }
-
     }
 
 
+    // Menutup modal menggunakan tombol Escape
     document.addEventListener('keydown', function(event) {
 
         if (event.key === 'Escape') {
@@ -1652,36 +2039,45 @@
             document
                 .querySelectorAll('.modal.show')
                 .forEach(function(modal) {
-
                     modal.classList.remove('show');
-
                 });
 
             document.body.style.overflow = '';
 
+            closeLogoutModal();
         }
 
     });
 
 
+    // Membuka popup logout
     function openLogoutModal() {
         document.getElementById('logoutModal').classList.add('show');
     }
 
+
+    // Menutup popup logout
     function closeLogoutModal() {
         document.getElementById('logoutModal').classList.remove('show');
     }
 
+
+    // Konfirmasi logout
     function confirmLogout() {
         document.getElementById('logoutForm').submit();
     }
 
+
+    // Menutup popup logout ketika klik area luar
     document.getElementById('logoutModal').addEventListener('click', function(event) {
-        if (event.target === this) closeLogoutModal();
+
+        if (event.target === this) {
+            closeLogoutModal();
+        }
+
     });
 
 </script>
 
 </body>
-
 </html>
