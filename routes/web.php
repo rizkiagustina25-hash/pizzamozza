@@ -273,8 +273,4 @@ Route::middleware(['auth', 'role:karyawan'])
         Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('orders.updateStatus');
 
-<<<<<<< HEAD
     });
-=======
-});
->>>>>>> cc828bf (Update halaman produk dan fitur checkout pelanggan)
