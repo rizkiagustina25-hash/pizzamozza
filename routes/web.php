@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,9 +41,10 @@ use App\Http\Controllers\Karyawan\ProductController as KaryawanProductController
 Route::get('/', [ProductController::class, 'index'])
     ->name('home');
 
-Route::get('/dashboard', [ProductController::class, 'index'])
+// Dashboard Pelanggan
+Route::get('/dashboard', [CustomerDashboardController::class, 'index'])
+    ->middleware(['auth', 'role:pelanggan'])
     ->name('dashboard');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -271,4 +273,8 @@ Route::middleware(['auth', 'role:karyawan'])
         Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('orders.updateStatus');
 
+<<<<<<< HEAD
     });
+=======
+});
+>>>>>>> cc828bf (Update halaman produk dan fitur checkout pelanggan)

@@ -6,11 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PizzaMozza</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -259,70 +257,67 @@
             margin-left: 265px;
         }
 
-        .topbar-title {
-            margin-left: 20px;
-            font-size: 22px;
-            font-weight: 700;
-            color: #3b2925;
-}
-
+        /*
+         * TOPBAR
+         * Tinggi dikunci 88px, sama persis dengan .brand di sidebar,
+         * sehingga garis bawah topbar sejajar dengan pembatas judul sidebar.
+         */
         .topbar {
-            min-height: 80px;
+            height: 88px;
+            min-height: 88px;
             position: sticky;
             top: 0;
             z-index: 50;
             padding: 15px 30px;
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 20px;
             background: #fffdf9;
             border-bottom: 1px solid #f0e1d5;
         }
 
-        .mobile-menu {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: 0;
-            border-radius: 8px;
-            background: #fbe9e4;
-            color: var(--dashboard-red);
-            font-size: 19px;
+        .topbar-heading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 150px;
+            flex-shrink: 0;
         }
 
-        .search-box {
-            flex: 1;
-            max-width: 450px;
-            position: relative;
+        .topbar-title {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #3b2925;
         }
 
-        .search-box input {
-            width: 100%;
-            height: 43px;
-            border: 1px solid #eee0d5;
-            border-radius: 24px;
-            padding: 0 16px 0 42px;
-            outline: none;
-            background: #fff;
-            font-size: 13px;
-        }
-
-        .search-box input:focus {
-            border-color: var(--dashboard-red-hover);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 13px;
-            color: #99877e;
+        .topbar-description {
+            margin-top: 5px;
+            color: #907d73;
+            font-size: 12px;
         }
 
         .topbar-actions {
             margin-left: auto;
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             gap: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Tombol menu HP: disembunyikan di desktop, tampil lewat media query */
+        .mobile-menu {
+            display: none;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 8px;
+            background: #fbe9e4;
+            color: var(--dashboard-red);
         }
 
         .cart-button {
@@ -400,29 +395,29 @@
         }
 
         .btn-saya {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 11px 17px;
-    border: none;
-    border-radius: 8px;
-    background: #c52c2c;
-    color: white;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    cursor: pointer;
-}
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 17px;
+            border: none;
+            border-radius: 8px;
+            background: #c52c2c;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-.btn-saya:hover {
-    background: #a82020;
-    color: white;
-}
+        .btn-saya:hover {
+            background: #a82020;
+            color: white;
+        }
 
-.btn-saya i {
-    font-size: 17px;
-}
+        .btn-saya i {
+            font-size: 17px;
+        }
 
         /* ================= LANDING ================= */
 
@@ -1128,7 +1123,7 @@
             }
 
             .mobile-menu {
-                display: block;
+                display: inline-flex;
             }
 
             .content {
@@ -1163,11 +1158,30 @@
             }
 
             .mobile-menu {
+                display: inline-flex;
                 flex-shrink: 0;
+            }
+
+            .topbar-heading {
+                min-width: 0;
+                flex: 1;
+            }
+
+            .topbar-title {
+                font-size: 17px;
+            }
+
+            .topbar-description {
+                font-size: 10px;
             }
 
             .search-box {
                 display: none;
+            }
+
+            .topbar-actions {
+                margin-left: auto;
+                gap: 8px;
             }
 
             .login-button {
@@ -1211,1056 +1225,955 @@
 
 <body>
 
-@php
-    $menu = request('menu', 'home');
-    $currentMenu = $menu;
+    @php
+        $menu = request('menu', 'home');
+        $currentMenu = $menu;
 
-    $pageTitles = [
-        'dashboard' => 'Dashboard',
-        'products' => 'Produk',
-        'orders' => 'Pesanan Saya',
-        'profile' => 'Akun Saya',
-    ];
+        // Kunci 'home' disamakan dengan nilai $menu bawaan,
+        // supaya judul dan deskripsi di topbar tampil di menu utama.
+        $pageTitles = [
+            'home' => 'Dashboard',
+            'products' => 'Produk',
+            'orders' => 'Pesanan Saya',
+            'profile' => 'Akun Saya',
+        ];
 
-    $pageDescriptions = [
-        'dashboard' => 'Selamat datang di PizzaMozza!',
-        'products' => 'Temukan pizza favorit kamu.',
-        'orders' => 'Lihat status dan riwayat pesanan kamu disini.',
-        'profile' => 'Informasi akun dan alamat pengiriman kamu.',
-    ];
-@endphp
+        $pageDescriptions = [
+            'home' => 'Selamat datang di PizzaMozza!',
+            'products' => 'Temukan pizza favorit kamu.',
+            'orders' => 'Lihat status dan riwayat pesanan kamu disini.',
+            'profile' => 'Informasi akun dan alamat pengiriman kamu.',
+        ];
+    @endphp
 
-<div class="topbar-heading">
-    <div class="topbar-title">
-        {{ $pageTitles[$currentMenu] ?? 'Dashboard' }}
-    </div>
+    <div class="app">
 
-    <div class="topbar-description">
-        {{ $pageDescriptions[$currentMenu] ?? '' }}
-    </div>
-</div>
-<div class="app">
+        <!-- ================= SIDEBAR PELANGGAN ================= -->
 
-    <!-- ================= SIDEBAR PELANGGAN ================= -->
+        <aside class="sidebar" id="sidebar">
 
-    <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-pizza-slice"></i>
+                </div>
 
-        <div class="brand">
-            <div class="brand-icon">
-                <i class="fa-solid fa-pizza-slice"></i>
+                <div>
+                    <div class="brand-text">Pizza<span>Mozza</span></div>
+                    <div class="brand-subtitle">Fresh, Tasty, Happiness!</div>
+                </div>
             </div>
 
-            <div>
-                <div class="brand-text">Pizza<span>Mozza</span></div>
-                <div class="brand-subtitle">Fresh, Tasty, Happiness!</div>
+            <div class="sidebar-section">
+
+                <div class="sidebar-title">Main Menu</div>
+
+                <ul class="sidebar-menu">
+
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="sidebar-link {{ $menu === 'home' ? 'active' : '' }}">
+
+                            <span class="sidebar-icon">
+                                <i class="bi bi-grid-1x2-fill"></i>
+                            </span>
+
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('products.index') }}"
+                            class="sidebar-link {{ request()->routeIs('products.index') ? 'active' : '' }}">
+
+                            <span class="sidebar-icon">
+                                <i class="bi bi-box-seam"></i>
+                            </span>
+
+                            <span>Produk</span>
+                        </a>
+                    </li>
+
+                    @auth
+                        <li>
+                            <a href="{{ route('dashboard') }}?menu=orders"
+                                class="sidebar-link {{ $menu === 'orders' ? 'active' : '' }}">
+
+                                <span class="sidebar-icon">
+                                    <i class="bi bi-bag-check"></i>
+                                </span>
+
+                                <span>Pesanan Saya</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('dashboard') }}?menu=profile"
+                                class="sidebar-link {{ $menu === 'profile' ? 'active' : '' }}">
+
+                                <span class="sidebar-icon">
+                                    <i class="bi bi-person-circle"></i>
+                                </span>
+
+                                <span>Akun Saya</span>
+                            </a>
+                        </li>
+                    @endauth
+
+                </ul>
             </div>
-        </div>
 
-        <div class="sidebar-section">
-
-            <div class="sidebar-title">Main Menu</div>
-
-            <ul class="sidebar-menu">
-
-                <li>
-                    <a href="{{ route('dashboard') }}"
-                       class="sidebar-link {{ $menu === 'home' ? 'active' : '' }}">
-
-                        <span class="sidebar-icon">
-                            <i class="bi bi-grid-1x2-fill"></i>
-                        </span>
-
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('products.index') }}"
-                       class="sidebar-link {{ request()->routeIs('products.index') ? 'active' : '' }}">
-
-                        <span class="sidebar-icon">
-                            <i class="bi bi-box-seam"></i>
-                        </span>
-
-                        <span>Produk</span>
-                    </a>
-                </li>
+            <!-- Bagian profil dan logout di bawah sidebar -->
+            <div class="sidebar-bottom">
 
                 @auth
-                    <li>
-                        <a href="{{ route('dashboard') }}?menu=orders"
-                           class="sidebar-link {{ $menu === 'orders' ? 'active' : '' }}">
+                    <div class="user-mini">
 
-                            <span class="sidebar-icon">
-                                <i class="bi bi-bag-check"></i>
-                            </span>
+                        <div class="user-avatar">
+                            @if (auth()->user()->foto_profile)
+                                <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}" alt="Foto profil">
+                            @else
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            @endif
+                        </div>
 
-                            <span>Pesanan Saya</span>
-                        </a>
-                    </li>
+                        <div class="user-info">
+                            <div class="user-name">
+                                {{ auth()->user()->name }}
+                            </div>
 
-                    <li>
-                        <a href="{{ route('dashboard') }}?menu=profile"
-                           class="sidebar-link {{ $menu === 'profile' ? 'active' : '' }}">
+                            <div class="user-role">
+                                Pelanggan
+                            </div>
+                        </div>
 
-                            <span class="sidebar-icon">
-                                <i class="bi bi-person-circle"></i>
-                            </span>
-
-                            <span>Akun Saya</span>
-                        </a>
-                    </li>
-                @endauth
-
-            </ul>
-        </div>
-
-        <!-- Bagian profil dan logout di bawah sidebar -->
-        <div class="sidebar-bottom">
-
-            @auth
-                <div class="user-mini">
-
-                    <div class="user-avatar">
-                        @if(auth()->user()->foto_profile)
-                            <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}"
-                                 alt="Foto profil">
-                        @else
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        @endif
                     </div>
 
-                    <div class="user-info">
-                        <div class="user-name">
-                            {{ auth()->user()->name }}
-                        </div>
+                    <button type="button" class="sidebar-logout" onclick="openCustomerLogoutModal()">
 
-                        <div class="user-role">
-                            Pelanggan
-                        </div>
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+
+                    </button>
+                @else
+                    <a href="{{ route('login') }}" class="sidebar-login">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Login
+                    </a>
+
+                @endauth
+
+            </div>
+
+        </aside>
+
+        <!-- ================= MAIN WRAPPER ================= -->
+
+        <div class="main-wrapper">
+
+
+            <!-- ================= TOPBAR ================= -->
+
+            <header class="topbar">
+
+                <!-- Tombol menu untuk tampilan HP -->
+                <button type="button" class="mobile-menu" onclick="toggleSidebar()" aria-label="Buka menu">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+                <!-- Judul dan deskripsi halaman -->
+                <div class="topbar-heading">
+
+                    <div class="topbar-title">
+                        {{ $pageTitles[$currentMenu] ?? 'Dashboard' }}
+                    </div>
+
+                    <div class="topbar-description">
+                        {{ $pageDescriptions[$currentMenu] ?? '' }}
                     </div>
 
                 </div>
 
-                <button type="button"
-                        class="sidebar-logout"
-                        onclick="openCustomerLogoutModal()">
+                <!-- Pencarian hanya muncul di halaman produk -->
+                @if (request()->routeIs('products.index'))
+                    <form action="{{ route('products.index') }}" method="GET" class="search-box">
 
-                    <i class="bi bi-box-arrow-right"></i>
-                    Logout
+                        <span class="search-icon">
+                            <i class="bi bi-search"></i>
+                        </span>
 
-                </button>
+                        <input type="text" name="search" placeholder="Cari pizza favorit kamu..."
+                            value="{{ request('search') }}">
 
-            @else
+                    </form>
+                @endif
 
-                <a href="{{ route('login') }}" class="sidebar-login">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    Login
-                </a>
+                <!-- Tombol kanan topbar -->
+                <div class="topbar-actions">
 
-            @endauth
+                    <!-- Keranjang -->
+                    <a href="{{ route('cart.index') }}" class="cart-button" aria-label="Keranjang">
 
-        </div>
+                        <i class="bi bi-cart3"></i>
 
-    </aside>
+                        @auth
+                            @php
+                                $cartCount = session('cart') ? collect(session('cart'))->sum('quantity') : 0;
+                            @endphp
 
-    <!-- ================= MAIN WRAPPER ================= -->
+                            @if ($cartCount > 0)
+                                <span class="cart-badge">
+                                    {{ $cartCount }}
+                                </span>
+                            @endif
+                        @endauth
 
-    <div class="main-wrapper">
+                    </a>
 
-        <!-- ================= TOPBAR ================= -->
+                    <!-- Tombol login atau akun -->
+                    @guest
 
-        <header class="topbar">
+                        <a href="{{ route('login') }}" class="login-button">
 
-            <button type="button"
-                    class="mobile-menu"
-                    onclick="toggleSidebar()"
-                    aria-label="Buka menu">
+                            Login
 
-                <i class="bi bi-list"></i>
+                        </a>
+                    @else
+                        @if ($menu === 'profile')
+                            <button type="button" class="btn-saya" onclick="openCustomerLogoutModal()">
 
-            </button>
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Logout</span>
 
-            @php
-    $currentMenu = request('menu', 'dashboard');
+                            </button>
+                        @else
+                            <a href="{{ route('dashboard', ['menu' => 'profile']) }}" class="btn-saya">
 
-    $pageTitles = [
-        'dashboard' => 'Dashboard',
-        'products' => 'Produk',
-        'orders' => 'Pesanan Saya',
-        'profile' => 'Akun Saya',
-    ];
+                                <i class="bi bi-person-circle"></i>
+                                <span>Saya</span>
 
-    $pageTitle = $pageTitles[$currentMenu] ?? 'Dashboard';
-@endphp
+                            </a>
+                        @endif
 
-<div class="topbar-title">
-    {{ $pageTitle }}
-</div>
+                    @endguest
 
-           <header class="topbar">
+                </div>
 
-    <button type="button"
-            class="mobile-menu"
-            onclick="toggleSidebar()"
-            aria-label="Buka menu">
+            </header>
 
-        <i class="bi bi-list"></i>
+            <!-- ================= CONTENT ================= -->
 
-    </button>
+            <main class="content">
 
-    <div class="topbar-actions">
+                @if ($menu === 'home')
 
-        <!-- Kode Cart, Saya, dan Logout tetap di sini -->
+                    @guest
 
-    </div>
+                        <section class="landing-preview">
 
-</header>
+                            <div class="landing-content">
 
-@if (request()->routeIs('products.index'))
-    <form action="{{ route('products.index') }}"
-          method="GET"
-          class="search-box">
+                                <div class="landing-badge">
+                                    🍕 Fresh • Hot • Delicious
+                                </div>
 
-        <span class="search-icon">
-            <i class="bi bi-search"></i>
-        </span>
+                                <h1 class="landing-title">
+                                    Selamat Datang di
+                                    <span>PizzaMozza!</span>
+                                </h1>
 
-        <input type="text"
-               name="search"
-               placeholder="Cari pizza favorit kamu..."
-               value="{{ request('search') }}">
+                                <p class="landing-description">
+                                    Nikmati pizza lezat dengan bahan berkualitas,
+                                    topping melimpah, dan rasa yang bikin ingin pesan lagi.
+                                </p>
 
-    </form>
-@endif
+                                <div class="landing-actions">
 
-<div class="topbar-actions">
+                                    <a href="{{ route('products.index') }}" class="btn-primary">
+                                        Lihat Produk
+                                    </a>
 
-    <!-- Keranjang -->
-    <a href="{{ route('cart.index') }}"
-       class="cart-button"
-       aria-label="Keranjang">
+                                    <a href="{{ route('register') }}" class="btn-secondary">
+                                        Daftar Sekarang
+                                    </a>
 
-        <i class="bi bi-cart3"></i>
+                                </div>
 
-        @auth
-            @php
-                $cartCount = session('cart')
-                    ? collect(session('cart'))->sum('quantity')
-                    : 0;
-            @endphp
-
-            @if($cartCount > 0)
-                <span class="cart-badge">
-                    {{ $cartCount }}
-                </span>
-            @endif
-        @endauth
-
-    </a>
-
-    @guest
-        <a href="{{ route('login') }}" class="login-button">
-            Login
-        </a>
-    @else
-
-        @if ($menu === 'profile')
-            <button type="button"
-                    class="btn-saya"
-                    onclick="openCustomerLogoutModal()">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
-            </button>
-        @else
-            <a href="{{ route('dashboard', ['menu' => 'profile']) }}"
-               class="btn-saya">
-                <i class="bi bi-person-circle"></i>
-                <span>Saya</span>
-            </a>
-        @endif
-
-    @endguest
-
-</div>
-
-</header>
-
-
-        <!-- ================= CONTENT ================= -->
-
-        <main class="content">
-
-            @if($menu === 'home')
-
-                @guest
-
-                    <section class="landing-preview">
-
-                        <div class="landing-content">
-
-                            <div class="landing-badge">
-                                🍕 Fresh • Hot • Delicious
                             </div>
 
-                            <h1 class="landing-title">
-                                Selamat Datang di
-                                <span>PizzaMozza!</span>
-                            </h1>
+                            <div class="landing-visual">
+                                🍕
+                            </div>
 
-                            <p class="landing-description">
-                                Nikmati pizza lezat dengan bahan berkualitas,
-                                topping melimpah, dan rasa yang bikin ingin pesan lagi.
-                            </p>
+                        </section>
+                    @else
+                        <h1 class="page-title">
+                            Halo, {{ auth()->user()->name }} 👋
+                        </h1>
 
-                            <div class="landing-actions">
+                        <p class="page-subtitle">
+                            Selamat datang kembali di PizzaMozza.
+                        </p>
 
-                                <a href="{{ route('products.index') }}"
-                                   class="btn-primary">
-                                    Lihat Produk
+                        <section class="dashboard-summary">
+
+                            <div class="summary-card">
+                                <div>
+                                    <span class="summary-label">Total Pesanan</span>
+                                    <div class="summary-value">
+                                        {{ $allOrders->count() }}
+                                    </div>
+                                </div>
+
+                                <div class="summary-icon">
+                                    <i class="bi bi-cart-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="summary-card">
+                                <div>
+                                    <span class="summary-label">Sedang Diproses</span>
+                                    <div class="summary-value">
+                                        {{ $processingCount }}
+                                    </div>
+                                </div>
+
+                                <div class="summary-icon">
+                                    <i class="bi bi-clock-history"></i>
+                                </div>
+                            </div>
+
+                            <div class="summary-card">
+                                <div>
+                                    <span class="summary-label">Pesanan Berisi Produk</span>
+
+                                    <div class="summary-value">
+                                        {{ $allOrders->filter(fn($order) => $order->items && $order->items->isNotEmpty())->count() }}
+                                    </div>
+                                </div>
+
+                                <div class="summary-icon">
+                                    <i class="bi bi-bag-check"></i>
+                                </div>
+                            </div>
+
+                            <div class="summary-card">
+                                <div>
+                                    <span class="summary-label">Menunggu Pembayaran</span>
+                                    <div class="summary-value">
+                                        {{ $pendingCount }}
+                                    </div>
+                                </div>
+
+                                <div class="summary-icon">
+                                    <i class="bi bi-wallet2"></i>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <!-- MENU CEPAT -->
+
+                        <section class="section">
+
+                            <div class="section-header">
+                                <h2 class="section-title">Menu Cepat</h2>
+                            </div>
+
+                            <div class="quick-grid">
+
+                                <a href="{{ route('dashboard') }}?menu=orders" class="quick-card orange">
+
+                                    <div class="quick-icon">🛒</div>
+
+                                    <div>
+                                        <h3>Pesanan Saya</h3>
+                                        <p>Lihat pesanan yang sedang berlangsung.</p>
+                                    </div>
+
+                                    <span class="quick-arrow">›</span>
+
                                 </a>
 
-                                <a href="{{ route('register') }}"
-                                   class="btn-secondary">
-                                    Daftar Sekarang
+                                <a href="{{ route('dashboard') }}?menu=profile" class="quick-card blue">
+
+                                    <div class="quick-icon">👤</div>
+
+                                    <div>
+                                        <h3>Akun Saya</h3>
+                                        <p>Kelola informasi akun kamu.</p>
+                                    </div>
+
+                                    <span class="quick-arrow">›</span>
+
+                                </a>
+
+                                <a href="{{ route('dashboard') }}?menu=profile" class="quick-card green">
+
+                                    <div class="quick-icon">📍</div>
+
+                                    <div>
+                                        <h3>Alamat Saya</h3>
+                                        <p>Periksa alamat pengiriman.</p>
+                                    </div>
+
+                                    <span class="quick-arrow">›</span>
+
+                                </a>
+
+                                <a href="{{ route('dashboard') }}?menu=orders" class="quick-card purple">
+
+                                    <div class="quick-icon">🕘</div>
+
+                                    <div>
+                                        <h3>Riwayat Pesanan</h3>
+                                        <p>Lihat riwayat transaksi kamu.</p>
+                                    </div>
+
+                                    <span class="quick-arrow">›</span>
+
                                 </a>
 
                             </div>
 
-                        </div>
+                        </section>
 
-                        <div class="landing-visual">
-                            🍕
-                        </div>
+                        <!-- PESANAN TERBARU -->
 
-                    </section>
+                        <section class="section">
 
-                @else
+                            <div class="section-header">
 
-                    <h1 class="page-title">
-                        Halo, {{ auth()->user()->name }} 👋
-                    </h1>
+                                <h2 class="section-title">
+                                    Pesanan Terbaru
+                                </h2>
 
-                    <p class="page-subtitle">
-                        Selamat datang kembali di PizzaMozza.
-                    </p>
+                                <a href="{{ route('dashboard') }}?menu=orders" class="section-link">
+                                    Lihat Semua →
+                                </a>
 
-                    <section class="dashboard-summary">
-
-                        <div class="summary-card">
-                            <div>
-                                <span class="summary-label">Total Pesanan</span>
-                                <div class="summary-value">
-                                    {{ $allOrders->count() }}
-                                </div>
                             </div>
 
-                            <div class="summary-icon">
-                                <i class="bi bi-cart-check"></i>
+                            <div class="latest-orders-card">
+
+                                <table class="latest-orders-table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Produk</th>
+                                            <th>Tanggal</th>
+                                            <th>Total Pembayaran</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        @forelse($latestOrders as $order)
+                                            @php
+                                                $firstItem = $order->items->first();
+                                                $firstProduct = $firstItem?->product;
+                                            @endphp
+
+                                            <tr>
+
+                                                <td>
+                                                    <div class="order-product">
+
+                                                        @if ($firstProduct && $firstProduct->image)
+                                                            <img src="{{ asset('image/' . $firstProduct->image) }}"
+                                                                alt="{{ $firstProduct->name }}">
+                                                        @else
+                                                            <span style="font-size:28px">
+                                                                🍕
+                                                            </span>
+                                                        @endif
+
+                                                        <span>
+                                                            {{ $firstProduct?->name ?? 'Pesanan #' . $order->id }}
+                                                        </span>
+
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    {{ $order->created_at?->format('d M Y') ?? '-' }}
+                                                </td>
+
+                                                <td>
+                                                    Rp {{ number_format($order->total_price ?? 0, 0, ',', '.') }}
+                                                </td>
+
+                                                <td>
+                                                    <a class="order-action"
+                                                        href="{{ route('customer.orders.show', $order->id) }}">
+                                                        Lihat Pesanan
+                                                    </a>
+                                                </td>
+
+                                            </tr>
+
+                                        @empty
+
+                                            <tr>
+                                                <td colspan="4" class="order-empty">
+                                                    Belum ada pesanan.
+                                                </td>
+                                            </tr>
+                                        @endforelse
+
+                                    </tbody>
+
+                                </table>
+
                             </div>
-                        </div>
 
-                        <div class="summary-card">
-                            <div>
-                                <span class="summary-label">Sedang Diproses</span>
-                                <div class="summary-value">
-                                    {{ $processingCount }}
-                                </div>
-                            </div>
+                        </section>
 
-                            <div class="summary-icon">
-                                <i class="bi bi-clock-history"></i>
-                            </div>
-                        </div>
+                    @endguest
 
-                        <div class="summary-card">
-                            <div>
-                                <span class="summary-label">Pesanan Berisi Produk</span>
-
-                                <div class="summary-value">
-                                    {{ $allOrders->filter(fn($order) => $order->items && $order->items->isNotEmpty())->count() }}
-                                </div>
-                            </div>
-
-                            <div class="summary-icon">
-                                <i class="bi bi-bag-check"></i>
-                            </div>
-                        </div>
-
-                        <div class="summary-card">
-                            <div>
-                                <span class="summary-label">Menunggu Pembayaran</span>
-                                <div class="summary-value">
-                                    {{ $pendingCount }}
-                                </div>
-                            </div>
-
-                            <div class="summary-icon">
-                                <i class="bi bi-wallet2"></i>
-                            </div>
-                        </div>
-
-                    </section>
-
-                    <!-- MENU CEPAT -->
-
-                    <section class="section">
-
-                        <div class="section-header">
-                            <h2 class="section-title">Menu Cepat</h2>
-                        </div>
-
-                        <div class="quick-grid">
-
-                            <a href="{{ route('dashboard') }}?menu=orders"
-                               class="quick-card orange">
-
-                                <div class="quick-icon">🛒</div>
-
-                                <div>
-                                    <h3>Pesanan Saya</h3>
-                                    <p>Lihat pesanan yang sedang berlangsung.</p>
-                                </div>
-
-                                <span class="quick-arrow">›</span>
-
-                            </a>
-
-                            <a href="{{ route('dashboard') }}?menu=profile"
-                               class="quick-card blue">
-
-                                <div class="quick-icon">👤</div>
-
-                                <div>
-                                    <h3>Akun Saya</h3>
-                                    <p>Kelola informasi akun kamu.</p>
-                                </div>
-
-                                <span class="quick-arrow">›</span>
-
-                            </a>
-
-                            <a href="{{ route('dashboard') }}?menu=profile"
-                               class="quick-card green">
-
-                                <div class="quick-icon">📍</div>
-
-                                <div>
-                                    <h3>Alamat Saya</h3>
-                                    <p>Periksa alamat pengiriman.</p>
-                                </div>
-
-                                <span class="quick-arrow">›</span>
-
-                            </a>
-
-                            <a href="{{ route('dashboard') }}?menu=orders"
-                               class="quick-card purple">
-
-                                <div class="quick-icon">🕘</div>
-
-                                <div>
-                                    <h3>Riwayat Pesanan</h3>
-                                    <p>Lihat riwayat transaksi kamu.</p>
-                                </div>
-
-                                <span class="quick-arrow">›</span>
-
-                            </a>
-
-                        </div>
-
-                    </section>
-
-                    <!-- PESANAN TERBARU -->
+                    <!-- PRODUK FAVORIT -->
 
                     <section class="section">
 
                         <div class="section-header">
 
                             <h2 class="section-title">
-                                Pesanan Terbaru
+                                Produk Favorit
                             </h2>
 
-                            <a href="{{ route('dashboard') }}?menu=orders"
-                               class="section-link">
+                            <a href="{{ route('products.index') }}" class="section-link">
                                 Lihat Semua →
                             </a>
 
                         </div>
 
-                        <div class="latest-orders-card">
+                        @if (isset($products) && $products->count())
 
-                            <table class="latest-orders-table">
+                            <div class="product-grid">
 
-                                <thead>
-                                    <tr>
-                                        <th>Produk</th>
-                                        <th>Tanggal</th>
-                                        <th>Total Pembayaran</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
+                                @foreach ($products as $product)
+                                    @php
+                                        $variant = $product->variants->first() ?? null;
+                                        $price = $variant?->price ?? ($product->price ?? 0);
+                                    @endphp
 
-                                <tbody>
+                                    <div class="product-card">
 
-                                    @forelse($latestOrders as $order)
+                                        <div class="product-image">
 
-                                        @php
-                                            $firstItem = $order->items->first();
-                                            $firstProduct = $firstItem?->product;
-                                        @endphp
-
-                                        <tr>
-
-                                            <td>
-                                                <div class="order-product">
-
-                                                    @if($firstProduct && $firstProduct->image)
-
-                                                        <img src="{{ asset('image/' . $firstProduct->image) }}"
-                                                             alt="{{ $firstProduct->name }}">
-
-                                                    @else
-
-                                                        <span style="font-size:28px">
-                                                            🍕
-                                                        </span>
-
-                                                    @endif
-
-                                                    <span>
-                                                        {{ $firstProduct?->name ?? 'Pesanan #' . $order->id }}
-                                                    </span>
-
+                                            @if (!empty($product->image))
+                                                <img src="{{ asset('image/' . $product->image) }}"
+                                                    alt="{{ $product->name }}">
+                                            @else
+                                                <div class="product-placeholder">
+                                                    🍕
                                                 </div>
-                                            </td>
+                                            @endif
 
-                                            <td>
-                                                {{ $order->created_at?->format('d M Y') ?? '-' }}
-                                            </td>
+                                        </div>
 
-                                            <td>
-                                                Rp {{ number_format($order->total_price ?? 0, 0, ',', '.') }}
-                                            </td>
+                                        <div class="product-info">
 
-                                            <td>
-                                                <a class="order-action"
-                                                   href="{{ route('customer.orders.show', $order->id) }}">
-                                                    Lihat Pesanan
-                                                </a>
-                                            </td>
-
-                                        </tr>
-
-                                    @empty
-
-                                        <tr>
-                                            <td colspan="4" class="order-empty">
-                                                Belum ada pesanan.
-                                            </td>
-                                        </tr>
-
-                                    @endforelse
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </section>
-
-                @endguest
-
-                <!-- PRODUK FAVORIT -->
-
-                <section class="section">
-
-                    <div class="section-header">
-
-                        <h2 class="section-title">
-                            Produk Favorit
-                        </h2>
-
-                        <a href="{{ route('products.index') }}"
-                           class="section-link">
-                            Lihat Semua →
-                        </a>
-
-                    </div>
-
-                    @if(isset($products) && $products->count())
-
-                        <div class="product-grid">
-
-                            @foreach($products as $product)
-
-                                @php
-                                    $variant = $product->variants->first() ?? null;
-                                    $price = $variant?->price ?? $product->price ?? 0;
-                                @endphp
-
-                                <div class="product-card">
-
-                                    <div class="product-image">
-
-                                        @if(!empty($product->image))
-
-                                            <img src="{{ asset('image/' . $product->image) }}"
-                                                 alt="{{ $product->name }}">
-
-                                        @else
-
-                                            <div class="product-placeholder">
-                                                🍕
+                                            <div class="product-name">
+                                                {{ $product->name }}
                                             </div>
 
-                                        @endif
+                                            <div class="product-price">
+                                                Rp {{ number_format($price, 0, ',', '.') }}
+                                            </div>
 
-                                    </div>
+                                            <a href="{{ route('products.show', $product) }}" class="product-button">
+                                                Lihat Produk
+                                            </a>
 
-                                    <div class="product-info">
-
-                                        <div class="product-name">
-                                            {{ $product->name }}
                                         </div>
 
-                                        <div class="product-price">
-                                            Rp {{ number_format($price, 0, ',', '.') }}
+                                    </div>
+                                @endforeach
+
+                            </div>
+                        @else
+                            <div class="empty-state">
+
+                                <div class="empty-icon">🍕</div>
+
+                                <h3>Produk belum tersedia</h3>
+
+                                <p>
+                                    Silakan cek halaman produk untuk melihat menu PizzaMozza.
+                                </p>
+
+                                <a href="{{ route('products.index') }}" class="btn-primary">
+                                    Lihat Produk
+                                </a>
+
+                            </div>
+
+                        @endif
+
+                    </section>
+                @elseif($menu === 'orders')
+                    @auth
+
+                        <h1 class="page-title">Pesanan Saya</h1>
+
+                        <p class="page-subtitle">
+                            Lihat status dan riwayat pesanan kamu disini.
+                        </p>
+
+                        @if ($allOrders->count())
+                            <div class="orders-card">
+
+                                @foreach ($allOrders as $order)
+                                    @php
+                                        $status = strtolower((string) $order->status);
+
+                                        $statusClass = match ($status) {
+                                            'pending' => 'status-pending',
+                                            'processing' => 'status-processing',
+                                            'shipped' => 'status-shipped',
+                                            'completed' => 'status-completed',
+                                            'cancelled' => 'status-cancelled',
+                                            default => 'status-pending',
+                                        };
+
+                                        $statusLabel = match ($status) {
+                                            'pending' => 'Menunggu',
+                                            'processing' => 'Diproses',
+                                            'shipped' => 'Dikirim',
+                                            'completed' => 'Selesai',
+                                            'cancelled' => 'Dibatalkan',
+                                            default => ucfirst($status),
+                                        };
+                                    @endphp
+
+                                    <a href="{{ route('customer.orders.show', $order->id) }}" class="order-row">
+
+                                        <div>
+
+                                            <div class="order-number">
+                                                #{{ $order->id }}
+                                            </div>
+
+                                            <div class="order-date">
+                                                {{ $order->created_at?->format('d M Y, H:i') ?? '-' }}
+                                            </div>
+
                                         </div>
 
-                                        <a href="{{ route('products.show', $product) }}"
-                                           class="product-button">
-                                            Lihat Produk
-                                        </a>
+                                        <div class="order-total">
+                                            Rp {{ number_format($order->total_price ?? 0, 0, ',', '.') }}
+                                        </div>
 
-                                    </div>
+                                        <span class="status {{ $statusClass }}">
+                                            {{ $statusLabel }}
+                                        </span>
 
-                                </div>
+                                    </a>
+                                @endforeach
 
-                            @endforeach
+                            </div>
+                        @else
+                            <div class="empty-state">
 
-                        </div>
+                                <div class="empty-icon">🛒</div>
 
+                                <h3>Belum ada pesanan</h3>
+
+                                <p>Kamu belum melakukan transaksi.</p>
+
+                                <a href="{{ route('products.index') }}" class="btn-primary">
+                                    Mulai Belanja
+                                </a>
+
+                            </div>
+                        @endif
                     @else
-
                         <div class="empty-state">
 
-                            <div class="empty-icon">🍕</div>
+                            <div class="empty-icon">🔐</div>
 
-                            <h3>Produk belum tersedia</h3>
+                            <h3>Silakan Login</h3>
 
-                            <p>
-                                Silakan cek halaman produk untuk melihat menu PizzaMozza.
-                            </p>
+                            <p>Login terlebih dahulu untuk melihat pesanan.</p>
 
-                            <a href="{{ route('products.index') }}"
-                               class="btn-primary">
-                                Lihat Produk
+                            <a href="{{ route('login') }}" class="btn-primary">
+                                Login
                             </a>
 
                         </div>
 
-                    @endif
+                    @endauth
+                @elseif($menu === 'profile')
+                    @auth
 
-                </section>
+                        <h1 class="page-title">Akun Saya</h1>
 
-            @elseif($menu === 'orders')
+                        <p class="page-subtitle">
+                            Informasi akun dan alamat pengiriman kamu.
+                        </p>
 
-                @auth
+                        <div class="profile-card">
 
-                    <h1 class="page-title">Pesanan Saya</h1>
+                            <div class="profile-header">
 
-                    <p class="page-subtitle">
-                        Lihat status dan riwayat pesanan kamu disini.
-                    </p>
+                                <div class="profile-avatar">
 
-                    @if($allOrders->count())
+                                    @if (auth()->user()->foto_profile)
+                                        <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}"
+                                            alt="Foto profil">
+                                    @else
+                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                    @endif
 
-                        <div class="orders-card">
+                                </div>
 
-                            @foreach($allOrders as $order)
+                                <div>
 
-                                @php
-                                    $status = strtolower((string) $order->status);
-
-                                    $statusClass = match($status) {
-                                        'pending' => 'status-pending',
-                                        'processing' => 'status-processing',
-                                        'shipped' => 'status-shipped',
-                                        'completed' => 'status-completed',
-                                        'cancelled' => 'status-cancelled',
-                                        default => 'status-pending',
-                                    };
-
-                                    $statusLabel = match($status) {
-                                        'pending' => 'Menunggu',
-                                        'processing' => 'Diproses',
-                                        'shipped' => 'Dikirim',
-                                        'completed' => 'Selesai',
-                                        'cancelled' => 'Dibatalkan',
-                                        default => ucfirst($status),
-                                    };
-                                @endphp
-
-                                <a href="{{ route('customer.orders.show', $order->id) }}"
-                                   class="order-row">
-
-                                    <div>
-
-                                        <div class="order-number">
-                                            #{{ $order->id }}
-                                        </div>
-
-                                        <div class="order-date">
-                                            {{ $order->created_at?->format('d M Y, H:i') ?? '-' }}
-                                        </div>
-
+                                    <div class="profile-name">
+                                        {{ auth()->user()->name }}
                                     </div>
 
-                                    <div class="order-total">
-                                        Rp {{ number_format($order->total_price ?? 0, 0, ',', '.') }}
+                                    <div class="profile-email">
+                                        {{ auth()->user()->email }}
                                     </div>
 
-                                    <span class="status {{ $statusClass }}">
-                                        {{ $statusLabel }}
-                                    </span>
+                                </div>
+
+                            </div>
+
+                            <div class="profile-grid">
+
+                                <div class="profile-field">
+
+                                    <div class="profile-label">
+                                        Nama Lengkap
+                                    </div>
+
+                                    <div class="profile-value">
+                                        {{ auth()->user()->name }}
+                                    </div>
+
+                                </div>
+
+                                <div class="profile-field">
+
+                                    <div class="profile-label">
+                                        Email
+                                    </div>
+
+                                    <div class="profile-value">
+                                        {{ auth()->user()->email }}
+                                    </div>
+
+                                </div>
+
+                                <div class="profile-field">
+
+                                    <div class="profile-label">
+                                        Nomor Telepon
+                                    </div>
+
+                                    <div class="profile-value">
+                                        {{ auth()->user()->no_hp ?: '-' }}
+                                    </div>
+
+                                </div>
+
+                                <div class="profile-field">
+
+                                    <div class="profile-label">
+                                        Role
+                                    </div>
+
+                                    <div class="profile-value">
+                                        Pelanggan
+                                    </div>
+
+                                </div>
+
+                                <div class="profile-field" style="grid-column:1/-1">
+
+                                    <div class="profile-label">
+                                        Alamat Pengiriman
+                                    </div>
+
+                                    <div class="profile-value">
+                                        {{ auth()->user()->address ?: 'Alamat belum diisi.' }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+
+                                <a href="{{ route('profile.edit') }}" class="btn-primary">
+
+                                    <i class="bi bi-pencil-square" style="margin-right: 8px;"></i>
+
+                                    Edit Profile
 
                                 </a>
 
-                            @endforeach
+                                <a href="{{ route('password.reset.form') }}" class="btn-primary">
+
+                                    <i class="bi bi-key" style="margin-right: 8px;"></i>
+
+                                    Reset Password
+
+                                </a>
+
+                                <a href="{{ route('dashboard') }}" class="btn-secondary">
+
+                                    <i class="bi bi-arrow-left" style="margin-right: 8px;"></i>
+
+                                    Kembali ke Menu
+
+                                </a>
+
+                            </div>
 
                         </div>
-
                     @else
-
                         <div class="empty-state">
 
-                            <div class="empty-icon">🛒</div>
+                            <div class="empty-icon">👤</div>
 
-                            <h3>Belum ada pesanan</h3>
+                            <h3>Belum Login</h3>
 
-                            <p>Kamu belum melakukan transaksi.</p>
+                            <p>Silakan login untuk melihat akun kamu.</p>
 
-                            <a href="{{ route('products.index') }}"
-                               class="btn-primary">
-                                Mulai Belanja
+                            <a href="{{ route('login') }}" class="btn-primary">
+                                Login
                             </a>
 
                         </div>
 
-                    @endif
+                    @endauth
 
-                @else
+                @endif
 
-                    <div class="empty-state">
+            </main>
 
-                        <div class="empty-icon">🔐</div>
-
-                        <h3>Silakan Login</h3>
-
-                        <p>Login terlebih dahulu untuk melihat pesanan.</p>
-
-                        <a href="{{ route('login') }}" class="btn-primary">
-                            Login
-                        </a>
-
-                    </div>
-
-                @endauth
-
-            @elseif($menu === 'profile')
-
-                @auth
-
-                    <h1 class="page-title">Akun Saya</h1>
-
-                    <p class="page-subtitle">
-                        Informasi akun dan alamat pengiriman kamu.
-                    </p>
-
-                    <div class="profile-card">
-
-                        <div class="profile-header">
-
-                            <div class="profile-avatar">
-
-                                @if(auth()->user()->foto_profile)
-
-                                    <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}"
-                                         alt="Foto profil">
-
-                                @else
-
-                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-
-                                @endif
-
-                            </div>
-
-                            <div>
-
-                                <div class="profile-name">
-                                    {{ auth()->user()->name }}
-                                </div>
-
-                                <div class="profile-email">
-                                    {{ auth()->user()->email }}
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="profile-grid">
-
-                            <div class="profile-field">
-
-                                <div class="profile-label">
-                                    Nama Lengkap
-                                </div>
-
-                                <div class="profile-value">
-                                    {{ auth()->user()->name }}
-                                </div>
-
-                            </div>
-
-                            <div class="profile-field">
-
-                                <div class="profile-label">
-                                    Email
-                                </div>
-
-                                <div class="profile-value">
-                                    {{ auth()->user()->email }}
-                                </div>
-
-                            </div>
-
-                            <div class="profile-field">
-
-                                <div class="profile-label">
-                                    Nomor Telepon
-                                </div>
-
-                                <div class="profile-value">
-                                    {{ auth()->user()->no_hp ?: '-' }}
-                                </div>
-
-                            </div>
-
-                            <div class="profile-field">
-
-                                <div class="profile-label">
-                                    Role
-                                </div>
-
-                                <div class="profile-value">
-                                    Pelanggan
-                                </div>
-
-                            </div>
-
-                            <div class="profile-field" style="grid-column:1/-1">
-
-                                <div class="profile-label">
-                                    Alamat Pengiriman
-                                </div>
-
-                                <div class="profile-value">
-                                    {{ auth()->user()->address ?: 'Alamat belum diisi.' }}
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
-
-                            <a href="{{ route('profile.edit') }}"
-                               class="btn-primary">
-
-                                <i class="bi bi-pencil-square"
-                                   style="margin-right: 8px;"></i>
-
-                                Edit Profile
-
-                            </a>
-
-                            <a href="{{ route('password.reset.form') }}"
-                               class="btn-primary">
-
-                                <i class="bi bi-key"
-                                   style="margin-right: 8px;"></i>
-
-                                Reset Password
-
-                            </a>
-
-                            <a href="{{ route('dashboard') }}"
-                               class="btn-secondary">
-
-                                <i class="bi bi-arrow-left"
-                                   style="margin-right: 8px;"></i>
-
-                                Kembali ke Menu
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                @else
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">👤</div>
-
-                        <h3>Belum Login</h3>
-
-                        <p>Silakan login untuk melihat akun kamu.</p>
-
-                        <a href="{{ route('login') }}" class="btn-primary">
-                            Login
-                        </a>
-
-                    </div>
-
-                @endauth
-
-            @endif
-
-        </main>
-
-        <footer class="footer">
-            © {{ date('Y') }} PizzaMozza. All Rights Reserved.
-        </footer>
-
-    </div>
-
-</div>
-
-<!-- ================= FORM LOGOUT ================= -->
-
-@auth
-    <form action="{{ route('logout') }}"
-          method="POST"
-          id="customerLogoutForm">
-
-        @csrf
-
-    </form>
-@endauth
-
-<!-- ================= SCRIPT SIDEBAR ================= -->
-
-<script>
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-
-        if (sidebar) {
-            sidebar.classList.toggle('open');
-        }
-    }
-
-    document.addEventListener('click', function(event) {
-        const sidebar = document.getElementById('sidebar');
-        const menuButton = document.querySelector('.mobile-menu');
-
-        if (
-            window.innerWidth <= 800 &&
-            sidebar &&
-            menuButton &&
-            sidebar.classList.contains('open') &&
-            !sidebar.contains(event.target) &&
-            !menuButton.contains(event.target)
-        ) {
-            sidebar.classList.remove('open');
-        }
-    });
-</script>
-
-<!-- ================= POPUP LOGOUT PELANGGAN ================= -->
-
-<div class="logout-modal"
-     id="customerLogoutModal">
-
-    <div class="logout-dialog"
-         role="dialog"
-         aria-modal="true"
-         aria-labelledby="customerLogoutTitle">
-
-        <div class="logout-modal-icon">
-            <i class="bi bi-box-arrow-right"></i>
-        </div>
-
-        <h3 id="customerLogoutTitle">
-            Keluar dari Akun?
-        </h3>
-
-        <p>
-            Apakah kamu yakin ingin keluar dari akun PizzaMozza?
-        </p>
-
-        <div class="logout-modal-actions">
-
-            <button type="button"
-                    class="cancel-logout"
-                    onclick="closeCustomerLogoutModal()">
-
-                Batal
-
-            </button>
-
-            <button type="button"
-                    class="confirm-logout"
-                    onclick="confirmCustomerLogout()">
-
-                Ya, Keluar
-
-            </button>
+            <footer class="footer">
+                © {{ date('Y') }} PizzaMozza. All Rights Reserved.
+            </footer>
 
         </div>
 
     </div>
 
-</div>
+    <!-- ================= FORM LOGOUT ================= -->
 
-<script>
-    function openCustomerLogoutModal() {
-        document.getElementById('customerLogoutModal')
-            .classList.add('show');
-    }
+    @auth
+        <form action="{{ route('logout') }}" method="POST" id="customerLogoutForm">
 
-    function closeCustomerLogoutModal() {
-        document.getElementById('customerLogoutModal')
-            .classList.remove('show');
-    }
+            @csrf
 
-    function confirmCustomerLogout() {
-        const logoutForm = document.getElementById('customerLogoutForm');
+        </form>
+    @endauth
 
-        if (logoutForm) {
-            logoutForm.submit();
+    <!-- ================= SCRIPT SIDEBAR ================= -->
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
         }
-    }
 
-    document.getElementById('customerLogoutModal')
-        .addEventListener('click', function(event) {
-            if (event.target === this) {
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.querySelector('.mobile-menu');
+
+            if (
+                window.innerWidth <= 800 &&
+                sidebar &&
+                menuButton &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(event.target) &&
+                !menuButton.contains(event.target)
+            ) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+
+    <!-- ================= POPUP LOGOUT PELANGGAN ================= -->
+
+    <div class="logout-modal" id="customerLogoutModal">
+
+        <div class="logout-dialog" role="dialog" aria-modal="true" aria-labelledby="customerLogoutTitle">
+
+            <div class="logout-modal-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+
+            <h3 id="customerLogoutTitle">
+                Keluar dari Akun?
+            </h3>
+
+            <p>
+                Apakah kamu yakin ingin keluar dari akun PizzaMozza?
+            </p>
+
+            <div class="logout-modal-actions">
+
+                <button type="button" class="cancel-logout" onclick="closeCustomerLogoutModal()">
+
+                    Batal
+
+                </button>
+
+                <button type="button" class="confirm-logout" onclick="confirmCustomerLogout()">
+
+                    Ya, Keluar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function openCustomerLogoutModal() {
+            document.getElementById('customerLogoutModal')
+                .classList.add('show');
+        }
+
+        function closeCustomerLogoutModal() {
+            document.getElementById('customerLogoutModal')
+                .classList.remove('show');
+        }
+
+        function confirmCustomerLogout() {
+            const logoutForm = document.getElementById('customerLogoutForm');
+
+            if (logoutForm) {
+                logoutForm.submit();
+            }
+        }
+
+        document.getElementById('customerLogoutModal')
+            .addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeCustomerLogoutModal();
+                }
+            });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
                 closeCustomerLogoutModal();
             }
         });
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeCustomerLogoutModal();
-        }
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

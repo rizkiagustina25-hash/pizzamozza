@@ -8,8 +8,7 @@
     <title>Checkout - PizzaMozza</title>
 
     {{-- Bootstrap Icons --}}
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
         * {
@@ -446,6 +445,50 @@
             margin-bottom: 20px;
         }
 
+        .delivery-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .delivery-option {
+            display: block;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .delivery-option:has(input:checked) {
+            border-color: #941919;
+            background: #fff5f5;
+        }
+
+        .delivery-option input {
+            accent-color: #941919;
+            margin-right: 6px;
+        }
+
+        .delivery-option strong {
+            display: block;
+            margin-top: 9px;
+            font-size: 14px;
+        }
+
+        .delivery-option small {
+            display: block;
+            margin-top: 5px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 420px) {
+            .delivery-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .form-group label {
             display: block;
             font-weight: bold;
@@ -736,10 +779,7 @@
 
                     <div class="user-avatar">
                         @if (auth()->user()->foto_profile)
-                            <img
-                                src="{{ asset('storage/' . auth()->user()->foto_profile) }}"
-                                alt="Foto profil"
-                            >
+                            <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}" alt="Foto profil">
                         @else
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                         @endif
@@ -757,11 +797,7 @@
 
                 </div>
 
-                <form
-                    action="{{ route('logout') }}"
-                    method="POST"
-                    class="logout-form"
-                >
+                <form action="{{ route('logout') }}" method="POST" class="logout-form">
                     @csrf
 
                     <button type="submit" class="logout-button">
@@ -769,7 +805,6 @@
                         Logout
                     </button>
                 </form>
-
             @else
                 <a href="{{ route('login') }}" class="login-sidebar-button">
                     <i class="bi bi-box-arrow-in-right"></i>
@@ -790,27 +825,14 @@
 
             <div class="topbar-left">
 
-                <button
-                    type="button"
-                    class="mobile-menu-btn"
-                    id="mobileMenuBtn"
-                    aria-label="Buka menu"
-                    aria-expanded="false"
-                >
+                <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Buka menu"
+                    aria-expanded="false">
                     <i class="bi bi-list"></i>
                 </button>
 
-                <form
-                    action="{{ route('products.index') }}"
-                    method="GET"
-                    class="search-form"
-                >
-                    <input
-                        type="text"
-                        name="search"
-                        placeholder="Cari pizza favorit..."
-                        value="{{ request('search') }}"
-                    >
+                <form action="{{ route('products.index') }}" method="GET" class="search-form">
+                    <input type="text" name="search" placeholder="Cari pizza favorit..."
+                        value="{{ request('search') }}">
 
                     <button type="submit" aria-label="Cari">
                         <i class="bi bi-search"></i>
@@ -822,17 +844,12 @@
             <div class="topbar-right">
 
                 {{-- IKON KERANJANG AKTIF --}}
-                <a
-                    href="{{ route('cart.index') }}"
-                    class="cart-link"
-                    aria-label="Keranjang belanja"
-                    title="Keranjang belanja"
-                >
+                <a href="{{ route('cart.index') }}" class="cart-link" aria-label="Keranjang belanja"
+                    title="Keranjang belanja">
                     <i class="bi bi-cart3"></i>
 
                     @php
-                        $cartCount = collect(session('cart', []))
-                            ->sum('quantity');
+                        $cartCount = collect(session('cart', []))->sum('quantity');
                     @endphp
 
                     @if ($cartCount > 0)
@@ -941,16 +958,16 @@
                                 </div>
 
                                 @if (!empty($item['toppings']) && count($item['toppings']) > 0)
-
                                     <div class="item-detail">
                                         Topping:
 
                                         @foreach ($item['toppings'] as $topping)
-                                            {{ $topping['name'] }}@if (!$loop->last), @endif
+                                            {{ $topping['name'] }}@if (!$loop->last)
+                                                ,
+                                            @endif
                                         @endforeach
 
                                     </div>
-
                                 @endif
 
                                 <div class="item-total">
@@ -959,164 +976,218 @@
 
                             </div>
 
-                        @empty
+                            @empty
 
-                            <p class="item-detail">
-                                Keranjang kamu masih kosong.
-                            </p>
+                                <p class="item-detail">
+                                    Keranjang kamu masih kosong.
+                                </p>
 
-                            <a href="{{ route('products.index') }}" class="back-button">
-                                <i class="bi bi-shop"></i>
-                                Lihat Produk
-                            </a>
+                                <a href="{{ route('products.index') }}" class="back-button">
+                                    <i class="bi bi-shop"></i>
+                                    Lihat Produk
+                                </a>
 
-                        @endforelse
+                            @endforelse
 
-                    </section>
+                        </section>
 
-                </div>
+                    </div>
 
-                {{-- KOLOM KANAN: RINGKASAN --}}
-                <div>
+                    {{-- KOLOM KANAN: RINGKASAN --}}
+                    <div>
 
-                    <section class="card">
+                        <section class="card">
 
-                        <h2>
-                            <i class="bi bi-receipt"></i>
-                            Ringkasan Pembayaran
-                        </h2>
+                            <h2>
+                                <i class="bi bi-receipt"></i>
+                                Ringkasan Pembayaran
+                            </h2>
 
-                        <form
-                            action="{{ route('checkout.store') }}"
-                            method="POST"
-                        >
-                            @csrf
+                            <form action="{{ route('checkout.store') }}" method="POST">
+                                @csrf
 
-                            {{-- ALAMAT PENGIRIMAN --}}
-                            <div class="form-group">
 
-                                <label for="address">
-                                    <i class="bi bi-geo-alt-fill"></i>
-                                    Alamat Pengiriman
-                                </label>
+                                {{-- PILIH METODE PENGAMBILAN --}}
+                                <div class="form-group">
+                                    <label>Metode Pesanan</label>
 
-                                <textarea
-                                    name="address"
-                                    id="address"
-                                    rows="4"
-                                    required
-                                >{{ old('address', auth()->user()->address) }}</textarea>
+                                    <div class="delivery-options">
+                                        <label class="delivery-option">
+                                            <input type="radio" name="delivery_method" value="delivery"
+                                                {{ old('delivery_method', 'delivery') === 'delivery' ? 'checked' : '' }}>
 
-                                @error('address')
-                                    <div class="error-message">
-                                        {{ $message }}
+                                            <strong>
+                                                <i class="bi bi-truck"></i>
+                                                Delivery
+                                            </strong>
+
+                                            <small>Pesanan diantar ke alamat kamu. Ongkir Rp10.000.</small>
+                                        </label>
+
+                                        <label class="delivery-option">
+                                            <input type="radio" name="delivery_method" value="take_away"
+                                                {{ old('delivery_method') === 'take_away' ? 'checked' : '' }}>
+
+                                            <strong>
+                                                <i class="bi bi-shop"></i>
+                                                Take Away
+                                            </strong>
+
+                                            <small>Ambil pesanan langsung di toko. Gratis ongkir.</small>
+                                        </label>
                                     </div>
-                                @enderror
 
-                            </div>
+                                    @error('delivery_method')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                            {{-- TOTAL PRODUK --}}
-                            <div class="summary-row">
+                                {{-- ALAMAT PENGIRIMAN --}}
+                                <div class="form-group" id="addressGroup">
+                                    <label for="address">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                        Alamat Pengiriman
+                                    </label>
 
-                                <span>Total Produk</span>
+                                    <textarea name="address" id="address" rows="4" placeholder="Masukkan alamat lengkap pengiriman...">{{ old('address', auth()->user()->address) }}</textarea>
 
-                                <span>
-                                    Rp{{ number_format($total, 0, ',', '.') }}
-                                </span>
+                                    @error('address')
+                                        <div class="error-message">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                            </div>
+                                {{-- TOTAL PRODUK --}}
+                                <div class="summary-row">
+                                    <span>Total Produk</span>
+                                    <span>Rp{{ number_format($total, 0, ',', '.') }}</span>
+                                </div>
 
-                            {{-- ONGKOS KIRIM --}}
-                            <div class="summary-row">
+                                {{-- ONGKOS KIRIM --}}
+                                <div class="summary-row">
+                                    <span>Ongkos Kirim</span>
+                                    <span id="shippingCost">Rp10.000</span>
+                                </div>
 
-                                <span>Ongkos Kirim</span>
+                                {{-- TOTAL PEMBAYARAN --}}
+                                <div class="total">
+                                    <span>Total</span>
+                                    <span id="grandTotal">
+                                        Rp{{ number_format($total + 10000, 0, ',', '.') }}
+                                    </span>
+                                </div>
 
-                                <span>
-                                    Akan dihitung
-                                </span>
 
-                            </div>
+                                {{-- TOMBOL PEMBAYARAN --}}
+                                <button type="submit" class="payment-button" @disabled(empty($cart))>
+                                    <i class="bi bi-credit-card-fill"></i>
+                                    Lanjut ke Pembayaran
+                                </button>
 
-                            {{-- TOTAL PEMBAYARAN --}}
-                            <div class="total">
+                                {{-- CATATAN --}}
+                                <div class="note">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                    Setelah checkout dikonfirmasi, pesanan
+                                    akan dibuat dan kamu akan diarahkan ke
+                                    halaman pembayaran.
+                                </div>
 
-                                <span>Total</span>
+                            </form>
 
-                                <span>
-                                    Rp{{ number_format($total, 0, ',', '.') }}
-                                </span>
+                        </section>
 
-                            </div>
-
-                            {{-- TOMBOL PEMBAYARAN --}}
-                            <button
-                                type="submit"
-                                class="payment-button"
-                                @disabled(empty($cart))
-                            >
-                                <i class="bi bi-credit-card-fill"></i>
-                                Lanjut ke Pembayaran
-                            </button>
-
-                            {{-- CATATAN --}}
-                            <div class="note">
-                                <i class="bi bi-info-circle-fill"></i>
-                                Setelah checkout dikonfirmasi, pesanan
-                                akan dibuat dan kamu akan diarahkan ke
-                                halaman pembayaran.
-                            </div>
-
-                        </form>
-
-                    </section>
+                    </div>
 
                 </div>
 
-            </div>
+            </main>
 
-        </main>
+            {{-- FOOTER --}}
+            <footer class="footer">
+                © {{ date('Y') }} PizzaMozza. All Rights Reserved.
+            </footer>
 
-        {{-- FOOTER --}}
-        <footer class="footer">
-            © {{ date('Y') }} PizzaMozza. All Rights Reserved.
-        </footer>
+        </div>
 
-    </div>
+        {{-- JAVASCRIPT SIDEBAR MOBILE --}}
+        <script>
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const menuButton = document.getElementById('mobileMenuBtn');
 
-    {{-- JAVASCRIPT SIDEBAR MOBILE --}}
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const menuButton = document.getElementById('mobileMenuBtn');
-
-        function openSidebar() {
-            sidebar.classList.add('open');
-            overlay.classList.add('show');
-            menuButton.setAttribute('aria-expanded', 'true');
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('show');
-            menuButton.setAttribute('aria-expanded', 'false');
-        }
-
-        menuButton.addEventListener('click', function () {
-            if (sidebar.classList.contains('open')) {
-                closeSidebar();
-            } else {
-                openSidebar();
+            function openSidebar() {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+                menuButton.setAttribute('aria-expanded', 'true');
             }
-        });
 
-        overlay.addEventListener('click', closeSidebar);
-
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeSidebar();
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+                menuButton.setAttribute('aria-expanded', 'false');
             }
-        });
-    </script>
 
-</body>
-</html>
+            menuButton.addEventListener('click', function() {
+                if (sidebar.classList.contains('open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            overlay.addEventListener('click', closeSidebar);
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeSidebar();
+                }
+            });
+
+            // Pengaturan Delivery dan Take Away
+            const deliveryRadios = document.querySelectorAll(
+                'input[name="delivery_method"]'
+            );
+
+            const addressGroup = document.getElementById('addressGroup');
+            const addressInput = document.getElementById('address');
+            const shippingCostElement = document.getElementById('shippingCost');
+            const grandTotalElement = document.getElementById('grandTotal');
+
+            const productTotal = {{ (float) $total }};
+
+            function formatRupiah(number) {
+                return 'Rp' + new Intl.NumberFormat('id-ID', {
+                    maximumFractionDigits: 0
+                }).format(number);
+            }
+
+            function updateDelivery() {
+                const selected = document.querySelector(
+                    'input[name="delivery_method"]:checked'
+                );
+
+                const method = selected ? selected.value : 'delivery';
+                const shippingCost = method === 'delivery' ? 10000 : 0;
+                const grandTotal = productTotal + shippingCost;
+
+                shippingCostElement.textContent = formatRupiah(shippingCost);
+                grandTotalElement.textContent = formatRupiah(grandTotal);
+
+                if (method === 'delivery') {
+                    addressGroup.style.display = 'block';
+                    addressInput.required = true;
+                } else {
+                    addressGroup.style.display = 'none';
+                    addressInput.required = false;
+                }
+            }
+
+            deliveryRadios.forEach(radio => {
+                radio.addEventListener('change', updateDelivery);
+            });
+
+            updateDelivery();
+        </script>
+
+    </body>
+
+    </html>

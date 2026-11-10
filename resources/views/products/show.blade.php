@@ -1,4 +1,3 @@
-
 @php
     $isNastar = mb_strtolower(trim($product->name)) === 'kue nastar';
 
@@ -257,7 +256,7 @@
             </div>
 
             <div class="app-brand-subtitle">
-                Pelanggan
+                Fresh, Tasty, Happiness!
             </div>
         </div>
 
