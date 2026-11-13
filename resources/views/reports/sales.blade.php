@@ -962,7 +962,7 @@
         <header class="topbar">
 
             <div class="topbar-title">
-                <h3>Laporan Penjualan</h3>
+               
             </div>
 
             <div class="topbar-admin">
@@ -990,8 +990,6 @@
             <!-- JUDUL HALAMAN -->
 
             <div class="page-heading">
-
-                <small>MANAJEMEN KEUANGAN</small>
 
                 <h2>Laporan Penjualan</h2>
 
@@ -1027,22 +1025,22 @@
 
                         <option value="today"
                             {{ $period === 'today' ? 'selected' : '' }}>
-                            Hari Ini
+                            Hari 
                         </option>
 
                         <option value="week"
                             {{ $period === 'week' ? 'selected' : '' }}>
-                            Minggu Ini
+                            Minggu 
                         </option>
 
                         <option value="month"
                             {{ $period === 'month' ? 'selected' : '' }}>
-                            Bulan Ini
+                            Bulan 
                         </option>
 
                         <option value="year"
                             {{ $period === 'year' ? 'selected' : '' }}>
-                            Tahun Ini
+                            Tahun 
                         </option>
 
                     </select>
@@ -1446,7 +1444,7 @@
 
             new Chart(chartElement, {
 
-                type: 'bar',
+                type: 'line',
 
                 data: {
                     labels: chartLabels,
