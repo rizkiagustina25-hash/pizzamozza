@@ -9,17 +9,19 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Product::with('variants');
+{
+    $query = Product::with('variants');
 
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        $products = $query->latest()->get();
-
-        return view('products.index', compact('products'));
+    if ($request->filled('search')) {
+        $query->where('name', 'like', '%' . $request->search . '%');
     }
+
+    $products = $query->latest()->get();
+
+    $heroProduct = $products->first();
+
+    return view('products.index', compact('products', 'heroProduct'));
+}
 
     public function show($id)
     {

@@ -22,7 +22,8 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Calibri, 'Segoe UI', sans-serif;
+            font-size: 15px;
             background: #fffaf3;
             color: #34241f;
         }
@@ -81,9 +82,9 @@
 
         .brand-text {
             color: white;
-            font-size: 23px;
-            font-weight: 700;
-            letter-spacing: -.5px;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -.3px;
         }
 
         .brand-text span {
@@ -91,9 +92,9 @@
         }
 
         .brand-subtitle {
-            margin-top: 3px;
+            margin-top: 2px;
             color: #f2caca;
-            font-size: 11px;
+            font-size: 13px;
         }
 
         .sidebar-section {
@@ -103,10 +104,10 @@
         .sidebar-title {
             padding: 0 12px 13px;
             color: #e9bdbd;
-            font-size: 10px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1.3px;
-            font-weight: 700;
+            letter-spacing: 1.2px;
+            font-weight: 600;
         }
 
         .sidebar-menu {
@@ -125,8 +126,8 @@
             padding: 11px 14px;
             border-radius: 9px;
             color: #f8eaea;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 15.5px;
+            font-weight: 500;
             transition: .2s ease;
         }
 
@@ -167,14 +168,14 @@
             border-radius: 50%;
             background: #ffe0e0;
             color: var(--dashboard-red);
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             flex-shrink: 0;
-            font-size: 15px;
+            font-size: 17px;
         }
 
         .user-avatar img {
@@ -190,17 +191,17 @@
 
         .user-name {
             color: white;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .user-role {
-            margin-top: 4px;
+            margin-top: 2px;
             color: #e9bdbd;
-            font-size: 11px;
+            font-size: 13px;
         }
 
         .sidebar-logout,
@@ -216,8 +217,8 @@
             border-radius: 8px;
             background: white;
             color: var(--dashboard-red);
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
             transition: .2s ease;
         }
 
@@ -257,15 +258,15 @@
 
         .topbar-title {
             margin: 0;
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 25px;
+            font-weight: 600;
             color: #3b2925;
         }
 
         .topbar-description {
-            margin-top: 5px;
+            margin-top: 3px;
             color: #907d73;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .topbar-actions {
@@ -313,7 +314,7 @@
             color: white;
             display: grid;
             place-items: center;
-            font-size: 10px;
+            font-size: 11.5px;
         }
 
         .btn-saya {
@@ -321,13 +322,13 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 11px 17px;
+            padding: 11px 18px;
             border: none;
             border-radius: 8px;
             background: #c52c2c;
             color: white;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
         }
 
@@ -340,12 +341,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 11px 17px;
+            padding: 11px 18px;
             border-radius: 8px;
             background: var(--dashboard-red);
             color: white;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
         }
 
         .login-button:hover {
@@ -359,15 +360,15 @@
         /* ================= PRODUCT HEADING ================= */
 
         .page-title {
-            margin-bottom: 7px;
-            font-size: 26px;
-            font-weight: 750;
+            margin-bottom: 6px;
+            font-size: 30px;
+            font-weight: 600;
         }
 
         .page-subtitle {
             margin-bottom: 25px;
             color: #907d73;
-            font-size: 13px;
+            font-size: 15.5px;
         }
 
         /* ================= SEARCH ================= */
@@ -401,7 +402,7 @@
             border-radius: 9px;
             background: white;
             outline: none;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .search-form input:focus {
@@ -409,20 +410,19 @@
         }
 
         .search-form button {
-            min-height: 43px;
+            min-height: 45px;
             padding: 0 20px;
             border: none;
             border-radius: 8px;
             background: var(--dashboard-red);
             color: white;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
         }
 
         .search-form button:hover {
             background: var(--dashboard-red-hover);
         }
-
 
         /* ================= PRODUCT GRID ================= */
 
@@ -467,10 +467,10 @@
         }
 
         .product-content h3 {
-            margin-bottom: 9px;
+            margin-bottom: 8px;
             color: #34241f;
-            font-size: 17px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         .product-description {
@@ -480,49 +480,25 @@
         .product-price {
             margin-bottom: 15px;
             color: #941919;
-            font-size: 17px;
-            font-weight: 700;
+            font-size: 17.5px;
+            font-weight: 600;
         }
 
         .product-button {
             display: block;
             width: 100%;
-            padding: 13px 10px;
+            padding: 12px 10px;
             border-radius: 9px;
             background: #941919;
             color: white;
             text-align: center;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             transition: .2s ease;
         }
 
         .product-button:hover {
             background: #b52d2d;
-        }
-
-        /* RESPONSIVE PRODUCT GRID */
-
-        @media (max-width: 1200px) {
-            .product-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 1000px) {
-            .product-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 550px) {
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .product-image {
-                height: 220px;
-            }
         }
 
         /* ================= EMPTY STATE ================= */
@@ -543,12 +519,13 @@
 
         .empty-products h3 {
             margin: 14px 0 8px;
-            font-size: 16px;
+            font-size: 19px;
+            font-weight: 600;
         }
 
         .empty-products p {
             color: #907d73;
-            font-size: 12px;
+            font-size: 14.5px;
             line-height: 1.6;
         }
 
@@ -559,14 +536,14 @@
             border-radius: 8px;
             background: var(--dashboard-red);
             color: white;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
         }
 
         .result-info {
             margin-bottom: 17px;
             color: #907d73;
-            font-size: 12px;
+            font-size: 14.5px;
         }
 
         /* ================= FOOTER ================= */
@@ -575,7 +552,7 @@
             padding: 25px;
             text-align: center;
             color: #99877e;
-            font-size: 11px;
+            font-size: 13.5px;
         }
 
         /* ================= LOGOUT MODAL ================= */
@@ -622,14 +599,15 @@
 
         .logout-dialog h3 {
             margin-bottom: 10px;
-            font-size: 21px;
+            font-size: 23px;
+            font-weight: 600;
         }
 
         .logout-dialog p {
             margin-bottom: 24px;
             color: #81716a;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 15px;
+            line-height: 1.55;
         }
 
         .logout-modal-actions {
@@ -641,8 +619,8 @@
             flex: 1;
             min-height: 42px;
             border-radius: 9px;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
         }
 
@@ -726,11 +704,11 @@
             }
 
             .topbar-title {
-                font-size: 17px;
+                font-size: 20px;
             }
 
             .topbar-description {
-                font-size: 10px;
+                font-size: 12.5px;
             }
 
             .topbar-actions {
@@ -957,17 +935,48 @@
                     </div>
                 @endif
 
-
                 <!-- DAFTAR PRODUK -->
 
                 <section class="product-grid">
 
                     @forelse ($products as $product)
+                        @php
+                            $imgFile = $product->image ?? ($product->gambar ?? ($product->foto ?? null));
+                            $imgFile = $imgFile ? ltrim($imgFile, '/') : null;
+
+                            $candidates = $imgFile
+                                ? [
+                                    'storage/' . $imgFile,
+                                    'image/' . $imgFile,
+                                    'images/' . $imgFile,
+                                    'uploads/' . $imgFile,
+                                    $imgFile,
+                                ]
+                                : [];
+
+                            $resolvedImage = null;
+                            foreach ($candidates as $path) {
+                                if (file_exists(public_path($path))) {
+                                    $resolvedImage = asset($path);
+                                    break;
+                                }
+                            }
+
+                            if (!$resolvedImage && $imgFile) {
+                                $resolvedImage = str_starts_with($imgFile, 'http')
+                                    ? $imgFile
+                                    : asset('image/' . $imgFile);
+                            }
+
+                            $startingPrice = $product->variants->min('price') ?? $product->price;
+                        @endphp
+
                         <article class="product-card">
 
                             <div class="product-image">
-                                @if (!empty($product->image))
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                                @if ($resolvedImage)
+                                    <img src="{{ $resolvedImage }}" alt="{{ $product->name }}"
+                                        onerror="this.style.display='none'; this.parentElement.textContent='🍕';">
                                 @else
                                     🍕
                                 @endif
@@ -976,10 +985,6 @@
                             <div class="product-content">
 
                                 <h3>{{ $product->name }}</h3>
-
-                                @php
-                                    $startingPrice = $product->variants->min('price');
-                                @endphp
 
                                 <div class="product-price">
                                     @if ($startingPrice !== null)

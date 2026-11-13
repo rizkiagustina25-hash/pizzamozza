@@ -34,7 +34,7 @@ class AuthController extends Controller
             return redirect()->route('karyawan.dashboard');
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route('products.index');
     }
 
     return back()
@@ -73,7 +73,7 @@ public function showRegister()
 
         $request->session()->regenerate();
 
-        return redirect()->route('checkout.index');
+        return redirect()->route('dashboard');
     }
 
 public function showResetPassword()

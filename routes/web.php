@@ -38,8 +38,11 @@ use App\Http\Controllers\Karyawan\ProductController as KaryawanProductController
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [ProductController::class, 'index'])
-    ->name('home');
+Route::get('/', function () {
+    $products = \App\Models\Product::with('variants')->get();
+
+    return view('welcome', compact('products'));
+})->name('home');
 
 // Dashboard Pelanggan
 Route::get('/dashboard', [CustomerDashboardController::class, 'index'])

@@ -7,8 +7,8 @@
     <title>PizzaMozza</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -22,7 +22,8 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Calibri, 'Segoe UI', sans-serif;
+            font-size: 15px;
             background: #fffaf3;
             color: #34241f;
         }
@@ -85,9 +86,9 @@
 
         .brand-text {
             color: white;
-            font-size: 23px;
-            font-weight: 700;
-            letter-spacing: -.5px;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -.3px;
         }
 
         .brand-text span {
@@ -95,9 +96,9 @@
         }
 
         .brand-subtitle {
-            margin-top: 3px;
+            margin-top: 2px;
             color: #f2caca;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 400;
         }
 
@@ -108,10 +109,10 @@
         .sidebar-title {
             padding: 0 12px 13px;
             color: #e9bdbd;
-            font-size: 10px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1.3px;
-            font-weight: 700;
+            letter-spacing: 1.2px;
+            font-weight: 600;
         }
 
         .sidebar-menu {
@@ -130,8 +131,8 @@
             padding: 11px 14px;
             border-radius: 9px;
             color: #f8eaea;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 15.5px;
+            font-weight: 500;
             transition: .2s ease;
         }
 
@@ -174,14 +175,14 @@
             border-radius: 50%;
             background: #ffe0e0;
             color: var(--dashboard-red);
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             flex-shrink: 0;
-            font-size: 15px;
+            font-size: 17px;
         }
 
         .user-avatar img,
@@ -198,17 +199,17 @@
 
         .user-name {
             color: white;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .user-role {
-            margin-top: 4px;
+            margin-top: 2px;
             color: #e9bdbd;
-            font-size: 11px;
+            font-size: 13px;
         }
 
         .sidebar-logout {
@@ -223,8 +224,8 @@
             border-radius: 8px;
             background: white;
             color: var(--dashboard-red);
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
             transition: .2s ease;
         }
 
@@ -242,8 +243,8 @@
             border-radius: 8px;
             background: white;
             color: var(--dashboard-red);
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
         }
 
         .sidebar-login:hover {
@@ -257,11 +258,6 @@
             margin-left: 265px;
         }
 
-        /*
-         * TOPBAR
-         * Tinggi dikunci 88px, sama persis dengan .brand di sidebar,
-         * sehingga garis bawah topbar sejajar dengan pembatas judul sidebar.
-         */
         .topbar {
             height: 88px;
             min-height: 88px;
@@ -286,15 +282,15 @@
 
         .topbar-title {
             margin: 0;
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 25px;
+            font-weight: 600;
             color: #3b2925;
         }
 
         .topbar-description {
-            margin-top: 5px;
+            margin-top: 3px;
             color: #907d73;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .topbar-actions {
@@ -306,7 +302,6 @@
             flex-shrink: 0;
         }
 
-        /* Tombol menu HP: disembunyikan di desktop, tampil lewat media query */
         .mobile-menu {
             display: none;
             width: 40px;
@@ -343,7 +338,7 @@
             color: white;
             display: grid;
             place-items: center;
-            font-size: 10px;
+            font-size: 11.5px;
         }
 
         .login-button,
@@ -351,13 +346,13 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 11px 17px;
+            padding: 11px 18px;
             border: 0;
             border-radius: 8px;
             background: var(--dashboard-red);
             color: white;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
         }
 
         .login-button:hover,
@@ -369,13 +364,13 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 11px 17px;
+            padding: 11px 18px;
             border: 1px solid var(--dashboard-red);
             border-radius: 8px;
             background: white;
             color: var(--dashboard-red);
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
         }
 
         .content {
@@ -383,15 +378,15 @@
         }
 
         .page-title {
-            margin-bottom: 7px;
-            font-size: 26px;
-            font-weight: 750;
+            margin-bottom: 6px;
+            font-size: 30px;
+            font-weight: 600;
         }
 
         .page-subtitle {
             margin-bottom: 25px;
             color: #907d73;
-            font-size: 13px;
+            font-size: 15.5px;
         }
 
         .btn-saya {
@@ -399,13 +394,13 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 11px 17px;
+            padding: 11px 18px;
             border: none;
             border-radius: 8px;
             background: #c52c2c;
             color: white;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             text-decoration: none;
             cursor: pointer;
         }
@@ -441,17 +436,18 @@
         .landing-badge {
             display: inline-block;
             margin-bottom: 15px;
-            padding: 7px 13px;
+            padding: 7px 14px;
             border-radius: 20px;
             background: white;
             color: var(--dashboard-red);
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
         }
 
         .landing-title {
             margin-bottom: 15px;
-            font-size: 40px;
+            font-size: 42px;
+            font-weight: 600;
             line-height: 1.15;
         }
 
@@ -462,8 +458,8 @@
         .landing-description {
             margin-bottom: 23px;
             color: #705e54;
-            font-size: 14px;
-            line-height: 1.7;
+            font-size: 16.5px;
+            line-height: 1.65;
         }
 
         .landing-actions {
@@ -484,152 +480,218 @@
             box-shadow: 0 15px 35px #00000010;
         }
 
-        /* ================= DASHBOARD SUMMARY ================= */
+        /* ================= DASHBOARD SUMMARY (2x2 MODERN) ================= */
 
         .dashboard-summary {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 16px;
-            margin: 25px 0 30px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin: 25px 0 32px;
         }
 
         .summary-card {
-            min-height: 120px;
-            padding: 20px;
+            min-height: 118px;
+            padding: 22px 24px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            background: white;
-            border: 1px solid #f0e1d5;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px #482c1a05;
+            gap: 16px;
+            background: linear-gradient(145deg, #ffffff 0%, #fffcf8 100%);
+            border: 1px solid #efe0d3;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(72, 44, 26, 0.045);
             overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+            border-color: #e3cbb8;
+            box-shadow: 0 14px 30px rgba(72, 44, 26, 0.08);
         }
 
         .summary-card::before {
             content: "";
             position: absolute;
-            inset: 0 auto 0 0;
+            top: 18px;
+            bottom: 18px;
+            left: 0;
             width: 5px;
+            border-radius: 0 6px 6px 0;
             background: var(--accent, #8856df);
+        }
+
+        .summary-card:nth-child(1) {
+            --accent: #8856df;
+            --icon-bg: #f3edff;
+            --icon-color: #7742d6;
         }
 
         .summary-card:nth-child(2) {
             --accent: #ef9b35;
+            --icon-bg: #fff3e0;
+            --icon-color: #df8214;
         }
 
         .summary-card:nth-child(3) {
             --accent: #18a875;
+            --icon-bg: #e6f8f0;
+            --icon-color: #139164;
         }
 
         .summary-card:nth-child(4) {
             --accent: #e64b4b;
+            --icon-bg: #fdeaea;
+            --icon-color: #d63636;
         }
 
         .summary-label {
             display: block;
-            margin-bottom: 12px;
-            color: #806d62;
-            font-size: 12px;
+            margin-bottom: 8px;
+            color: #7d695e;
+            font-size: 15.5px;
+            font-weight: 500;
         }
 
         .summary-value {
-            font-size: 28px;
-            font-weight: 750;
+            color: #2d1e1a;
+            font-size: 35px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            line-height: 1.1;
         }
 
         .summary-icon {
-            width: 42px;
-            height: 42px;
+            width: 54px;
+            height: 54px;
             flex-shrink: 0;
             display: grid;
             place-items: center;
-            border-radius: 12px;
-            background: #faf1eb;
-            font-size: 20px;
+            border-radius: 16px;
+            background: var(--icon-bg, #faf1eb);
+            color: var(--icon-color, #34241f);
+            font-size: 23px;
+            transition: transform 0.25s ease;
         }
 
-        /* ================= QUICK MENU ================= */
+        .summary-card:hover .summary-icon {
+            transform: scale(1.06);
+        }
+
+        /* ================= QUICK MENU (MODERN) ================= */
 
         .quick-grid {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
         .quick-card {
-            min-height: 115px;
-            padding: 16px;
+            min-height: 122px;
+            padding: 18px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            border-radius: 13px;
-            transition: .2s;
+            gap: 14px;
+            border-radius: 18px;
+            box-shadow: 0 6px 18px rgba(52, 36, 31, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
         .quick-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            box-shadow: 0 14px 28px rgba(52, 36, 31, 0.09);
         }
 
         .quick-card h3 {
-            margin-bottom: 6px;
-            font-size: 13px;
+            margin-bottom: 4px;
+            color: #2d1e1a;
+            font-size: 16.5px;
+            font-weight: 600;
         }
 
         .quick-card p {
-            color: #74665e;
-            font-size: 11px;
-            line-height: 1.5;
+            color: #6e5f57;
+            font-size: 13.5px;
+            line-height: 1.4;
         }
 
         .quick-icon {
-            width: 42px;
-            height: 42px;
+            width: 48px;
+            height: 48px;
             flex-shrink: 0;
             display: grid;
             place-items: center;
-            border-radius: 50%;
-            font-size: 19px;
+            border-radius: 15px;
+            background: #ffffff;
+            font-size: 20px;
+            transition: transform 0.25s ease;
+        }
+
+        .quick-card:hover .quick-icon {
+            transform: scale(1.06);
         }
 
         .quick-arrow {
             margin-left: auto;
-            font-size: 21px;
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.72);
+            color: #4b3832;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .quick-card:hover .quick-arrow {
+            background: #ffffff;
+            transform: translateX(3px);
         }
 
         .orange {
-            background: #fff1df;
+            background: linear-gradient(135deg, #fff6ea 0%, #ffebd2 100%);
+            border: 1px solid #f7dec0;
         }
 
         .orange .quick-icon {
-            background: #ffdb9f;
+            color: #e07a16;
+            box-shadow: 0 6px 14px rgba(224, 122, 22, 0.16);
         }
 
         .blue {
-            background: #eaf3ff;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e1eeff 100%);
+            border: 1px solid #cde0fa;
         }
 
         .blue .quick-icon {
-            background: #b9d9ff;
+            color: #2563eb;
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.15);
         }
 
         .green {
-            background: #eaf8ef;
+            background: linear-gradient(135deg, #eefbf3 0%, #dcf5e6 100%);
+            border: 1px solid #c5ebd5;
         }
 
         .green .quick-icon {
-            background: #b9e8c8;
+            color: #16a34a;
+            box-shadow: 0 6px 14px rgba(22, 163, 74, 0.15);
         }
 
         .purple {
-            background: #f1ecff;
+            background: linear-gradient(135deg, #f5f1ff 0%, #eae2ff 100%);
+            border: 1px solid #d9ccff;
+            cursor: pointer;
         }
 
         .purple .quick-icon {
-            background: #d0c1ff;
+            color: #7c3aed;
+            box-shadow: 0 6px 14px rgba(124, 58, 237, 0.15);
         }
 
         /* ================= SECTION ================= */
@@ -647,14 +709,14 @@
         }
 
         .section-title {
-            font-size: 19px;
-            font-weight: 750;
+            font-size: 22px;
+            font-weight: 600;
         }
 
         .section-link {
             color: var(--dashboard-red);
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
         }
 
         .latest-orders-card,
@@ -673,7 +735,8 @@
 
         .latest-orders-card h2 {
             margin-bottom: 20px;
-            font-size: 19px;
+            font-size: 21px;
+            font-weight: 600;
         }
 
         .latest-orders-table {
@@ -686,12 +749,13 @@
             padding: 15px 12px;
             text-align: left;
             border-bottom: 1px solid #f2e8e0;
-            font-size: 13px;
+            font-size: 15px;
         }
 
         .latest-orders-table th {
             color: #907d73;
-            font-size: 11px;
+            font-size: 13.5px;
+            font-weight: 600;
             white-space: nowrap;
         }
 
@@ -715,11 +779,12 @@
 
         .order-action {
             display: inline-block;
-            padding: 9px 12px;
+            padding: 9px 14px;
             border-radius: 7px;
             background: var(--dashboard-red);
             color: white;
-            font-size: 11px;
+            font-size: 13.5px;
+            font-weight: 600;
             white-space: nowrap;
         }
 
@@ -731,9 +796,10 @@
             padding: 28px !important;
             text-align: center !important;
             color: #907d73;
+            font-size: 15px;
         }
 
-        /* ================= PRODUCT ================= */
+        /* ================= PRODUCT (BEST SELLER) ================= */
 
         .product-grid {
             display: grid;
@@ -745,8 +811,8 @@
             overflow: hidden;
             background: white;
             border: 1px solid #f0e1d5;
-            border-radius: 14px;
-            transition: .2s;
+            border-radius: 16px;
+            transition: .2s ease;
         }
 
         .product-card:hover {
@@ -755,7 +821,8 @@
         }
 
         .product-image {
-            height: 165px;
+            position: relative;
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -769,6 +836,23 @@
             object-fit: cover;
         }
 
+        .bestseller-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(148, 25, 25, 0.92);
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
+        }
+
         .product-placeholder {
             font-size: 55px;
         }
@@ -778,27 +862,28 @@
         }
 
         .product-name {
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: 17px;
+            font-weight: 600;
         }
 
         .product-price {
             color: var(--dashboard-red);
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 16.5px;
+            font-weight: 600;
         }
 
         .product-button {
             display: block;
             margin-top: 12px;
             padding: 10px;
-            border-radius: 7px;
+            border-radius: 8px;
             background: var(--dashboard-red);
             color: white;
             text-align: center;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 14.5px;
+            font-weight: 600;
+            transition: .2s ease;
         }
 
         .product-button:hover {
@@ -824,27 +909,27 @@
         }
 
         .order-number {
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15.5px;
+            font-weight: 600;
         }
 
         .order-date {
-            margin-top: 5px;
+            margin-top: 4px;
             color: #99877e;
-            font-size: 11px;
+            font-size: 13.5px;
         }
 
         .order-total {
             margin-left: auto;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15.5px;
+            font-weight: 600;
         }
 
         .status {
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 12.5px;
+            font-weight: 600;
         }
 
         .status-pending {
@@ -890,18 +975,18 @@
             width: 70px;
             height: 70px;
             flex-shrink: 0;
-            font-size: 27px;
+            font-size: 28px;
         }
 
         .profile-name {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 21px;
+            font-weight: 600;
         }
 
         .profile-email {
-            margin-top: 5px;
+            margin-top: 4px;
             color: #99877e;
-            font-size: 12px;
+            font-size: 14.5px;
         }
 
         .profile-grid {
@@ -919,12 +1004,13 @@
         .profile-label {
             margin-bottom: 6px;
             color: #99877e;
-            font-size: 10px;
+            font-size: 12.5px;
+            font-weight: 600;
             text-transform: uppercase;
         }
 
         .profile-value {
-            font-size: 13px;
+            font-size: 15.5px;
             line-height: 1.5;
             overflow-wrap: anywhere;
         }
@@ -946,20 +1032,21 @@
 
         .empty-state h3 {
             margin-bottom: 8px;
-            font-size: 16px;
+            font-size: 19px;
+            font-weight: 600;
         }
 
         .empty-state p {
             margin-bottom: 18px;
             color: #99877e;
-            font-size: 12px;
+            font-size: 14.5px;
         }
 
         .footer {
             padding: 25px;
             text-align: center;
             color: #99877e;
-            font-size: 11px;
+            font-size: 13.5px;
         }
 
         /* ================= MODAL LOGOUT ================= */
@@ -1007,14 +1094,15 @@
         .logout-dialog h3 {
             margin-bottom: 10px;
             color: #34241f;
-            font-size: 21px;
+            font-size: 23px;
+            font-weight: 600;
         }
 
         .logout-dialog p {
             margin-bottom: 24px;
             color: #81716a;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 15px;
+            line-height: 1.55;
         }
 
         .logout-modal-actions {
@@ -1026,8 +1114,8 @@
             flex: 1;
             min-height: 42px;
             border-radius: 9px;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.2s ease;
         }
@@ -1062,6 +1150,183 @@
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
+        }
+
+        /* ================= MODAL PENGANTARAN ================= */
+
+        .delivery-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(35, 15, 15, 0.55);
+        }
+
+        .delivery-modal.show {
+            display: flex;
+        }
+
+        .delivery-dialog {
+            position: relative;
+            width: 100%;
+            max-width: 430px;
+            padding: 30px 26px 26px;
+            background: #fffaf3;
+            border: 1px solid #f0e1d5;
+            border-radius: 20px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+            text-align: center;
+            animation: popupFadeIn 0.2s ease;
+        }
+
+        .delivery-close-x {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #f5ebe2;
+            color: #5c433b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .delivery-close-x:hover {
+            background: #ead9cc;
+        }
+
+        .delivery-modal-icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            background: #f8e5e2;
+            color: var(--dashboard-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .delivery-dialog h3 {
+            margin: 0 0 6px;
+            color: #34241f;
+            font-size: 23px;
+            font-weight: 600;
+        }
+
+        .delivery-subtitle {
+            margin: 0 0 18px;
+            color: #8c786e;
+            font-size: 15px;
+        }
+
+        .delivery-rates {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .rate-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1px solid #eeded2;
+        }
+
+        .rate-item.free {
+            border-left: 4px solid #18a875;
+        }
+
+        .rate-item.paid {
+            border-left: 4px solid var(--dashboard-red);
+        }
+
+        .rate-badge {
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .rate-item.free .rate-badge {
+            background: #eaf8ef;
+            color: #18a875;
+        }
+
+        .rate-item.paid .rate-badge {
+            background: #f8e5e2;
+            color: var(--dashboard-red);
+        }
+
+        .rate-detail strong {
+            display: block;
+            color: #34241f;
+            font-size: 15.5px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .rate-detail span {
+            display: block;
+            color: #7d6a60;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .delivery-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background: #f8efe6;
+            color: #6b5349;
+            font-size: 14px;
+            text-align: left;
+            line-height: 1.45;
+        }
+
+        .delivery-note strong {
+            font-weight: 600;
+        }
+
+        .delivery-note i {
+            color: var(--dashboard-red);
+            font-size: 15px;
+            margin-top: 2px;
+        }
+
+        .delivery-confirm-btn {
+            width: 100%;
+            height: 44px;
+            border: none;
+            border-radius: 10px;
+            background: var(--dashboard-red);
+            color: #ffffff;
+            font-size: 15.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .delivery-confirm-btn:hover {
+            background: var(--dashboard-red-hover);
         }
 
         /* ================= ICON ================= */
@@ -1168,11 +1433,11 @@
             }
 
             .topbar-title {
-                font-size: 17px;
+                font-size: 20px;
             }
 
             .topbar-description {
-                font-size: 10px;
+                font-size: 12.5px;
             }
 
             .search-box {
@@ -1200,7 +1465,7 @@
             }
 
             .landing-title {
-                font-size: 30px;
+                font-size: 32px;
             }
 
             .latest-orders-card {
@@ -1229,8 +1494,6 @@
         $menu = request('menu', 'home');
         $currentMenu = $menu;
 
-        // Kunci 'home' disamakan dengan nilai $menu bawaan,
-        // supaya judul dan deskripsi di topbar tampil di menu utama.
         $pageTitles = [
             'home' => 'Dashboard',
             'products' => 'Produk',
@@ -1358,7 +1621,6 @@
                         <i class="bi bi-box-arrow-in-right"></i>
                         Login
                     </a>
-
                 @endauth
 
             </div>
@@ -1369,19 +1631,16 @@
 
         <div class="main-wrapper">
 
-
             <!-- ================= TOPBAR ================= -->
 
             <header class="topbar">
 
-                <!-- Tombol menu untuk tampilan HP -->
                 <button type="button" class="mobile-menu" onclick="toggleSidebar()" aria-label="Buka menu">
 
                     <i class="bi bi-list"></i>
 
                 </button>
 
-                <!-- Judul dan deskripsi halaman -->
                 <div class="topbar-heading">
 
                     <div class="topbar-title">
@@ -1394,7 +1653,6 @@
 
                 </div>
 
-                <!-- Pencarian hanya muncul di halaman produk -->
                 @if (request()->routeIs('products.index'))
                     <form action="{{ route('products.index') }}" method="GET" class="search-box">
 
@@ -1408,10 +1666,8 @@
                     </form>
                 @endif
 
-                <!-- Tombol kanan topbar -->
                 <div class="topbar-actions">
 
-                    <!-- Keranjang -->
                     <a href="{{ route('cart.index') }}" class="cart-button" aria-label="Keranjang">
 
                         <i class="bi bi-cart3"></i>
@@ -1430,13 +1686,9 @@
 
                     </a>
 
-                    <!-- Tombol login atau akun -->
                     @guest
-
                         <a href="{{ route('login') }}" class="login-button">
-
                             Login
-
                         </a>
                     @else
                         @if ($menu === 'profile')
@@ -1454,7 +1706,6 @@
 
                             </a>
                         @endif
-
                     @endguest
 
                 </div>
@@ -1584,7 +1835,9 @@
 
                                 <a href="{{ route('dashboard') }}?menu=orders" class="quick-card orange">
 
-                                    <div class="quick-icon">🛒</div>
+                                    <div class="quick-icon">
+                                        <i class="bi bi-cart-fill"></i>
+                                    </div>
 
                                     <div>
                                         <h3>Pesanan Saya</h3>
@@ -1597,7 +1850,9 @@
 
                                 <a href="{{ route('dashboard') }}?menu=profile" class="quick-card blue">
 
-                                    <div class="quick-icon">👤</div>
+                                    <div class="quick-icon">
+                                        <i class="bi bi-person-fill"></i>
+                                    </div>
 
                                     <div>
                                         <h3>Akun Saya</h3>
@@ -1610,7 +1865,9 @@
 
                                 <a href="{{ route('dashboard') }}?menu=profile" class="quick-card green">
 
-                                    <div class="quick-icon">📍</div>
+                                    <div class="quick-icon">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </div>
 
                                     <div>
                                         <h3>Alamat Saya</h3>
@@ -1621,18 +1878,21 @@
 
                                 </a>
 
-                                <a href="{{ route('dashboard') }}?menu=orders" class="quick-card purple">
+                                <div class="quick-card purple" onclick="openDeliveryModal()" role="button" tabindex="0"
+                                    onkeydown="if(event.key==='Enter'||event.key===' ') openDeliveryModal()">
 
-                                    <div class="quick-icon">🕘</div>
+                                    <div class="quick-icon">
+                                        <i class="bi bi-scooter"></i>
+                                    </div>
 
                                     <div>
-                                        <h3>Riwayat Pesanan</h3>
-                                        <p>Lihat riwayat transaksi kamu.</p>
+                                        <h3>Info Pengantaran</h3>
+                                        <p>Cek area & tarif ongkir delivery.</p>
                                     </div>
 
                                     <span class="quick-arrow">›</span>
 
-                                </a>
+                                </div>
 
                             </div>
 
@@ -1673,6 +1933,27 @@
                                             @php
                                                 $firstItem = $order->items->first();
                                                 $firstProduct = $firstItem?->product;
+
+                                                $orderImgFile = $firstProduct
+                                                    ? ($firstProduct->image ?? $firstProduct->gambar ?? $firstProduct->foto ?? null)
+                                                    : null;
+                                                $orderImgFile = $orderImgFile ? ltrim($orderImgFile, '/') : null;
+
+                                                $orderCandidates = $orderImgFile ? [
+                                                    'storage/' . $orderImgFile,
+                                                    'image/' . $orderImgFile,
+                                                    'images/' . $orderImgFile,
+                                                    'uploads/' . $orderImgFile,
+                                                    $orderImgFile,
+                                                ] : [];
+
+                                                $resolvedOrderImage = null;
+                                                foreach ($orderCandidates as $path) {
+                                                    if (file_exists(public_path($path))) {
+                                                        $resolvedOrderImage = asset($path);
+                                                        break;
+                                                    }
+                                                }
                                             @endphp
 
                                             <tr>
@@ -1680,9 +1961,10 @@
                                                 <td>
                                                     <div class="order-product">
 
-                                                        @if ($firstProduct && $firstProduct->image)
-                                                            <img src="{{ asset('image/' . $firstProduct->image) }}"
-                                                                alt="{{ $firstProduct->name }}">
+                                                        @if ($resolvedOrderImage)
+                                                            <img src="{{ $resolvedOrderImage }}"
+                                                                alt="{{ $firstProduct->name }}"
+                                                                onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-size:28px\'>🍕</span>');">
                                                         @else
                                                             <span style="font-size:28px">
                                                                 🍕
@@ -1732,14 +2014,14 @@
 
                     @endguest
 
-                    <!-- PRODUK FAVORIT -->
+                    <!-- PRODUK BEST SELLER -->
 
                     <section class="section">
 
                         <div class="section-header">
 
                             <h2 class="section-title">
-                                Produk Favorit
+                                Produk Best Seller
                             </h2>
 
                             <a href="{{ route('products.index') }}" class="section-link">
@@ -1754,17 +2036,44 @@
 
                                 @foreach ($products as $product)
                                     @php
-                                        $variant = $product->variants->first() ?? null;
-                                        $price = $variant?->price ?? ($product->price ?? 0);
+                                        $imgFile = $product->image ?? $product->gambar ?? $product->foto ?? null;
+                                        $imgFile = $imgFile ? ltrim($imgFile, '/') : null;
+
+                                        $candidates = $imgFile ? [
+                                            'storage/' . $imgFile,
+                                            'image/' . $imgFile,
+                                            'images/' . $imgFile,
+                                            'uploads/' . $imgFile,
+                                            $imgFile,
+                                        ] : [];
+
+                                        $resolvedImage = null;
+                                        foreach ($candidates as $path) {
+                                            if (file_exists(public_path($path))) {
+                                                $resolvedImage = asset($path);
+                                                break;
+                                            }
+                                        }
+
+                                        if (!$resolvedImage && $imgFile && str_starts_with($imgFile, 'http')) {
+                                            $resolvedImage = $imgFile;
+                                        }
+
+                                        $price = $product->variants->min('price') ?? ($product->price ?? 0);
                                     @endphp
 
                                     <div class="product-card">
 
                                         <div class="product-image">
 
-                                            @if (!empty($product->image))
-                                                <img src="{{ asset('image/' . $product->image) }}"
-                                                    alt="{{ $product->name }}">
+                                            <span class="bestseller-badge">
+                                                🔥 Best Seller
+                                            </span>
+
+                                            @if ($resolvedImage)
+                                                <img src="{{ $resolvedImage }}"
+                                                    alt="{{ $product->name }}"
+                                                    onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'product-placeholder\'>🍕</div>');">
                                             @else
                                                 <div class="product-placeholder">
                                                     🍕
@@ -2069,13 +2378,91 @@
 
     @auth
         <form action="{{ route('logout') }}" method="POST" id="customerLogoutForm">
-
             @csrf
-
         </form>
     @endauth
 
-    <!-- ================= SCRIPT SIDEBAR ================= -->
+    <!-- ================= POPUP LOGOUT PELANGGAN ================= -->
+
+    <div class="logout-modal" id="customerLogoutModal">
+
+        <div class="logout-dialog" role="dialog" aria-modal="true" aria-labelledby="customerLogoutTitle">
+
+            <div class="logout-modal-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+
+            <h3 id="customerLogoutTitle">
+                Keluar dari Akun?
+            </h3>
+
+            <p>
+                Apakah kamu yakin ingin keluar dari akun PizzaMozza?
+            </p>
+
+            <div class="logout-modal-actions">
+
+                <button type="button" class="cancel-logout" onclick="closeCustomerLogoutModal()">
+                    Batal
+                </button>
+
+                <button type="button" class="confirm-logout" onclick="confirmCustomerLogout()">
+                    Ya, Keluar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= MODAL INFORMASI PENGANTARAN ================= -->
+
+    <div class="delivery-modal" id="deliveryInfoModal">
+        <div class="delivery-dialog" role="dialog" aria-modal="true" aria-labelledby="deliveryModalTitle">
+            <button type="button" class="delivery-close-x" onclick="closeDeliveryModal()" aria-label="Tutup">
+                <i class="bi bi-x-lg"></i>
+            </button>
+
+            <div class="delivery-modal-icon">
+                <i class="bi bi-scooter"></i>
+            </div>
+
+            <h3 id="deliveryModalTitle">Informasi Pengantaran</h3>
+            <p class="delivery-subtitle">
+                Ketentuan tarif delivery pesanan PizzaMozza:
+            </p>
+
+            <div class="delivery-rates">
+                <div class="rate-item free">
+                    <div class="rate-badge">GRATIS</div>
+                    <div class="rate-detail">
+                        <strong>Wilayah Pelaihari & Sekitarnya</strong>
+                        <span>Free Ongkir (Rp 0) langsung ke alamatmu.</span>
+                    </div>
+                </div>
+
+                <div class="rate-item paid">
+                    <div class="rate-badge">Rp 10.000</div>
+                    <div class="rate-detail">
+                        <strong>Di Luar Wilayah Pelaihari</strong>
+                        <span>Dikenakan tarif ongkir flat sebesar Rp 10.000.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="delivery-note">
+                <i class="bi bi-info-circle"></i>
+                <span>Pastikan titik & detail alamat di menu <strong>Alamat Saya</strong> sudah benar sebelum checkout.</span>
+            </div>
+
+            <button type="button" class="delivery-confirm-btn" onclick="closeDeliveryModal()">
+                Mengerti
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
 
     <script>
         function toggleSidebar() {
@@ -2101,55 +2488,13 @@
                 sidebar.classList.remove('open');
             }
         });
-    </script>
 
-    <!-- ================= POPUP LOGOUT PELANGGAN ================= -->
-
-    <div class="logout-modal" id="customerLogoutModal">
-
-        <div class="logout-dialog" role="dialog" aria-modal="true" aria-labelledby="customerLogoutTitle">
-
-            <div class="logout-modal-icon">
-                <i class="bi bi-box-arrow-right"></i>
-            </div>
-
-            <h3 id="customerLogoutTitle">
-                Keluar dari Akun?
-            </h3>
-
-            <p>
-                Apakah kamu yakin ingin keluar dari akun PizzaMozza?
-            </p>
-
-            <div class="logout-modal-actions">
-
-                <button type="button" class="cancel-logout" onclick="closeCustomerLogoutModal()">
-
-                    Batal
-
-                </button>
-
-                <button type="button" class="confirm-logout" onclick="confirmCustomerLogout()">
-
-                    Ya, Keluar
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <script>
         function openCustomerLogoutModal() {
-            document.getElementById('customerLogoutModal')
-                .classList.add('show');
+            document.getElementById('customerLogoutModal').classList.add('show');
         }
 
         function closeCustomerLogoutModal() {
-            document.getElementById('customerLogoutModal')
-                .classList.remove('show');
+            document.getElementById('customerLogoutModal').classList.remove('show');
         }
 
         function confirmCustomerLogout() {
@@ -2160,16 +2505,36 @@
             }
         }
 
-        document.getElementById('customerLogoutModal')
-            .addEventListener('click', function(event) {
+        const logoutModal = document.getElementById('customerLogoutModal');
+        if (logoutModal) {
+            logoutModal.addEventListener('click', function(event) {
                 if (event.target === this) {
                     closeCustomerLogoutModal();
                 }
             });
+        }
+
+        function openDeliveryModal() {
+            document.getElementById('deliveryInfoModal').classList.add('show');
+        }
+
+        function closeDeliveryModal() {
+            document.getElementById('deliveryInfoModal').classList.remove('show');
+        }
+
+        const deliveryModal = document.getElementById('deliveryInfoModal');
+        if (deliveryModal) {
+            deliveryModal.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeDeliveryModal();
+                }
+            });
+        }
 
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeCustomerLogoutModal();
+                closeDeliveryModal();
             }
         });
     </script>
