@@ -190,8 +190,7 @@
             }
         }
 
-        /* Tombol HTML transparan berada tepat di atas tombol pada gambar banner.
-           Jadi tampilannya tetap seperti desain, tetapi tetap bisa diklik. */
+        /* Tombol HTML transparan berada tepat di atas tombol pada gambar banner. */
         .hero-register-overlay {
             position: absolute;
             left: 6%;
@@ -929,6 +928,31 @@
 
 <body>
 
+    @php
+        $resolveAsset = function (?string $file, array $folders = ['images/', 'storage/images/', 'storage/', 'image/', 'uploads/']) {
+            if (!$file) {
+                return null;
+            }
+            $clean = ltrim($file, '/');
+            if (str_starts_with($clean, 'http')) {
+                return $clean;
+            }
+            if (file_exists(public_path($clean))) {
+                return asset($clean);
+            }
+            foreach ($folders as $folder) {
+                if (file_exists(public_path($folder . $clean))) {
+                    return asset($folder . $clean);
+                }
+            }
+            return null;
+        };
+
+        $heroBannerUrl = $resolveAsset('pizzamozza-hero-banner.png')
+            ?? $resolveAsset('pizza-banner.jpeg')
+            ?? asset('storage/images/pizzamozza-hero-banner.png');
+    @endphp
+
     <!-- HEADER -->
 
     <header class="navbar" id="home">
@@ -970,7 +994,7 @@
     </header>
 
     <!-- HERO BANNER -->
-    <section class="hero">
+    <section class="hero" style="background-image: url('{{ $heroBannerUrl }}');">
 
         <a href="{{ route('register') }}" class="hero-register-overlay" aria-label="Daftar Sekarang">
         </a>
@@ -1035,14 +1059,20 @@
                 <section class="product-page">
 
                     @foreach ($productPair as $product)
+                        @php
+                            $rawImg = $product->image ?? $product->gambar ?? $product->foto ?? null;
+                            $resolvedProductImage = $resolveAsset($rawImg, ['images/', 'storage/', 'image/', 'uploads/']);
+                        @endphp
+
                         <article class="product-card" tabindex="0">
 
                             <div class="product-image">
 
-                                @if ($product->image)
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                                @if ($resolvedProductImage)
+                                    <img src="{{ $resolvedProductImage }}" alt="{{ $product->name }}"
+                                        onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span style=\'font-size:80px\'>🍕</span>');">
                                 @else
-                                    <i class="bi bi-pizza image-placeholder"></i>
+                                    <span style="font-size: 80px;">🍕</span>
                                 @endif
 
                             </div>
@@ -1148,7 +1178,7 @@
                 </p>
             </div>
 
-            <img src="{{ asset('images/adonan-pizza.jpg') }}" class="promo-image"
+            <img src="{{ $resolveAsset('adonan-pizza.jpg') ?? asset('images/adonan-pizza.jpg') }}" class="promo-image"
                 alt="Proses pembuatan adonan pizza">
 
         </div>
@@ -1166,7 +1196,7 @@
                 </p>
             </div>
 
-            <img src="{{ asset('images/bahan-segar.jpg') }}" class="promo-image"
+            <img src="{{ $resolveAsset('bahan-segar.jpg') ?? asset('images/bahan-segar.jpg') }}" class="promo-image"
                 alt="Bahan-bahan segar untuk pizza">
 
         </div>
