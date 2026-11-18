@@ -570,7 +570,7 @@
                     rgba(148, 25, 25, .65) 55%,
                     rgba(120, 19, 19, .08) 100%
                 ),
-                url("{{ asset('image/pizza-banner.jpeg') }}");
+              url("{{ asset('images/pizza-banner.jpeg') }}");
 
             background-size: cover;
             background-position: center 55%;
@@ -1504,8 +1504,7 @@
             <div class="page-heading">
 
                 <div>
-                    <h1>Dashboard</h1>
-                    <p>Ringkasan aktivitas dan operasional PizzaMozza.</p>
+                
                 </div>
 
                 <div class="date-label">
