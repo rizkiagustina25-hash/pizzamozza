@@ -1507,6 +1507,18 @@
             'orders' => 'Lihat status dan riwayat pesanan kamu disini.',
             'profile' => 'Informasi akun dan alamat pengiriman kamu.',
         ];
+
+        $userFotoUrl = null;
+        if (auth()->check() && auth()->user()->foto_profile) {
+            $rawFoto = ltrim(auth()->user()->foto_profile, '/');
+            foreach (['profile/' . $rawFoto, 'storage/' . $rawFoto, $rawFoto] as $fotoPath) {
+                if (file_exists(public_path($fotoPath))) {
+                    $userFotoUrl = asset($fotoPath);
+                    break;
+                }
+            }
+            $userFotoUrl ??= asset('profile/' . $rawFoto);
+        }
     @endphp
 
     <div class="app">
@@ -1591,8 +1603,9 @@
                     <div class="user-mini">
 
                         <div class="user-avatar">
-                            @if (auth()->user()->foto_profile)
-                                <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}" alt="Foto profil">
+                            @if ($userFotoUrl)
+                                <img src="{{ $userFotoUrl }}" alt="Foto profil"
+                                    onerror="this.style.display='none'; this.parentElement.textContent='{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}';">
                             @else
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             @endif
@@ -1878,7 +1891,8 @@
 
                                 </a>
 
-                                <div class="quick-card purple" onclick="openDeliveryModal()" role="button" tabindex="0"
+                                <div class="quick-card purple" onclick="openDeliveryModal()" role="button"
+                                    tabindex="0"
                                     onkeydown="if(event.key==='Enter'||event.key===' ') openDeliveryModal()">
 
                                     <div class="quick-icon">
@@ -1935,17 +1949,20 @@
                                                 $firstProduct = $firstItem?->product;
 
                                                 $orderImgFile = $firstProduct
-                                                    ? ($firstProduct->image ?? $firstProduct->gambar ?? $firstProduct->foto ?? null)
+                                                    ? $firstProduct->image ??
+                                                        ($firstProduct->gambar ?? ($firstProduct->foto ?? null))
                                                     : null;
                                                 $orderImgFile = $orderImgFile ? ltrim($orderImgFile, '/') : null;
 
-                                                $orderCandidates = $orderImgFile ? [
-                                                    'storage/' . $orderImgFile,
-                                                    'image/' . $orderImgFile,
-                                                    'images/' . $orderImgFile,
-                                                    'uploads/' . $orderImgFile,
-                                                    $orderImgFile,
-                                                ] : [];
+                                                $orderCandidates = $orderImgFile
+                                                    ? [
+                                                        'storage/' . $orderImgFile,
+                                                        'image/' . $orderImgFile,
+                                                        'images/' . $orderImgFile,
+                                                        'uploads/' . $orderImgFile,
+                                                        $orderImgFile,
+                                                    ]
+                                                    : [];
 
                                                 $resolvedOrderImage = null;
                                                 foreach ($orderCandidates as $path) {
@@ -2036,16 +2053,18 @@
 
                                 @foreach ($products as $product)
                                     @php
-                                        $imgFile = $product->image ?? $product->gambar ?? $product->foto ?? null;
+                                        $imgFile = $product->image ?? ($product->gambar ?? ($product->foto ?? null));
                                         $imgFile = $imgFile ? ltrim($imgFile, '/') : null;
 
-                                        $candidates = $imgFile ? [
-                                            'storage/' . $imgFile,
-                                            'image/' . $imgFile,
-                                            'images/' . $imgFile,
-                                            'uploads/' . $imgFile,
-                                            $imgFile,
-                                        ] : [];
+                                        $candidates = $imgFile
+                                            ? [
+                                                'storage/' . $imgFile,
+                                                'image/' . $imgFile,
+                                                'images/' . $imgFile,
+                                                'uploads/' . $imgFile,
+                                                $imgFile,
+                                            ]
+                                            : [];
 
                                         $resolvedImage = null;
                                         foreach ($candidates as $path) {
@@ -2071,8 +2090,7 @@
                                             </span>
 
                                             @if ($resolvedImage)
-                                                <img src="{{ $resolvedImage }}"
-                                                    alt="{{ $product->name }}"
+                                                <img src="{{ $resolvedImage }}" alt="{{ $product->name }}"
                                                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'product-placeholder\'>🍕</div>');">
                                             @else
                                                 <div class="product-placeholder">
@@ -2124,12 +2142,6 @@
                     </section>
                 @elseif($menu === 'orders')
                     @auth
-
-                        <h1 class="page-title">Pesanan Saya</h1>
-
-                        <p class="page-subtitle">
-                            Lihat status dan riwayat pesanan kamu disini.
-                        </p>
 
                         @if ($allOrders->count())
                             <div class="orders-card">
@@ -2217,25 +2229,17 @@
                 @elseif($menu === 'profile')
                     @auth
 
-                        <h1 class="page-title">Akun Saya</h1>
-
-                        <p class="page-subtitle">
-                            Informasi akun dan alamat pengiriman kamu.
-                        </p>
-
                         <div class="profile-card">
 
                             <div class="profile-header">
 
                                 <div class="profile-avatar">
-
-                                    @if (auth()->user()->foto_profile)
-                                        <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}"
-                                            alt="Foto profil">
+                                    @if ($userFotoUrl)
+                                        <img src="{{ $userFotoUrl }}" alt="Foto profil"
+                                            onerror="this.style.display='none'; this.parentElement.textContent='{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}';">
                                     @else
                                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                     @endif
-
                                 </div>
 
                                 <div>
@@ -2453,7 +2457,8 @@
 
             <div class="delivery-note">
                 <i class="bi bi-info-circle"></i>
-                <span>Pastikan titik & detail alamat di menu <strong>Alamat Saya</strong> sudah benar sebelum checkout.</span>
+                <span>Pastikan titik & detail alamat di menu <strong>Alamat Saya</strong> sudah benar sebelum
+                    checkout.</span>
             </div>
 
             <button type="button" class="delivery-confirm-btn" onclick="closeDeliveryModal()">

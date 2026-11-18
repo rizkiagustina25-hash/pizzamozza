@@ -23,8 +23,7 @@ class CheckoutController extends Controller
         $total = collect($cart)->sum(
             fn ($item) => (float) (
                 $item['subtotal'] ??
-                ((float) ($item['unit_price'] ?? $item['price'] ?? 0)
-                    * (int) ($item['quantity'] ?? 0))
+                ((float) ($item['unit_price'] ?? $item['price'] ?? 0) * (int) ($item['quantity'] ?? 0))
             )
         );
 
@@ -52,7 +51,7 @@ class CheckoutController extends Controller
             : 0;
 
         // Alamat wajib untuk Delivery.
-        if ($deliveryMethod === 'delivery' && empty($validated['address'])) {
+        if ($deliveryMethod === 'delivery' && empty(trim((string) ($validated['address'] ?? '')))) {
             return back()
                 ->withErrors(['address' => 'Alamat pengiriman wajib diisi.'])
                 ->withInput();
@@ -60,7 +59,7 @@ class CheckoutController extends Controller
 
         // Untuk Take Away, alamat diisi keterangan pengambilan.
         $address = $deliveryMethod === 'delivery'
-            ? $validated['address']
+            ? trim((string) $validated['address'])
             : 'Take Away - Diambil langsung di toko';
 
         $cart = session()->get('cart', []);
@@ -82,8 +81,7 @@ class CheckoutController extends Controller
         $subtotal = collect($cart)->sum(
             fn ($item) => (float) (
                 $item['subtotal'] ??
-                ((float) ($item['unit_price'] ?? $item['price'] ?? 0)
-                    * (int) $item['quantity'])
+                ((float) ($item['unit_price'] ?? $item['price'] ?? 0) * (int) $item['quantity'])
             )
         );
 

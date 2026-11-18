@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Produk | PizzaMozza</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -159,8 +160,10 @@
             margin-bottom: 13px;
         }
 
-        .user-avatar,
-        .profile-avatar {
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -168,14 +171,8 @@
             border-radius: 50%;
             background: #ffe0e0;
             color: var(--dashboard-red);
-            font-weight: 600;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
             font-size: 17px;
+            font-weight: 600;
         }
 
         .user-avatar img {
@@ -315,6 +312,7 @@
             display: grid;
             place-items: center;
             font-size: 11.5px;
+            font-weight: 600;
         }
 
         .btn-saya {
@@ -354,7 +352,39 @@
         }
 
         .content {
-            padding: 30px;
+            padding: 30px 30px 110px;
+        }
+
+        /* ================= FLASH ALERTS ================= */
+
+        .flash-alert {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 18px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            font-size: 14.5px;
+            font-weight: 500;
+        }
+
+        .flash-alert.success {
+            background: #eaf8ef;
+            border: 1px solid #bfe6cd;
+            color: #16794c;
+        }
+
+        .flash-alert.error {
+            background: #fff0f0;
+            border: 1px solid #f5c2c2;
+            color: #a81c1c;
+        }
+
+        .flash-alert-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         /* ================= PRODUCT HEADING ================= */
@@ -433,6 +463,8 @@
         }
 
         .product-card {
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
             background: white;
             border: 1px solid #f0dfd3;
@@ -448,6 +480,7 @@
         .product-image {
             width: 100%;
             height: 213px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -463,42 +496,227 @@
         }
 
         .product-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             padding: 18px 19px 20px;
         }
 
         .product-content h3 {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #34241f;
             font-size: 18px;
             font-weight: 600;
         }
 
-        .product-description {
-            display: none;
-        }
-
         .product-price {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             color: #941919;
             font-size: 17.5px;
             font-weight: 600;
         }
 
-        .product-button {
+        .product-price small {
             display: block;
-            width: 100%;
-            padding: 12px 10px;
-            border-radius: 9px;
-            background: #941919;
-            color: white;
-            text-align: center;
-            font-size: 15px;
-            font-weight: 600;
-            transition: .2s ease;
+            color: #8b776d;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 2px;
         }
 
-        .product-button:hover {
-            background: #b52d2d;
+        /* ================= CARD ACTION BUTTONS ================= */
+
+        .product-actions {
+            margin-top: auto;
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 8px;
+        }
+
+        .product-actions form {
+            margin: 0;
+            display: flex;
+        }
+
+        .btn-detail,
+        .btn-add-cart,
+        .btn-preorder {
+            width: 100%;
+            min-height: 41px;
+            padding: 9px 10px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            transition: .2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-detail {
+            background: #fff8f7;
+            color: var(--dashboard-red);
+            border: 1.5px solid #e2b8b8;
+        }
+
+        .btn-detail:hover {
+            background: #fdecec;
+            border-color: var(--dashboard-red);
+        }
+
+        .btn-add-cart {
+            border: none;
+            background: var(--dashboard-red);
+            color: white;
+        }
+
+        .btn-add-cart:hover {
+            background: var(--dashboard-red-hover);
+        }
+
+        .btn-add-cart:disabled {
+            opacity: 0.75;
+            cursor: wait;
+        }
+
+        .btn-preorder {
+            border: none;
+            background: #16874b;
+            color: white;
+        }
+
+        .btn-preorder:hover {
+            background: #126e3d;
+        }
+
+        /* ================= FLOATING BOTTOM CART BAR ================= */
+
+        .floating-cart-bar {
+            position: fixed;
+            bottom: 22px;
+            left: calc(50% + 132.5px);
+            transform: translate(-50%, 130%);
+            width: min(680px, calc(100% - 310px));
+            padding: 15px 22px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #941919 0%, #b82525 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 14px 34px rgba(148, 25, 25, 0.36);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            z-index: 90;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, background 0.2s ease;
+        }
+
+        .floating-cart-bar.visible {
+            transform: translate(-50%, 0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .floating-cart-bar:hover {
+            background: linear-gradient(135deg, #a61d1d 0%, #c62b2b 100%);
+            transform: translate(-50%, -2px);
+        }
+
+        .floating-cart-bar.pulse {
+            animation: cartBarBounce 0.35s ease;
+        }
+
+        @keyframes cartBarBounce {
+            0% {
+                transform: translate(-50%, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%, -4px) scale(1.02);
+            }
+
+            100% {
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+
+        .floating-cart-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .floating-bag-wrap {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.16);
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .floating-bag-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: var(--dashboard-red);
+            font-size: 11.5px;
+            font-weight: 700;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .floating-cart-text strong {
+            display: block;
+            font-size: 15.5px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+        }
+
+        .floating-cart-text span {
+            display: block;
+            font-size: 12.5px;
+            color: #fad8d8;
+            margin-top: 1px;
+        }
+
+        .floating-cart-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .floating-cart-total {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .floating-checkout-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            font-size: 13px;
+            font-weight: 600;
         }
 
         /* ================= EMPTY STATE ================= */
@@ -658,7 +876,7 @@
 
         /* ================= RESPONSIVE ================= */
 
-        @media(max-width: 1200px) {
+        @media(max-width: 1280px) {
             .product-grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
@@ -688,7 +906,14 @@
             }
 
             .content {
-                padding: 22px 18px;
+                padding: 22px 18px 110px;
+            }
+
+            .floating-cart-bar {
+                left: 50%;
+                width: calc(100% - 28px);
+                bottom: 16px;
+                padding: 14px 18px;
             }
         }
 
@@ -721,7 +946,7 @@
             }
 
             .content {
-                padding: 20px 14px;
+                padding: 20px 14px 110px;
             }
 
             .product-grid {
@@ -739,11 +964,47 @@
             .search-form button {
                 padding: 0 13px;
             }
+
+            .floating-checkout-pill {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
+
+    @php
+        $cartItems = session()->get('cart', []);
+        $cartCount = array_sum(array_column($cartItems, 'quantity'));
+        $cartTotal = collect($cartItems)->sum(function ($item) {
+            if (isset($item['subtotal'])) {
+                return (float) $item['subtotal'];
+            }
+            $price = (float) ($item['price'] ?? 0);
+            $qty = (int) ($item['quantity'] ?? 1);
+            return $price * $qty;
+        });
+
+        // Tujuan saat floating cart bar diklik (langsung ke checkout jika route tersedia, atau ke keranjang)
+        $checkoutUrl = \Illuminate\Support\Facades\Route::has('checkout.index')
+            ? route('checkout.index')
+            : (\Illuminate\Support\Facades\Route::has('checkout')
+                ? route('checkout')
+                : route('cart.index'));
+
+        $userFotoUrl = null;
+        if (auth()->check() && auth()->user()->foto_profile) {
+            $rawFoto = ltrim(auth()->user()->foto_profile, '/');
+            foreach (['profile/' . $rawFoto, 'storage/' . $rawFoto, $rawFoto] as $fotoPath) {
+                if (file_exists(public_path($fotoPath))) {
+                    $userFotoUrl = asset($fotoPath);
+                    break;
+                }
+            }
+            $userFotoUrl ??= asset('profile/' . $rawFoto);
+        }
+    @endphp
 
     <div class="app">
 
@@ -779,7 +1040,7 @@
 
                     <li>
                         <a href="{{ route('products.index') }}"
-                            class="sidebar-link {{ request()->routeIs('products.index') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
                             <span class="sidebar-icon">
                                 <i class="bi bi-box-seam"></i>
                             </span>
@@ -816,8 +1077,9 @@
                     <div class="user-mini">
 
                         <div class="user-avatar">
-                            @if (auth()->user()->foto_profile)
-                                <img src="{{ asset('storage/' . auth()->user()->foto_profile) }}" alt="Foto profil">
+                            @if ($userFotoUrl)
+                                <img src="{{ $userFotoUrl }}" alt="Foto profil"
+                                    onerror="this.style.display='none'; this.parentElement.textContent='{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}';">
                             @else
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             @endif
@@ -873,16 +1135,10 @@
 
                     <a href="{{ route('cart.index') }}" class="cart-button" aria-label="Keranjang">
                         <i class="bi bi-cart3"></i>
-
-                        @auth
-                            @php
-                                $cartCount = session('cart') ? collect(session('cart'))->sum('quantity') : 0;
-                            @endphp
-
-                            @if ($cartCount > 0)
-                                <span class="cart-badge">{{ $cartCount }}</span>
-                            @endif
-                        @endauth
+                        <span class="cart-badge" id="topbarCartBadge"
+                            style="{{ $cartCount > 0 ? '' : 'display:none;' }}">
+                            {{ $cartCount }}
+                        </span>
                     </a>
 
                     @guest
@@ -903,6 +1159,22 @@
             <!-- ================= CONTENT ================= -->
 
             <main class="content">
+
+                <div id="ajaxErrorBanner" class="flash-alert error" style="display: none;">
+                    <div class="flash-alert-left">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        <span id="ajaxErrorText"></span>
+                    </div>
+                </div>
+
+                @if ($errors->any())
+                    <div class="flash-alert error">
+                        <div class="flash-alert-left">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                            <span>{{ $errors->first() }}</span>
+                        </div>
+                    </div>
+                @endif
 
                 <h1 class="page-title">Menu Pizza Kami 🍕</h1>
 
@@ -941,14 +1213,16 @@
 
                     @forelse ($products as $product)
                         @php
+                            $isNastar = mb_strtolower(trim($product->name)) === 'kue nastar';
+
                             $imgFile = $product->image ?? ($product->gambar ?? ($product->foto ?? null));
                             $imgFile = $imgFile ? ltrim($imgFile, '/') : null;
 
                             $candidates = $imgFile
                                 ? [
+                                    'images/' . $imgFile,
                                     'storage/' . $imgFile,
                                     'image/' . $imgFile,
-                                    'images/' . $imgFile,
                                     'uploads/' . $imgFile,
                                     $imgFile,
                                 ]
@@ -968,35 +1242,65 @@
                                     : asset('image/' . $imgFile);
                             }
 
-                            $startingPrice = $product->variants->min('price') ?? $product->price;
+                            $defaultVariant = $product->variants->sortBy('price')->first();
+                            $startingPrice = $defaultVariant ? $defaultVariant->price : $product->price ?? 0;
                         @endphp
 
                         <article class="product-card">
 
-                            <div class="product-image">
+                            <a href="{{ route('products.show', $product->id) }}" class="product-image">
                                 @if ($resolvedImage)
                                     <img src="{{ $resolvedImage }}" alt="{{ $product->name }}"
                                         onerror="this.style.display='none'; this.parentElement.textContent='🍕';">
                                 @else
                                     🍕
                                 @endif
-                            </div>
+                            </a>
 
                             <div class="product-content">
 
-                                <h3>{{ $product->name }}</h3>
+                                <h3>
+                                    <a href="{{ route('products.show', $product->id) }}">
+                                        {{ $product->name }}
+                                    </a>
+                                </h3>
 
                                 <div class="product-price">
-                                    @if ($startingPrice !== null)
-                                        Rp {{ number_format($startingPrice, 0, ',', '.') }}
-                                    @else
-                                        Harga belum tersedia
+                                    Rp {{ number_format($startingPrice, 0, ',', '.') }}
+                                    @if ($product->variants->count() > 1 && $defaultVariant)
+                                        <small>Mulai ukuran {{ $defaultVariant->name }}</small>
                                     @endif
                                 </div>
 
-                                <a href="{{ route('products.show', $product->id) }}" class="product-button">
-                                    Lihat Produk
-                                </a>
+                                <div class="product-actions">
+                                    <a href="{{ route('products.show', $product->id) }}" class="btn-detail">
+                                        <i class="bi bi-eye"></i>
+                                        <span>Detail</span>
+                                    </a>
+
+                                    @if ($isNastar)
+                                        <a href="{{ route('products.show', $product->id) }}" class="btn-preorder">
+                                            <i class="bi bi-calendar-check"></i>
+                                            <span>Pre-Order</span>
+                                        </a>
+                                    @else
+                                        <form action="{{ route('cart.add') }}" method="POST" class="quick-add-form"
+                                            data-price="{{ (float) $startingPrice }}">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            @if ($defaultVariant)
+                                                <input type="hidden" name="variant_id"
+                                                    value="{{ $defaultVariant->id }}">
+                                            @endif
+                                            <input type="hidden" name="quantity" value="1">
+
+                                            <button type="submit" class="btn-add-cart">
+                                                <i class="bi bi-cart-plus"></i>
+                                                <span>Keranjang</span>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
 
                             </div>
 
@@ -1036,6 +1340,36 @@
         </div>
 
     </div>
+
+    <!-- ================= FLOATING BOTTOM CART BAR ================= -->
+
+    <a href="{{ $checkoutUrl }}" id="floatingCartBar"
+        class="floating-cart-bar {{ $cartCount > 0 ? 'visible' : '' }}">
+
+        <div class="floating-cart-left">
+            <div class="floating-bag-wrap">
+                <i class="bi bi-bag-check-fill"></i>
+                <span class="floating-bag-badge" id="floatingBagBadge">{{ $cartCount }}</span>
+            </div>
+
+            <div class="floating-cart-text">
+                <strong id="floatingCartLabel">
+                    Cart • {{ $cartCount }} {{ $cartCount > 1 ? 'Items' : 'Item' }}
+                </strong>
+                <span>Klik untuk lanjut ke Checkout</span>
+            </div>
+        </div>
+
+        <div class="floating-cart-right">
+            <span class="floating-cart-total" id="floatingCartTotal">
+                Rp {{ number_format($cartTotal, 0, ',', '.') }}
+            </span>
+            <span class="floating-checkout-pill">
+                Checkout <i class="bi bi-arrow-right"></i>
+            </span>
+        </div>
+
+    </a>
 
     <!-- ================= FORM LOGOUT ================= -->
 
@@ -1082,9 +1416,117 @@
     <!-- ================= JAVASCRIPT ================= -->
 
     <script>
+        let currentCartCount = Number(@json((int) $cartCount));
+        let currentCartTotal = Number(@json((float) $cartTotal));
+
+        function formatRupiah(number) {
+            return 'Rp ' + new Intl.NumberFormat('id-ID').format(number);
+        }
+
+        function updateFloatingCartUI(addedQty, addedPrice) {
+            currentCartCount += addedQty;
+            currentCartTotal += addedPrice * addedQty;
+
+            const topbarBadge = document.getElementById('topbarCartBadge');
+            const floatingBar = document.getElementById('floatingCartBar');
+            const bagBadge = document.getElementById('floatingBagBadge');
+            const cartLabel = document.getElementById('floatingCartLabel');
+            const cartTotal = document.getElementById('floatingCartTotal');
+
+            if (topbarBadge) {
+                topbarBadge.textContent = currentCartCount;
+                topbarBadge.style.display = currentCartCount > 0 ? 'grid' : 'none';
+            }
+
+            if (bagBadge) {
+                bagBadge.textContent = currentCartCount;
+            }
+
+            if (cartLabel) {
+                cartLabel.textContent = 'Cart • ' + currentCartCount + (currentCartCount > 1 ? ' Items' : ' Item');
+            }
+
+            if (cartTotal) {
+                cartTotal.textContent = formatRupiah(currentCartTotal);
+            }
+
+            if (floatingBar && currentCartCount > 0) {
+                floatingBar.classList.add('visible');
+                floatingBar.classList.remove('pulse');
+                void floatingBar.offsetWidth;
+                floatingBar.classList.add('pulse');
+            }
+        }
+
+        // Handle klik tombol "+ Keranjang" via AJAX agar floating bar langsung muncul di bawah
+        document.querySelectorAll('.quick-add-form').forEach(function(form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const btn = form.querySelector('.btn-add-cart');
+                const originalHTML = btn.innerHTML;
+                const itemPrice = parseFloat(form.dataset.price) || 0;
+                const errorBanner = document.getElementById('ajaxErrorBanner');
+                const errorText = document.getElementById('ajaxErrorText');
+
+                if (errorBanner) errorBanner.style.display = 'none';
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> <span>Menambah...</span>';
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .content
+                        },
+                        body: new FormData(form)
+                    });
+
+                    // Jika belum login & diarahkan ke halaman login
+                    if (response.redirected && response.url.includes('/login')) {
+                        window.location.href = response.url;
+                        return;
+                    }
+
+                    if (!response.ok) {
+                        let msg = 'Gagal menambahkan produk ke keranjang.';
+                        try {
+                            const data = await response.json();
+                            if (data.message) msg = data.message;
+                        } catch (_) {}
+
+                        if (errorBanner && errorText) {
+                            errorText.textContent = msg;
+                            errorBanner.style.display = 'flex';
+                            errorBanner.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                        } else {
+                            alert(msg);
+                        }
+                        return;
+                    }
+
+                    updateFloatingCartUI(1, itemPrice);
+
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> <span>Ditambahkan</span>';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                    }, 900);
+                } catch (err) {
+                    form.submit();
+                } finally {
+                    btn.disabled = false;
+                }
+            });
+        });
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-
             if (sidebar) {
                 sidebar.classList.toggle('open');
             }
@@ -1116,17 +1558,19 @@
 
         function confirmCustomerLogout() {
             const logoutForm = document.getElementById('customerLogoutForm');
-
             if (logoutForm) {
                 logoutForm.submit();
             }
         }
 
-        document.getElementById('customerLogoutModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeCustomerLogoutModal();
-            }
-        });
+        const logoutModal = document.getElementById('customerLogoutModal');
+        if (logoutModal) {
+            logoutModal.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeCustomerLogoutModal();
+                }
+            });
+        }
 
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
