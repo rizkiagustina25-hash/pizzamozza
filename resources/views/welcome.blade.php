@@ -1058,13 +1058,14 @@
                             : ($categoryValue ?? '')
                     );
 
-                    // GAMBAR DIAMBIL DARI FOLDER PUBLIC/IMAGE.
-                    if ($productImage) {
-                        $imageFile = basename($productImage);
-                        $imageUrl = asset('image/' . $imageFile);
-                    } else {
-                        $imageUrl = 'https://placehold.co/500x350/fff1e7/b51e20?text=PizzaMozza';
-                    }
+                    /// GAMBAR DIAMBIL DARI FOLDER PUBLIC/IMAGES.
+if ($productImage) {
+    $imageFile = basename($productImage);
+   $imageUrl = asset('image/' . $imageFile);
+} else {
+    $imageUrl = 'https://placehold.co/500x350/fff1e7/b51e20?text=PizzaMozza';
+}
+
                 @endphp
 
                 <article class="product-card"
