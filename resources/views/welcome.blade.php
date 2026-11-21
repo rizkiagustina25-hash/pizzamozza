@@ -1030,7 +1030,6 @@
         <!-- PRODUCT LIST -->
 
         <div class="section-heading">
-            <h2>Menu Favorit</h2>
         </div>
 
         <div class="product-grid" id="productGrid">
