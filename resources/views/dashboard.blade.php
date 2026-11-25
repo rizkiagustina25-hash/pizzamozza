@@ -3113,7 +3113,7 @@
 
                                     <i class="bi bi-arrow-left" style="margin-right: 8px;"></i>
 
-                                    Kembali ke Menu
+                                    Kembali ke Dashboard
 
                                 </a>
 
