@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +12,9 @@ use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\AuthController;
 
 // Customer / Public
+use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductRatingController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PaymentController;
@@ -39,7 +40,7 @@ use App\Http\Controllers\Karyawan\ProductController as KaryawanProductController
 */
 
 Route::get('/', function () {
-    $products = \App\Models\Product::with('variants')->get();
+    $products = \App\Models\Product::with(['variants', 'ratings'])->get();
 
     return view('welcome', compact('products'));
 })->name('home');
@@ -48,6 +49,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [CustomerDashboardController::class, 'index'])
     ->middleware(['auth', 'role:pelanggan'])
     ->name('dashboard');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -103,7 +105,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| PRODUK CUSTOMER
+| PRODUK & RATING CUSTOMER
 |--------------------------------------------------------------------------
 */
 
@@ -112,6 +114,10 @@ Route::get('/produk', [ProductController::class, 'index'])
 
 Route::get('/produk/{product}', [ProductController::class, 'show'])
     ->name('products.show');
+
+Route::post('/produk/{product}/rating', [ProductRatingController::class, 'store'])
+    ->middleware('auth')
+    ->name('products.rating.store');
 
 
 /*
@@ -206,21 +212,17 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
-
         // Data Karyawan
         Route::resource('/employees', EmployeeController::class)
             ->names('employees');
-
 
         // Data Pelanggan
         Route::resource('/customers', CustomerController::class)
             ->names('customers');
 
-
         // Data Produk
         Route::resource('/products', AdminProductController::class)
             ->names('products');
-
 
         // Kelola Pesanan Admin
         Route::get('/orders', [AdminOrderController::class, 'index'])
@@ -231,7 +233,6 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
             ->name('orders.updateStatus');
-
 
         // Laporan Penjualan
         Route::get('/laporan-penjualan', [SalesReportController::class, 'index'])
@@ -260,11 +261,9 @@ Route::middleware(['auth', 'role:karyawan'])
             return view('karyawan.dashboard');
         })->name('dashboard');
 
-
         // Data Produk Karyawan
         Route::get('/products', [KaryawanProductController::class, 'index'])
             ->name('products.index');
-
 
         // Kelola Pesanan Karyawan
         Route::get('/orders', [AdminOrderController::class, 'index'])

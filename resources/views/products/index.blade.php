@@ -509,6 +509,27 @@
             font-weight: 600;
         }
 
+        /* ================= RATING BINTANG ================= */
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #8b776d;
+        }
+
+        .product-rating i {
+            color: #f59e0b;
+            font-size: 13.5px;
+        }
+
+        .product-rating strong {
+            color: #34241f;
+            font-weight: 700;
+        }
+
         .product-price {
             margin-bottom: 16px;
             color: #941919;
@@ -986,12 +1007,18 @@
             return $price * $qty;
         });
 
-        // Tujuan saat floating cart bar diklik (langsung ke checkout jika route tersedia, atau ke keranjang)
+        // Tujuan saat floating cart bar diklik
         $checkoutUrl = \Illuminate\Support\Facades\Route::has('checkout.index')
             ? route('checkout.index')
             : (\Illuminate\Support\Facades\Route::has('checkout')
                 ? route('checkout')
                 : route('cart.index'));
+
+        $addToCartUrl = \Illuminate\Support\Facades\Route::has('cart.add')
+            ? route('cart.add')
+            : (\Illuminate\Support\Facades\Route::has('cart.store')
+                ? route('cart.store')
+                : url('/cart/add'));
 
         $userFotoUrl = null;
         if (auth()->check() && auth()->user()->foto_profile) {
@@ -1160,6 +1187,24 @@
 
             <main class="content">
 
+                @if (session('success'))
+                    <div class="flash-alert success">
+                        <div class="flash-alert-left">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>{{ session('success') }}</span>
+                        </div>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="flash-alert error">
+                        <div class="flash-alert-left">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                            <span>{{ session('error') }}</span>
+                        </div>
+                    </div>
+                @endif
+
                 <div id="ajaxErrorBanner" class="flash-alert error" style="display: none;">
                     <div class="flash-alert-left">
                         <i class="bi bi-exclamation-circle-fill"></i>
@@ -1190,67 +1235,68 @@
                         <i class="bi bi-search"></i>
 
                         <input type="search" name="search" placeholder="Cari nama produk..."
-                            value="{{ request('search') }}" aria-label="Cari produk">
+                            value="{{ request('search') }}">
                     </div>
 
-                    <button type="submit">
-                        <i class="bi bi-search"></i>
-                        Cari
-                    </button>
+                    <button type="submit">Cari</button>
 
                 </form>
 
                 @if (request('search'))
-                    <div class="result-info">
-                        Hasil pencarian untuk:
-                        <strong>{{ request('search') }}</strong>
-                    </div>
+                    <p class="result-info">
+                        Menampilkan hasil pencarian untuk:
+                        <strong>"{{ request('search') }}"</strong>
+                    </p>
                 @endif
 
-                <!-- DAFTAR PRODUK -->
+                <!-- GRID DAFTAR PRODUK -->
 
-                <section class="product-grid">
-
+                <div class="product-grid">
                     @forelse ($products as $product)
                         @php
-                            $isNastar = mb_strtolower(trim($product->name)) === 'kue nastar';
+                            $variants = $product->variants ?? collect();
+                            $firstVariant = $variants->first();
+                            $displayPrice =
+                                $variants->count() > 0
+                                    ? (float) $variants->min('price')
+                                    : (float) ($product->price ?? 0);
 
-                            $imgFile = $product->image ?? ($product->gambar ?? ($product->foto ?? null));
-                            $imgFile = $imgFile ? ltrim($imgFile, '/') : null;
+                            // Hitung rata-rata rating dan jumlah ulasan
+                            $avgRating = round((float) ($product->ratings->avg('rating') ?? 0), 1);
+                            $totalReviews = $product->ratings->count();
 
-                            $candidates = $imgFile
-                                ? [
-                                    'images/' . $imgFile,
-                                    'storage/' . $imgFile,
-                                    'image/' . $imgFile,
-                                    'uploads/' . $imgFile,
-                                    $imgFile,
-                                ]
-                                : [];
-
-                            $resolvedImage = null;
-                            foreach ($candidates as $path) {
-                                if (file_exists(public_path($path))) {
-                                    $resolvedImage = asset($path);
-                                    break;
+                            // Resolusi gambar produk lintas folder (image/, images/, storage/)
+                            $rawImg = $product->image ? ltrim($product->image, '/') : null;
+                            $productImgUrl = null;
+                            if ($rawImg) {
+                                if (str_starts_with($rawImg, 'http')) {
+                                    $productImgUrl = $rawImg;
+                                } else {
+                                    foreach (
+                                        [
+                                            'image/' . $rawImg,
+                                            'images/' . $rawImg,
+                                            'storage/' . $rawImg,
+                                            'uploads/' . $rawImg,
+                                            $rawImg,
+                                        ]
+                                        as $candidate
+                                    ) {
+                                        if (file_exists(public_path($candidate))) {
+                                            $productImgUrl = asset($candidate);
+                                            break;
+                                        }
+                                    }
                                 }
                             }
 
-                            if (!$resolvedImage && $imgFile) {
-                                $resolvedImage = str_starts_with($imgFile, 'http')
-                                    ? $imgFile
-                                    : asset('image/' . $imgFile);
-                            }
-
-                            $defaultVariant = $product->variants->sortBy('price')->first();
-                            $startingPrice = $defaultVariant ? $defaultVariant->price : $product->price ?? 0;
+                            $isOutOfStock = isset($product->stock) && (int) $product->stock <= 0;
                         @endphp
 
                         <article class="product-card">
-
                             <a href="{{ route('products.show', $product->id) }}" class="product-image">
-                                @if ($resolvedImage)
-                                    <img src="{{ $resolvedImage }}" alt="{{ $product->name }}"
+                                @if ($productImgUrl)
+                                    <img src="{{ $productImgUrl }}" alt="{{ $product->name }}"
                                         onerror="this.style.display='none'; this.parentElement.textContent='🍕';">
                                 @else
                                     🍕
@@ -1258,17 +1304,27 @@
                             </a>
 
                             <div class="product-content">
-
                                 <h3>
                                     <a href="{{ route('products.show', $product->id) }}">
                                         {{ $product->name }}
                                     </a>
                                 </h3>
 
+                                {{-- RATING BINTANG PRODUK --}}
+                                <div class="product-rating">
+                                    <i class="bi bi-star-fill"></i>
+                                    <strong>{{ $totalReviews > 0 ? number_format($avgRating, 1) : 'Baru' }}</strong>
+                                    @if ($totalReviews > 0)
+                                        <span>({{ $totalReviews }} ulasan)</span>
+                                    @endif
+                                </div>
+
                                 <div class="product-price">
-                                    Rp {{ number_format($startingPrice, 0, ',', '.') }}
-                                    @if ($product->variants->count() > 1 && $defaultVariant)
-                                        <small>Mulai ukuran {{ $defaultVariant->name }}</small>
+                                    Rp{{ number_format($displayPrice, 0, ',', '.') }}
+                                    @if ($variants->count() > 1)
+                                        <small>Mulai dari {{ $variants->count() }} ukuran</small>
+                                    @elseif ($firstVariant)
+                                        <small>Ukuran {{ $firstVariant->name }}</small>
                                     @endif
                                 </div>
 
@@ -1278,20 +1334,17 @@
                                         <span>Detail</span>
                                     </a>
 
-                                    @if ($isNastar)
+                                    @if ($isOutOfStock)
                                         <a href="{{ route('products.show', $product->id) }}" class="btn-preorder">
-                                            <i class="bi bi-calendar-check"></i>
+                                            <i class="bi bi-clock-history"></i>
                                             <span>Pre-Order</span>
                                         </a>
                                     @else
-                                        <form action="{{ route('cart.add') }}" method="POST" class="quick-add-form"
-                                            data-price="{{ (float) $startingPrice }}">
+                                        <form action="{{ $addToCartUrl }}" method="POST" class="js-ajax-cart-form">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            @if ($defaultVariant)
-                                                <input type="hidden" name="variant_id"
-                                                    value="{{ $defaultVariant->id }}">
-                                            @endif
+                                            <input type="hidden" name="variant_id"
+                                                value="{{ $firstVariant?->id }}">
                                             <input type="hidden" name="quantity" value="1">
 
                                             <button type="submit" class="btn-add-cart">
@@ -1301,37 +1354,24 @@
                                         </form>
                                     @endif
                                 </div>
-
                             </div>
-
                         </article>
-
                     @empty
-
                         <div class="empty-products">
-                            <i class="bi bi-emoji-frown"></i>
-
-                            <h3>Produk belum ditemukan</h3>
-
+                            <i class="bi bi-search"></i>
+                            <h3>Produk tidak ditemukan</h3>
                             <p>
-                                @if (request('search'))
-                                    Coba gunakan kata pencarian yang berbeda.
-                                @else
-                                    Produk PizzaMozza belum tersedia saat ini.
-                                @endif
+                                Maaf, menu yang kamu cari belum tersedia. Coba kata kunci lain atau lihat semua menu
+                                kami.
                             </p>
-
-                            @if (request('search'))
-                                <a href="{{ route('products.index') }}">
-                                    Lihat Semua Produk
-                                </a>
-                            @endif
+                            <a href="{{ route('products.index') }}">Lihat Semua Produk</a>
                         </div>
                     @endforelse
-
-                </section>
+                </div>
 
             </main>
+
+            <!-- ================= FOOTER ================= -->
 
             <footer class="footer">
                 © {{ date('Y') }} PizzaMozza. All Rights Reserved.
@@ -1345,186 +1385,53 @@
 
     <a href="{{ $checkoutUrl }}" id="floatingCartBar"
         class="floating-cart-bar {{ $cartCount > 0 ? 'visible' : '' }}">
-
         <div class="floating-cart-left">
             <div class="floating-bag-wrap">
                 <i class="bi bi-bag-check-fill"></i>
                 <span class="floating-bag-badge" id="floatingBagBadge">{{ $cartCount }}</span>
             </div>
-
             <div class="floating-cart-text">
-                <strong id="floatingCartLabel">
-                    Cart • {{ $cartCount }} {{ $cartCount > 1 ? 'Items' : 'Item' }}
-                </strong>
-                <span>Klik untuk lanjut ke Checkout</span>
+                <strong id="floatingCartCountText">{{ $cartCount }} Item di Keranjang</strong>
+                <span>Klik untuk lanjut ke pembayaran</span>
             </div>
         </div>
 
         <div class="floating-cart-right">
             <span class="floating-cart-total" id="floatingCartTotal">
-                Rp {{ number_format($cartTotal, 0, ',', '.') }}
+                Rp{{ number_format($cartTotal, 0, ',', '.') }}
             </span>
             <span class="floating-checkout-pill">
-                Checkout <i class="bi bi-arrow-right"></i>
+                <span>Checkout</span>
+                <i class="bi bi-arrow-right"></i>
             </span>
         </div>
-
     </a>
 
-    <!-- ================= FORM LOGOUT ================= -->
+    <!-- ================= LOGOUT FORM & MODAL ================= -->
 
     @auth
-        <form action="{{ route('logout') }}" method="POST" id="customerLogoutForm">
+        <form action="{{ route('logout') }}" method="POST" id="customerLogoutForm" style="display:none;">
             @csrf
         </form>
     @endauth
 
-    <!-- ================= POPUP LOGOUT ================= -->
-
     <div class="logout-modal" id="customerLogoutModal">
-
         <div class="logout-dialog" role="dialog" aria-modal="true" aria-labelledby="customerLogoutTitle">
-
             <div class="logout-modal-icon">
                 <i class="bi bi-box-arrow-right"></i>
             </div>
-
-            <h3 id="customerLogoutTitle">
-                Keluar dari Akun?
-            </h3>
-
-            <p>
-                Apakah kamu yakin ingin keluar dari akun PizzaMozza?
-            </p>
-
+            <h3 id="customerLogoutTitle">Keluar dari Akun?</h3>
+            <p>Apakah kamu yakin ingin keluar dari akun PizzaMozza?</p>
             <div class="logout-modal-actions">
-
-                <button type="button" class="cancel-logout" onclick="closeCustomerLogoutModal()">
-                    Batal
-                </button>
-
-                <button type="button" class="confirm-logout" onclick="confirmCustomerLogout()">
-                    Ya, Keluar
-                </button>
-
+                <button type="button" class="cancel-logout" onclick="closeCustomerLogoutModal()">Batal</button>
+                <button type="button" class="confirm-logout" onclick="confirmCustomerLogout()">Ya, Keluar</button>
             </div>
-
         </div>
-
     </div>
 
     <!-- ================= JAVASCRIPT ================= -->
 
     <script>
-        let currentCartCount = Number(@json((int) $cartCount));
-        let currentCartTotal = Number(@json((float) $cartTotal));
-
-        function formatRupiah(number) {
-            return 'Rp ' + new Intl.NumberFormat('id-ID').format(number);
-        }
-
-        function updateFloatingCartUI(addedQty, addedPrice) {
-            currentCartCount += addedQty;
-            currentCartTotal += addedPrice * addedQty;
-
-            const topbarBadge = document.getElementById('topbarCartBadge');
-            const floatingBar = document.getElementById('floatingCartBar');
-            const bagBadge = document.getElementById('floatingBagBadge');
-            const cartLabel = document.getElementById('floatingCartLabel');
-            const cartTotal = document.getElementById('floatingCartTotal');
-
-            if (topbarBadge) {
-                topbarBadge.textContent = currentCartCount;
-                topbarBadge.style.display = currentCartCount > 0 ? 'grid' : 'none';
-            }
-
-            if (bagBadge) {
-                bagBadge.textContent = currentCartCount;
-            }
-
-            if (cartLabel) {
-                cartLabel.textContent = 'Cart • ' + currentCartCount + (currentCartCount > 1 ? ' Items' : ' Item');
-            }
-
-            if (cartTotal) {
-                cartTotal.textContent = formatRupiah(currentCartTotal);
-            }
-
-            if (floatingBar && currentCartCount > 0) {
-                floatingBar.classList.add('visible');
-                floatingBar.classList.remove('pulse');
-                void floatingBar.offsetWidth;
-                floatingBar.classList.add('pulse');
-            }
-        }
-
-        // Handle klik tombol "+ Keranjang" via AJAX agar floating bar langsung muncul di bawah
-        document.querySelectorAll('.quick-add-form').forEach(function(form) {
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                const btn = form.querySelector('.btn-add-cart');
-                const originalHTML = btn.innerHTML;
-                const itemPrice = parseFloat(form.dataset.price) || 0;
-                const errorBanner = document.getElementById('ajaxErrorBanner');
-                const errorText = document.getElementById('ajaxErrorText');
-
-                if (errorBanner) errorBanner.style.display = 'none';
-                btn.disabled = true;
-                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> <span>Menambah...</span>';
-
-                try {
-                    const response = await fetch(form.action, {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .content
-                        },
-                        body: new FormData(form)
-                    });
-
-                    // Jika belum login & diarahkan ke halaman login
-                    if (response.redirected && response.url.includes('/login')) {
-                        window.location.href = response.url;
-                        return;
-                    }
-
-                    if (!response.ok) {
-                        let msg = 'Gagal menambahkan produk ke keranjang.';
-                        try {
-                            const data = await response.json();
-                            if (data.message) msg = data.message;
-                        } catch (_) {}
-
-                        if (errorBanner && errorText) {
-                            errorText.textContent = msg;
-                            errorBanner.style.display = 'flex';
-                            errorBanner.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'center'
-                            });
-                        } else {
-                            alert(msg);
-                        }
-                        return;
-                    }
-
-                    updateFloatingCartUI(1, itemPrice);
-
-                    btn.innerHTML = '<i class="bi bi-check-lg"></i> <span>Ditambahkan</span>';
-                    setTimeout(() => {
-                        btn.innerHTML = originalHTML;
-                    }, 900);
-                } catch (err) {
-                    form.submit();
-                } finally {
-                    btn.disabled = false;
-                }
-            });
-        });
-
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
@@ -1534,48 +1441,149 @@
 
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('sidebar');
-            const menuButton = document.querySelector('.mobile-menu');
-
+            const toggleBtn = document.querySelector('.mobile-menu');
             if (
                 window.innerWidth <= 800 &&
                 sidebar &&
-                menuButton &&
+                toggleBtn &&
                 sidebar.classList.contains('open') &&
                 !sidebar.contains(event.target) &&
-                !menuButton.contains(event.target)
+                !toggleBtn.contains(event.target)
             ) {
                 sidebar.classList.remove('open');
             }
         });
 
+        // Modal Logout
         function openCustomerLogoutModal() {
-            document.getElementById('customerLogoutModal').classList.add('show');
+            const modal = document.getElementById('customerLogoutModal');
+            if (modal) modal.classList.add('show');
         }
 
         function closeCustomerLogoutModal() {
-            document.getElementById('customerLogoutModal').classList.remove('show');
+            const modal = document.getElementById('customerLogoutModal');
+            if (modal) modal.classList.remove('show');
         }
 
         function confirmCustomerLogout() {
-            const logoutForm = document.getElementById('customerLogoutForm');
-            if (logoutForm) {
-                logoutForm.submit();
-            }
+            const form = document.getElementById('customerLogoutForm');
+            if (form) form.submit();
         }
 
         const logoutModal = document.getElementById('customerLogoutModal');
         if (logoutModal) {
             logoutModal.addEventListener('click', function(event) {
-                if (event.target === this) {
-                    closeCustomerLogoutModal();
-                }
+                if (event.target === this) closeCustomerLogoutModal();
             });
         }
 
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeCustomerLogoutModal();
+            if (event.key === 'Escape') closeCustomerLogoutModal();
+        });
+
+        // AJAX Tambah ke Keranjang & Update Floating Cart Bar
+        function formatRupiah(angka) {
+            return 'Rp' + new Intl.NumberFormat('id-ID').format(angka);
+        }
+
+        function showAjaxError(message) {
+            const banner = document.getElementById('ajaxErrorBanner');
+            const text = document.getElementById('ajaxErrorText');
+            if (banner && text) {
+                text.textContent = message;
+                banner.style.display = 'flex';
+                banner.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
             }
+        }
+
+        document.querySelectorAll('.js-ajax-cart-form').forEach(function(form) {
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalHtml = submitBtn ? submitBtn.innerHTML : '';
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML =
+                        '<i class="bi bi-hourglass-split"></i><span>Menambah...</span>';
+                }
+
+                try {
+                    const formData = new FormData(form);
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute(
+                        'content');
+
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                            ...(csrfToken ? {
+                                'X-CSRF-TOKEN': csrfToken
+                            } : {})
+                        },
+                        body: formData
+                    });
+
+                    const contentType = response.headers.get('content-type') || '';
+                    if (!contentType.includes('application/json')) {
+                        form.submit();
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        showAjaxError(data.message || 'Gagal menambahkan produk ke keranjang.');
+                        return;
+                    }
+
+                    const count = Number(data.cart_count ?? data.count ?? 0);
+                    const total = Number(data.cart_total ?? data.total ?? 0);
+
+                    const topBadge = document.getElementById('topbarCartBadge');
+                    if (topBadge) {
+                        topBadge.textContent = count;
+                        topBadge.style.display = count > 0 ? 'grid' : 'none';
+                    }
+
+                    const floatingBar = document.getElementById('floatingCartBar');
+                    const floatingBagBadge = document.getElementById('floatingBagBadge');
+                    const floatingCountText = document.getElementById('floatingCartCountText');
+                    const floatingTotal = document.getElementById('floatingCartTotal');
+
+                    if (floatingBagBadge) floatingBagBadge.textContent = count;
+                    if (floatingCountText) floatingCountText.textContent = count + ' Item di Keranjang';
+                    if (floatingTotal) floatingTotal.textContent = formatRupiah(total);
+
+                    if (floatingBar) {
+                        if (count > 0) {
+                            floatingBar.classList.add('visible');
+                            floatingBar.classList.remove('pulse');
+                            void floatingBar.offsetWidth;
+                            floatingBar.classList.add('pulse');
+                        } else {
+                            floatingBar.classList.remove('visible');
+                        }
+                    }
+
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '<i class="bi bi-check-lg"></i><span>Ditambah</span>';
+                        setTimeout(() => {
+                            submitBtn.innerHTML = originalHtml;
+                        }, 900);
+                    }
+                } catch (error) {
+                    form.submit();
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                    }
+                }
+            });
         });
     </script>
 

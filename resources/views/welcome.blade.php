@@ -146,6 +146,9 @@
             font-size: 14px;
             transition: .3s;
             white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
         }
 
         .login-btn:hover {
@@ -423,6 +426,8 @@
             border: 1px solid #f4e6df;
             box-shadow: var(--shadow);
             transition: .35s;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card:hover {
@@ -430,7 +435,7 @@
             box-shadow: 0 15px 30px rgba(100, 20, 10, .15);
         }
 
-        /* GAMBAR MENU DIPERBAIKI */
+        /* GAMBAR MENU */
 
         .product-image {
             height: 220px;
@@ -458,22 +463,45 @@
 
         .product-info {
             padding: 12px 14px 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-info h3 {
             font-size: 13px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+        }
+
+        .product-rating-mini {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .product-rating-mini i {
+            color: #f59e0b;
+            font-size: 11px;
+        }
+
+        .product-rating-mini strong {
+            color: var(--text);
+            font-weight: 700;
         }
 
         .product-info p {
             color: var(--muted);
             font-size: 10px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             line-height: 1.5;
         }
 
         .product-bottom {
+            margin-top: auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -845,7 +873,7 @@
             </div>
         </a>
 
-        <button class="menu-toggle" id="menuToggle" type="button">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Menu">
             <i class="fa-solid fa-bars"></i>
         </button>
 
@@ -862,10 +890,17 @@
                 <input type="text" id="searchInput" placeholder="Cari menu favorit...">
             </div>
 
-            <a href="{{ route('login') }}" class="login-btn">
-                <i class="fa-regular fa-user"></i>
-                Login
-            </a>
+            @auth
+                <a href="{{ route('dashboard') }}" class="login-btn">
+                    <i class="fa-regular fa-user"></i>
+                    Dashboard
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="login-btn">
+                    <i class="fa-regular fa-user"></i>
+                    Login
+                </a>
+            @endauth
         </div>
     </header>
 
@@ -944,11 +979,11 @@
                 </div>
             </div>
 
-            <button class="hero-arrow hero-prev" id="heroPrev" type="button">
+            <button class="hero-arrow hero-prev" id="heroPrev" type="button" aria-label="Slide Sebelumnya">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
 
-            <button class="hero-arrow hero-next" id="heroNext" type="button">
+            <button class="hero-arrow hero-next" id="heroNext" type="button" aria-label="Slide Berikutnya">
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
 
@@ -1029,9 +1064,6 @@
 
         <!-- PRODUCT LIST -->
 
-        <div class="section-heading">
-        </div>
-
         <div class="product-grid" id="productGrid">
 
             @forelse($products as $product)
@@ -1041,14 +1073,17 @@
 
                     $productName = $product->name ?? 'Produk PizzaMozza';
 
-                    $productImage = $product->image ?? null;
-
                     $productDescription = $product->description ?? '';
 
                     $productPrice = $product->price
                         ?? ($firstVariant->price ?? 0);
 
-                    // Menangani kategori berbentuk string maupun relasi.
+                    // Rating produk
+                    $ratingsCollection = $product->ratings ?? collect();
+                    $avgRating = round((float) ($ratingsCollection->avg('rating') ?? 0), 1);
+                    $totalReviews = $ratingsCollection->count();
+
+                    // Kategori berbentuk string maupun relasi
                     $categoryValue = $product->category;
 
                     $categoryName = strtolower(
@@ -1057,14 +1092,64 @@
                             : ($categoryValue ?? '')
                     );
 
-                    /// GAMBAR DIAMBIL DARI FOLDER PUBLIC/IMAGES.
-if ($productImage) {
-    $imageFile = basename($productImage);
-   $imageUrl = asset('image/' . $imageFile);
-} else {
-    $imageUrl = 'https://placehold.co/500x350/fff1e7/b51e20?text=PizzaMozza';
-}
+                    // SAMBUNGKAN KE FOLDER PUBLIC/IMAGES & PUBLIC/IMAGE (OTOMATIS COCOKKAN NAMA & EKSTENSI)
+                    $rawImage = $product->image ?? $product->gambar ?? $product->foto ?? null;
+                    $rawImage = $rawImage ? ltrim($rawImage, '/') : null;
+                    $imageUrl = null;
 
+                    if ($rawImage && (str_starts_with($rawImage, 'http://') || str_starts_with($rawImage, 'https://'))) {
+                        $imageUrl = $rawImage;
+                    } else {
+                        $baseFile = $rawImage ? basename($rawImage) : '';
+                        $candidates = [];
+
+                        if ($baseFile !== '') {
+                            $candidates = [
+                                'images/' . $baseFile,
+                                'images/' . $rawImage,
+                                'image/' . $baseFile,
+                                'image/' . $rawImage,
+                                'storage/' . $rawImage,
+                                'storage/products/' . $baseFile,
+                                $rawImage,
+                            ];
+                        }
+
+                        foreach ($candidates as $candidatePath) {
+                            if (file_exists(public_path($candidatePath))) {
+                                $imageUrl = asset($candidatePath);
+                                break;
+                            }
+                        }
+
+                        if (!$imageUrl) {
+                            $targetKeys = array_filter([
+                                $baseFile !== '' ? preg_replace('/[^a-z0-9]/', '', strtolower(pathinfo($baseFile, PATHINFO_FILENAME))) : null,
+                                preg_replace('/[^a-z0-9]/', '', strtolower($productName)),
+                            ]);
+
+                            foreach (['images', 'image'] as $dir) {
+                                $fullDir = public_path($dir);
+                                if (!is_dir($fullDir)) {
+                                    continue;
+                                }
+                                foreach (scandir($fullDir) as $file) {
+                                    if ($file === '.' || $file === '..' || is_dir($fullDir . DIRECTORY_SEPARATOR . $file)) {
+                                        continue;
+                                    }
+                                    $normalizedFile = preg_replace('/[^a-z0-9]/', '', strtolower(pathinfo($file, PATHINFO_FILENAME)));
+                                    if (in_array($normalizedFile, $targetKeys, true)) {
+                                        $imageUrl = asset($dir . '/' . $file);
+                                        break 2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (!$imageUrl) {
+                        $imageUrl = 'https://placehold.co/500x350/fff1e7/b51e20?text=' . urlencode($productName);
+                    }
                 @endphp
 
                 <article class="product-card"
@@ -1077,13 +1162,21 @@ if ($productImage) {
                                 src="{{ $imageUrl }}"
                                 alt="{{ $productName }}"
                                 loading="lazy"
-                                onerror="this.onerror=null; this.src='https://placehold.co/500x350/fff1e7/b51e20?text=Gambar+Tidak+Tersedia';">
+                                onerror="this.onerror=null; this.src='https://placehold.co/500x350/fff1e7/b51e20?text=PizzaMozza';">
                         </div>
                     </a>
 
                     <div class="product-info">
 
                         <h3>{{ $productName }}</h3>
+
+                        <div class="product-rating-mini">
+                            <i class="fa-solid fa-star"></i>
+                            <strong>{{ $totalReviews > 0 ? number_format($avgRating, 1) : 'Baru' }}</strong>
+                            @if ($totalReviews > 0)
+                                <span>({{ $totalReviews }})</span>
+                            @endif
+                        </div>
 
                         <p>
                             {{ \Illuminate\Support\Str::limit($productDescription, 55) }}
@@ -1258,150 +1351,96 @@ if ($productImage) {
     <!-- JAVASCRIPT -->
 
     <script>
-
         // MOBILE NAVBAR
-
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
 
-        menuToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('show');
-        });
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('show');
+            });
+        }
 
         // HERO CAROUSEL
-
         const slides = document.querySelectorAll('.hero-slide');
         const dots = document.querySelectorAll('.hero-dot');
-
-        const prevButton = document.getElementById('heroPrev');
-        const nextButton = document.getElementById('heroNext');
-
+        const prevBtn = document.getElementById('heroPrev');
+        const nextBtn = document.getElementById('heroNext');
         let currentSlide = 0;
-        let autoSlide;
+        let slideInterval;
 
         function showSlide(index) {
-
-            slides.forEach(slide => {
-                slide.classList.remove('active');
-            });
-
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
-
+            if (!slides.length) return;
             currentSlide = (index + slides.length) % slides.length;
-
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
-
-        }
-
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
-
-        function previousSlide() {
-            showSlide(currentSlide - 1);
-        }
-
-        function startAutoSlide() {
-
-            clearInterval(autoSlide);
-
-            autoSlide = setInterval(nextSlide, 5000);
-
-        }
-
-        nextButton.addEventListener('click', function() {
-
-            nextSlide();
-            startAutoSlide();
-
-        });
-
-        prevButton.addEventListener('click', function() {
-
-            previousSlide();
-            startAutoSlide();
-
-        });
-
-        dots.forEach((dot, index) => {
-
-            dot.addEventListener('click', function() {
-
-                showSlide(index);
-                startAutoSlide();
-
+            slides.forEach((slide, idx) => {
+                slide.classList.toggle('active', idx === currentSlide);
             });
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlide);
+            });
+        }
 
+        function startSlider() {
+            if (slides.length <= 1) return;
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => showSlide(currentSlide + 1), 5000);
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                showSlide(currentSlide - 1);
+                startSlider();
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                showSlide(currentSlide + 1);
+                startSlider();
+            });
+        }
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                showSlide(idx);
+                startSlider();
+            });
         });
 
-        startAutoSlide();
+        startSlider();
 
-        // CATEGORY FILTER
-
+        // FILTER KATEGORI & PENCARIAN LIVE
         const categoryButtons = document.querySelectorAll('.category-btn');
         const productCards = document.querySelectorAll('.product-card');
-
-        categoryButtons.forEach(button => {
-
-            button.addEventListener('click', function() {
-
-                categoryButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
-
-                this.classList.add('active');
-
-                const selectedCategory = this.dataset.category;
-
-                productCards.forEach(card => {
-
-                    const category = card.dataset.category;
-
-                    if (
-                        selectedCategory === 'all' ||
-                        category.includes(selectedCategory)
-                    ) {
-
-                        card.style.display = '';
-
-                    } else {
-
-                        card.style.display = 'none';
-
-                    }
-
-                });
-
-            });
-
-        });
-
-        // SEARCH PRODUCTS
-
         const searchInput = document.getElementById('searchInput');
+        let activeCategory = 'all';
 
-        searchInput.addEventListener('input', function() {
+        function filterProducts() {
+            const keyword = (searchInput?.value || '').trim().toLowerCase();
 
-            const keyword = this.value.toLowerCase();
+            productCards.forEach((card) => {
+                const cardCategory = (card.dataset.category || '').toLowerCase();
+                const cardName = (card.dataset.name || '').toLowerCase();
 
-            productCards.forEach(card => {
+                const matchCategory = activeCategory === 'all' || cardCategory.includes(activeCategory);
+                const matchSearch = keyword === '' || cardName.includes(keyword);
 
-                const name = card.dataset.name;
-                const category = card.dataset.category;
-
-                const matchesSearch =
-                    name.includes(keyword) ||
-                    category.includes(keyword);
-
-                card.style.display = matchesSearch ? '' : 'none';
-
+                card.style.display = (matchCategory && matchSearch) ? '' : 'none';
             });
+        }
 
+        categoryButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach((b) => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeCategory = (btn.dataset.category || 'all').toLowerCase();
+                filterProducts();
+            });
         });
 
+        if (searchInput) {
+            searchInput.addEventListener('input', filterProducts);
+        }
     </script>
 
 </body>

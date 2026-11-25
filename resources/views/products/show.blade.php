@@ -2,29 +2,26 @@
     $isNastar = mb_strtolower(trim($product->name ?? '')) === 'kue nastar';
     $isPizza = mb_strtolower((string) ($product->category ?? '')) === 'pizza';
 
-    $cartCount = array_sum(array_map(
-        fn ($item) => (int) ($item['quantity'] ?? 0),
-        session()->get('cart', [])
-    ));
+    $cartCount = array_sum(array_map(fn($item) => (int) ($item['quantity'] ?? 0), session()->get('cart', [])));
 
-    $rawProductImg = $product->image ?? $product->gambar ?? $product->foto ?? null;
+    $rawProductImg = $product->image ?? ($product->gambar ?? ($product->foto ?? null));
     $rawProductImg = $rawProductImg ? ltrim($rawProductImg, '/') : null;
     $resolvedProductImg = null;
 
     if ($rawProductImg) {
-        if (
-            str_starts_with($rawProductImg, 'http://') ||
-            str_starts_with($rawProductImg, 'https://')
-        ) {
+        if (str_starts_with($rawProductImg, 'http://') || str_starts_with($rawProductImg, 'https://')) {
             $resolvedProductImg = $rawProductImg;
         } else {
-            foreach ([
-                'images/' . $rawProductImg,
-                'storage/' . $rawProductImg,
-                'image/' . $rawProductImg,
-                'uploads/' . $rawProductImg,
-                $rawProductImg,
-            ] as $imagePath) {
+            foreach (
+                [
+                    'images/' . $rawProductImg,
+                    'storage/' . $rawProductImg,
+                    'image/' . $rawProductImg,
+                    'uploads/' . $rawProductImg,
+                    $rawProductImg,
+                ]
+                as $imagePath
+            ) {
                 if (file_exists(public_path($imagePath))) {
                     $resolvedProductImg = asset($imagePath);
                     break;
@@ -38,24 +35,31 @@
 
     $basePrice = (float) ($product->price ?? 0);
 
-    $variantPrices = $variants->pluck('price')->map(
-        fn ($price) => (float) $price
-    );
+    $variantPrices = $variants->pluck('price')->map(fn($price) => (float) $price);
 
-    $minimumPrice = $variantPrices->isNotEmpty()
-        ? $variantPrices->min()
-        : $basePrice;
+    $minimumPrice = $variantPrices->isNotEmpty() ? $variantPrices->min() : $basePrice;
 
-    $maximumPrice = $variantPrices->isNotEmpty()
-        ? $variantPrices->max()
-        : $basePrice;
+    $maximumPrice = $variantPrices->isNotEmpty() ? $variantPrices->max() : $basePrice;
 
-    $composition = data_get($product, 'composition')
-        ?? data_get($product, 'komposisi');
+    $initialSelectedPrice = $variants->isNotEmpty() ? (float) $variants->first()->price : $basePrice;
+
+    $isOutOfStock = $product->stock !== null && (int) $product->stock <= 0;
+
+    // Data Rating & Ulasan
+    $ratings = $product->ratings()->with('user')->latest()->get();
+    $ratingCount = $ratings->count();
+    $averageRating = $ratingCount > 0 ? round($ratings->avg('rating'), 1) : 0;
+    $userRating = auth()->check() ? $ratings->firstWhere('user_id', auth()->id()) : null;
+    $selectedStars = (int) old('rating', $userRating?->rating ?? 5);
+
+    $ratingActionUrl = \Illuminate\Support\Facades\Route::has('products.rating.store')
+        ? route('products.rating.store', $product->id)
+        : url('/produk/' . $product->id . '/rating');
 @endphp
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,7 +70,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -109,7 +114,8 @@
         }
 
         button,
-        input {
+        input,
+        textarea {
             font-family: inherit;
         }
 
@@ -125,7 +131,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 30px;
-            background: rgba(255,255,255,.97);
+            background: rgba(255, 255, 255, .97);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(15px);
         }
@@ -146,7 +152,7 @@
             background: var(--primary);
             border-radius: 50%;
             font-size: 19px;
-            box-shadow: 0 5px 13px rgba(197,31,43,.16);
+            box-shadow: 0 5px 13px rgba(197, 31, 43, .16);
         }
 
         .brand-name {
@@ -251,6 +257,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 6px;
             border-radius: 11px;
             color: white;
             background: var(--primary);
@@ -297,6 +304,7 @@
             padding: 12px 15px;
             border-radius: 10px;
             font-size: 12px;
+            font-weight: 600;
         }
 
         .alert-success {
@@ -314,7 +322,7 @@
         /* PRODUCT CARD */
 
         .product-card,
-        .details-card {
+        .reviews-card {
             overflow: hidden;
             border: 1px solid var(--border);
             border-radius: 20px;
@@ -373,7 +381,7 @@
             background: var(--primary);
             font-size: 10px;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(197,31,43,.18);
+            box-shadow: 0 4px 12px rgba(197, 31, 43, .18);
         }
 
         .photo-fallback {
@@ -444,6 +452,10 @@
             color: var(--green);
         }
 
+        .product-meta .bi-star-fill {
+            color: #f59e0b;
+        }
+
         .meta-separator {
             width: 1px;
             height: 14px;
@@ -503,10 +515,10 @@
             border-color: #d99b9b;
         }
 
-        .variant-radio:checked + .variant-card {
+        .variant-radio:checked+.variant-card {
             border: 1.5px solid var(--primary);
             background: #fff7f5;
-            box-shadow: 0 4px 12px rgba(197,31,43,.06);
+            box-shadow: 0 4px 12px rgba(197, 31, 43, .06);
         }
 
         .variant-title {
@@ -531,7 +543,7 @@
             transition: .2s;
         }
 
-        .variant-radio:checked + .variant-card .variant-check {
+        .variant-radio:checked+.variant-card .variant-check {
             opacity: 1;
         }
 
@@ -684,7 +696,7 @@
             color: var(--primary-dark);
         }
 
-        .guest-copy > i {
+        .guest-copy>i {
             margin-top: 2px;
             font-size: 15px;
         }
@@ -736,7 +748,7 @@
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 5px 13px rgba(197,31,43,.14);
+            box-shadow: 0 5px 13px rgba(197, 31, 43, .14);
             transition: .2s;
         }
 
@@ -783,96 +795,283 @@
             font-size: 10px;
         }
 
-        /* DETAILS SECTION */
+        /* REVIEWS & RATING SECTION (MENGGANTIKAN DESKRIPSI & KOMPOSISI) */
 
-        .details-card {
-            margin-top: 14px;
-            padding: 22px 25px;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 260px;
-            gap: 25px;
+        .reviews-card {
+            margin-top: 18px;
+            padding: 24px 28px 28px;
         }
 
-        .tab-list {
+        .reviews-header {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            gap: 28px;
+            justify-content: space-between;
+            gap: 16px;
             border-bottom: 1px solid var(--border);
+            margin-bottom: 22px;
         }
 
-        .tab-button {
+        .reviews-tab-active {
             position: relative;
-            padding: 10px 3px 13px;
-            color: #81736d;
-            background: transparent;
-            border: none;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .tab-button.active {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 6px 3px 14px;
             color: var(--primary);
+            font-size: 14px;
+            font-weight: 800;
         }
 
-        .tab-button.active::after {
+        .reviews-tab-active::after {
+            content: '';
             position: absolute;
+            left: 0;
             right: 0;
             bottom: -1px;
-            left: 0;
-            height: 2px;
-            content: '';
+            height: 2.5px;
             background: var(--primary);
         }
 
-        .tab-content {
-            display: none;
-            padding: 17px 0 4px;
-            color: #746660;
+        .reviews-summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+        }
+
+        .reviews-score {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .reviews-stars-row {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            color: #f59e0b;
             font-size: 12px;
-            line-height: 1.9;
         }
 
-        .tab-content.active {
+        .reviews-stars-row .empty {
+            color: #dfd4ce;
+        }
+
+        .reviews-count-text {
+            margin-top: 2px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .reviews-layout {
+            display: grid;
+            grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .review-form-panel {
+            padding: 20px;
+            border: 1px solid #f0e2d8;
+            border-radius: 15px;
+            background: #fffaf5;
+        }
+
+        .review-form-panel h3 {
+            font-size: 14px;
+            font-weight: 800;
+            color: #29201d;
+            margin-bottom: 4px;
+        }
+
+        .review-form-panel .form-hint {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .star-picker {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .star-pick-btn {
+            background: transparent;
+            border: none;
+            padding: 2px;
+            color: #dcd0c9;
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform .15s ease, color .15s ease;
+        }
+
+        .star-pick-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .star-pick-btn.active {
+            color: #f59e0b;
+        }
+
+        .star-pick-label {
+            margin-left: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .review-field-label {
             display: block;
+            margin-bottom: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #493a34;
         }
 
-        .product-facts {
-            padding: 16px;
+        .review-textarea {
+            width: 100%;
+            min-height: 92px;
+            padding: 11px 13px;
+            border: 1px solid #e6dad2;
+            border-radius: 11px;
+            background: white;
+            color: var(--text);
+            font-size: 12px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+            transition: .2s;
+        }
+
+        .review-textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .review-submit-btn {
+            width: 100%;
+            min-height: 42px;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .review-submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .review-list-panel {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: 17px;
-            border-radius: 13px;
-            background: #fff9f4;
-        }
-
-        .fact-row {
-            display: flex;
-            align-items: flex-start;
             gap: 11px;
         }
 
-        .fact-row i {
-            width: 19px;
-            margin-top: 2px;
+        .review-item-card {
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #fffdfb;
+        }
+
+        .review-item-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary-light);
             color: var(--primary);
-            font-size: 16px;
-            text-align: center;
+            font-size: 13px;
+            font-weight: 800;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
         }
 
-        .fact-row span {
-            display: block;
-            color: #95857c;
+        .review-author-name {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #29201d;
+        }
+
+        .verified-order-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            margin-left: 6px;
+            padding: 2px 7px;
+            border-radius: 20px;
+            background: #eaf8ef;
+            color: #16794c;
             font-size: 10px;
+            font-weight: 700;
         }
 
-        .fact-row strong {
-            display: block;
+        .review-item-stars {
+            display: flex;
+            align-items: center;
+            gap: 2px;
             margin-top: 3px;
-            color: #493a34;
+            color: #f59e0b;
             font-size: 11px;
-            font-weight: 700;
+        }
+
+        .review-item-stars .empty {
+            color: #dfd4ce;
+        }
+
+        .review-time {
+            font-size: 10.5px;
+            color: #9b8b82;
+            flex-shrink: 0;
+        }
+
+        .review-comment-body {
+            margin-top: 9px;
+            font-size: 12px;
+            color: #5c4f49;
+            line-height: 1.65;
+        }
+
+        .review-empty-state {
+            padding: 32px 20px;
+            border: 1px dashed #e6d7ce;
+            border-radius: 14px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .review-empty-state i {
+            display: block;
+            font-size: 24px;
+            color: #d6c5bc;
+            margin-bottom: 8px;
         }
 
         /* FOOTER */
@@ -912,10 +1111,6 @@
 
             .gallery-panel {
                 padding: 22px;
-            }
-
-            .details-card {
-                grid-template-columns: minmax(0, 1fr) 220px;
             }
         }
 
@@ -966,7 +1161,8 @@
                 padding-top: 17px;
             }
 
-            .product-grid {
+            .product-grid,
+            .reviews-layout {
                 grid-template-columns: 1fr;
             }
 
@@ -992,15 +1188,8 @@
                 font-size: 23px;
             }
 
-            .details-card {
-                grid-template-columns: 1fr;
-                padding: 17px;
-                gap: 15px;
-            }
-
-            .product-facts {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+            .reviews-card {
+                padding: 18px;
             }
         }
 
@@ -1035,14 +1224,6 @@
                 width: 100%;
                 text-align: center;
             }
-
-            .tab-list {
-                gap: 19px;
-            }
-
-            .product-facts {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -1075,12 +1256,7 @@
             <form class="search-box" action="{{ url('/') }}" method="GET">
                 <i class="bi bi-search"></i>
 
-                <input
-                    type="search"
-                    name="search"
-                    value="{{ request('search') }}"
-                    placeholder="Cari menu favorit..."
-                >
+                <input type="search" name="search" value="{{ request('search') }}" placeholder="Cari menu favorit...">
             </form>
 
             <a href="{{ route('cart.index') }}" class="cart-button">
@@ -1162,30 +1338,18 @@
                     <div class="main-photo">
 
                         @if ($resolvedProductImg)
+                            <img src="{{ $resolvedProductImg }}" alt="{{ $product->name }}" id="mainProductImage"
+                                onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='flex';">
 
-                            <img
-                                src="{{ $resolvedProductImg }}"
-                                alt="{{ $product->name }}"
-                                id="mainProductImage"
-                                onerror="this.style.display='none'; document.getElementById('photoFallback').style.display='flex';"
-                            >
-
-                            <div
-                                id="photoFallback"
-                                class="photo-fallback"
-                                style="display:none"
-                            >
+                            <div id="photoFallback" class="photo-fallback" style="display:none">
                                 <i class="fa-solid {{ $isPizza ? 'fa-pizza-slice' : 'fa-utensils' }}"></i>
                                 <span>Foto produk belum tersedia</span>
                             </div>
-
                         @else
-
                             <div id="photoFallback" class="photo-fallback">
                                 <i class="fa-solid {{ $isPizza ? 'fa-pizza-slice' : 'fa-utensils' }}"></i>
                                 <span>Foto produk belum tersedia</span>
                             </div>
-
                         @endif
 
                         <span class="favorite-badge">
@@ -1220,6 +1384,14 @@
 
                     <div class="product-meta">
 
+                        <a href="#ulasan-produk">
+                            <i class="bi bi-star-fill"></i>
+                            <strong>{{ $ratingCount > 0 ? number_format($averageRating, 1) : 'Baru' }}</strong>
+                            ({{ $ratingCount }} ulasan)
+                        </a>
+
+                        <span class="meta-separator"></span>
+
                         <span>
                             <i class="bi bi-check-circle-fill"></i>
                             Dibuat dengan bahan pilihan
@@ -1239,33 +1411,21 @@
                     <div class="price-range">
 
                         @if ($minimumPrice !== $maximumPrice)
-
                             Rp{{ number_format($minimumPrice, 0, ',', '.') }}
                             – Rp{{ number_format($maximumPrice, 0, ',', '.') }}
-
                         @else
-
                             Rp{{ number_format($minimumPrice, 0, ',', '.') }}
-
                         @endif
 
                     </div>
 
 
                     {{-- FORM --}}
-                    <form
-                        action="{{ route('cart.add') }}"
-                        method="POST"
-                        id="productForm"
-                    >
+                    <form action="{{ route('cart.add') }}" method="POST" id="productForm">
 
                         @csrf
 
-                        <input
-                            type="hidden"
-                            name="product_id"
-                            value="{{ $product->id }}"
-                        >
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
 
 
                         {{-- VARIANTS --}}
@@ -1274,43 +1434,29 @@
                             <div>
 
                                 <label class="section-label">
-                                    {{ $isPizza ? 'Pilih Ukuran Pizza' : 'Pilih Ukuran / Paket' }}
+                                    {{ $isNastar ? 'Pilih Ukuran Toples' : ($isPizza ? 'Pilih Ukuran Pizza' : 'Pilih Varian') }}
                                 </label>
 
                                 <div class="variant-grid">
 
-                                    @foreach ($variants as $index => $variant)
-
+                                    @foreach ($variants as $variant)
                                         <label class="variant-option">
-
-                                            <input
-                                                type="radio"
-                                                name="variant_id"
-                                                value="{{ $variant->id }}"
+                                            <input type="radio" name="variant_id" value="{{ $variant->id }}"
+                                                class="variant-radio js-variant-input"
                                                 data-price="{{ (float) $variant->price }}"
-                                                data-name="{{ $variant->name }}"
-                                                class="variant-radio"
-                                                {{ $index === 0 ? 'checked' : '' }}
-                                            >
+                                                {{ $loop->first ? 'checked' : '' }}>
 
                                             <span class="variant-card">
-
                                                 <span>
-                                                    <span class="variant-title">
-                                                        {{ $variant->name }}
-                                                    </span>
-
+                                                    <span class="variant-title">{{ $variant->name }}</span>
                                                     <span class="variant-price">
-                                                        Rp{{ number_format($variant->price, 0, ',', '.') }}
+                                                        Rp{{ number_format((float) $variant->price, 0, ',', '.') }}
                                                     </span>
                                                 </span>
 
                                                 <i class="bi bi-check-circle-fill variant-check"></i>
-
                                             </span>
-
                                         </label>
-
                                     @endforeach
 
                                 </div>
@@ -1326,49 +1472,23 @@
                             <div class="topping-area">
 
                                 <label class="section-label">
-                                    Tambahan Topping
-
-                                    <span style="font-weight:400;color:#999;">
-                                        (Opsional)
-                                    </span>
+                                    Tambah Topping (Opsional)
                                 </label>
 
                                 <div class="topping-list">
 
                                     @foreach ($toppings as $topping)
-
                                         <label class="topping-option">
-
-                                            <span style="display:flex;align-items:center;gap:8px;">
-
-                                                <input
-                                                    type="checkbox"
-                                                    name="toppings[]"
-                                                    value="{{ $topping->id }}"
-                                                    data-medium="{{ (float) $topping->price_medium }}"
-                                                    data-large="{{ (float) $topping->price_large }}"
-                                                    class="topping-checkbox"
-                                                >
-
-                                                <span>
-                                                    <span class="topping-name">
-                                                        {{ $topping->name }}
-                                                    </span>
-
-                                                    <span class="topping-price">
-                                                        + Rp{{ number_format($topping->price_medium, 0, ',', '.') }}
-                                                    </span>
+                                            <span>
+                                                <span class="topping-name">{{ $topping->name }}</span>
+                                                <span class="topping-price">
+                                                    +Rp{{ number_format((float) $topping->price, 0, ',', '.') }}
                                                 </span>
-
                                             </span>
 
-                                            <i
-                                                class="bi bi-plus-circle"
-                                                style="color:var(--primary);"
-                                            ></i>
-
+                                            <input type="checkbox" name="toppings[]" value="{{ $topping->id }}"
+                                                class="js-topping-input" data-price="{{ (float) $topping->price }}">
                                         </label>
-
                                     @endforeach
 
                                 </div>
@@ -1381,121 +1501,70 @@
                         {{-- QUANTITY --}}
                         <div class="quantity-area">
 
-                            <label for="quantity" class="section-label">
+                            <label class="section-label" for="quantityInput">
                                 Jumlah Pesanan
                             </label>
 
                             <div class="quantity-control">
+                                <button type="button" id="qtyMinusBtn" aria-label="Kurangi jumlah">−</button>
 
-                                <button type="button" onclick="decreaseQty()">
-                                    −
-                                </button>
+                                <input type="number" name="quantity" id="quantityInput" value="1"
+                                    min="1" max="99">
 
-                                <input
-                                    type="number"
-                                    id="quantity"
-                                    name="quantity"
-                                    value="1"
-                                    min="1"
-                                >
-
-                                <button type="button" onclick="increaseQty()">
-                                    +
-                                </button>
-
+                                <button type="button" id="qtyPlusBtn" aria-label="Tambah jumlah">+</button>
                             </div>
 
                         </div>
 
 
-                        {{-- PRE ORDER NASTAR --}}
-                        @if ($isNastar)
-
-                            <div class="preorder-box">
-
-                                <label for="po_date" class="section-label">
-                                    <i class="bi bi-calendar-event"></i>
-                                    Tanggal Pre-Order
-                                </label>
-
-                                <input
-                                    type="date"
-                                    id="po_date"
-                                    min="{{ now()->toDateString() }}"
-                                    required
-                                >
-
-                                <p>
-                                    Pilih tanggal pengiriman atau pengambilan Kue Nastar.
-                                </p>
-
-                            </div>
-
-                        @endif
-
-
-                        {{-- TOTAL --}}
+                        {{-- TOTAL PRICE --}}
                         <div class="total-box">
-
                             <p>Total Harga</p>
-
-                            <strong id="totalPrice">
-                                Rp{{ number_format($minimumPrice, 0, ',', '.') }}
+                            <strong id="totalPriceDisplay">
+                                Rp{{ number_format($initialSelectedPrice, 0, ',', '.') }}
                             </strong>
-
                         </div>
 
 
-                        {{-- AUTHENTICATED USER --}}
-                        @auth
-
-                            @if ($isNastar)
-
-                                <button
-                                    type="button"
-                                    onclick="orderViaWhatsApp()"
-                                    class="whatsapp-button"
-                                >
-                                    <i class="bi bi-whatsapp"></i>
-                                    Pesan Kue Nastar via WhatsApp
-                                </button>
-
-                            @else
-
-                                <button type="submit" class="submit-button">
-                                    <i class="bi bi-cart-plus"></i>
-                                    Tambah ke Keranjang
-                                </button>
-
-                            @endif
-
-                        @else
-
-                            {{-- FREE USER --}}
+                        {{-- GUEST NOTICE --}}
+                        @guest
                             <div class="guest-notice">
-
                                 <div class="guest-copy">
-
-                                    <i class="bi bi-lock-fill"></i>
-
+                                    <i class="bi bi-info-circle-fill"></i>
                                     <div>
-                                        <strong>Masuk terlebih dahulu</strong>
-
-                                        <span>
-                                            Silakan login untuk menambahkan produk ke keranjang.
-                                        </span>
+                                        <strong>Login untuk memesan lebih mudah</strong>
+                                        <span>Masuk ke akun PizzaMozza agar pesananmu tersimpan di riwayat.</span>
                                     </div>
-
                                 </div>
 
                                 <a href="{{ route('login') }}" class="guest-login">
-                                    Login Sekarang
-                                    <i class="bi bi-arrow-right"></i>
+                                    Login
                                 </a>
+                            </div>
+                        @endguest
 
+
+                        {{-- SUBMIT BUTTON --}}
+                        @if ($isOutOfStock)
+                            <div class="preorder-box">
+                                <label class="section-label" for="preorderDate">
+                                    Tanggal Pengambilan Pre-Order
+                                </label>
+                                <input type="date" name="preorder_date" id="preorderDate"
+                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                                <p>Stok harian habis. Produk ini tersedia melalui sistem Pre-Order.</p>
                             </div>
 
-                        @endauth
+                            <button type="submit" class="whatsapp-button">
+                                <i class="bi bi-clock-history"></i>
+                                Pesan Pre-Order
+                            </button>
+                        @else
+                            <button type="submit" class="submit-button">
+                                <i class="bi bi-cart-plus"></i>
+                                Tambah ke Keranjang
+                            </button>
+                        @endif
 
                     </form>
 
@@ -1506,97 +1575,142 @@
         </section>
 
 
-        {{-- PRODUCT DETAILS --}}
-        <section class="details-card">
+        {{-- ULASAN & RATING PRODUK (MENGGANTIKAN DESKRIPSI & KOMPOSISI) --}}
+        <section class="reviews-card" id="ulasan-produk">
 
-            <div>
-
-                <div class="tab-list">
-
-                    <button
-                        type="button"
-                        class="tab-button active"
-                        data-tab="description"
-                    >
-                        Deskripsi
-                    </button>
-
-                    <button
-                        type="button"
-                        class="tab-button"
-                        data-tab="composition"
-                    >
-                        Komposisi
-                    </button>
-
-                    <button
-                        type="button"
-                        class="tab-button"
-                        data-tab="reviews"
-                    >
-                        Ulasan
-                    </button>
-
+            <div class="reviews-header">
+                <div class="reviews-tab-active">
+                    <i class="bi bi-star-fill"></i>
+                    <span>Ulasan ({{ $ratingCount }})</span>
                 </div>
 
+                <div class="reviews-summary">
+                    <span class="reviews-score">{{ number_format($averageRating, 1) }}</span>
 
-                <div id="tab-description" class="tab-content active">
-                    {{ $product->description ?: 'Menu lezat dengan bahan segar pilihan dan cita rasa khas PizzaMozza. Dibuat hangat setelah pesanan diterima sehingga cocok dinikmati bersama keluarga maupun teman.' }}
+                    <div>
+                        <div class="reviews-stars-row">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <i class="bi bi-star-fill {{ $i <= round($averageRating) ? '' : 'empty' }}"></i>
+                            @endfor
+                        </div>
+                        <div class="reviews-count-text">
+                            Dari {{ $ratingCount }} ulasan pelanggan
+                        </div>
+                    </div>
                 </div>
-
-                <div id="tab-composition" class="tab-content">
-                    {{ $composition ?: 'Informasi komposisi produk belum tersedia.' }}
-                </div>
-
-                <div id="tab-reviews" class="tab-content">
-                    Ulasan pelanggan untuk produk ini akan ditampilkan di sini.
-                </div>
-
             </div>
 
 
-            {{-- PRODUCT FACTS --}}
-            <aside class="product-facts">
+            <div class="reviews-layout">
 
-                <div class="fact-row">
+                {{-- KOLOM KIRI: FORM RATING BINTANG & KOMENTAR --}}
+                <div class="review-form-panel">
+                    @auth
+                        <form action="{{ $ratingActionUrl }}" method="POST">
+                            @csrf
 
-                    <i class="bi bi-gift"></i>
+                            <h3>{{ $userRating ? 'Perbarui Ulasan Kamu' : 'Beri Rating & Komentar' }}</h3>
+                            <p class="form-hint">Pilih jumlah bintang dan tulis komentar tentang produk ini.</p>
 
-                    <div>
-                        <span>Kategori</span>
-                        <strong>
-                            {{ ucfirst($product->category ?? 'Menu') }}
-                        </strong>
-                    </div>
+                            <input type="hidden" name="rating" id="ratingInput" value="{{ $selectedStars }}">
 
+                            <div class="star-picker" id="starPicker">
+                                @for ($star = 1; $star <= 5; $star++)
+                                    <button type="button"
+                                        class="star-pick-btn {{ $star <= $selectedStars ? 'active' : '' }}"
+                                        data-value="{{ $star }}" aria-label="Beri {{ $star }} bintang">
+                                        <i class="bi bi-star-fill"></i>
+                                    </button>
+                                @endfor
+
+                                <span class="star-pick-label" id="starPickLabel">
+                                    {{ $selectedStars }} / 5 Bintang
+                                </span>
+                            </div>
+
+                            <label for="reviewTextarea" class="review-field-label">
+                                Komentar Produk
+                            </label>
+
+                            <textarea name="review" id="reviewTextarea" class="review-textarea"
+                                placeholder="Bagikan pendapatmu soal rasa, porsi, atau topping produk ini...">{{ old('review', $userRating?->review) }}</textarea>
+
+                            <button type="submit" class="review-submit-btn">
+                                <i class="bi bi-send-fill"></i>
+                                <span>{{ $userRating ? 'Simpan Perubahan' : 'Kirim Ulasan' }}</span>
+                            </button>
+                        </form>
+                    @else
+                        <h3>Ingin Memberi Rating & Komentar?</h3>
+                        <p class="form-hint">
+                            Login terlebih dahulu untuk memberikan penilaian bintang dan komentar pada produk ini.
+                        </p>
+                        <a href="{{ route('login') }}" class="review-submit-btn">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            <span>Login Sekarang</span>
+                        </a>
+                    @endauth
                 </div>
 
-                <div class="fact-row">
 
-                    <i class="bi bi-people"></i>
+                {{-- KOLOM KANAN: DAFTAR ULASAN & KOMENTAR PELANGGAN --}}
+                <div class="review-list-panel">
+                    @forelse ($ratings as $item)
+                        @php
+                            $hasOrdered = class_exists(\App\Models\OrderItem::class)
+                                ? \App\Models\OrderItem::where('product_id', $product->id)
+                                    ->whereHas('order', fn($q) => $q->where('user_id', $item->user_id))
+                                    ->exists()
+                                : false;
+                        @endphp
 
-                    <div>
-                        <span>Estimasi Sajian</span>
+                        <article class="review-item-card">
+                            <div class="review-item-head">
+                                <div class="review-author">
+                                    <div class="review-avatar">
+                                        {{ strtoupper(substr($item->user->name ?? 'P', 0, 1)) }}
+                                    </div>
 
-                        <strong>
-                            {{ $isPizza ? '1–2 orang' : 'Sesuai pilihan produk' }}
-                        </strong>
-                    </div>
+                                    <div>
+                                        <div class="review-author-name">
+                                            {{ $item->user->name ?? 'Pelanggan' }}
 
+                                            @if ($hasOrdered)
+                                                <span class="verified-order-pill">
+                                                    <i class="bi bi-patch-check-fill"></i>
+                                                    Pernah Memesan
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="review-item-stars">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i
+                                                    class="bi bi-star-fill {{ $i <= $item->rating ? '' : 'empty' }}"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span class="review-time">
+                                    {{ $item->created_at->diffForHumans() }}
+                                </span>
+                            </div>
+
+                            @if (!empty($item->review))
+                                <p class="review-comment-body">{{ $item->review }}</p>
+                            @endif
+                        </article>
+                    @empty
+                        <div class="review-empty-state">
+                            <i class="bi bi-chat-square-heart"></i>
+                            Belum ada ulasan untuk produk ini.<br>
+                            Jadilah yang pertama memberikan rating dan komentar!
+                        </div>
+                    @endforelse
                 </div>
 
-                <div class="fact-row">
-
-                    <i class="bi bi-patch-check"></i>
-
-                    <div>
-                        <span>Ketersediaan</span>
-                        <strong>Tersedia melalui pemesanan</strong>
-                    </div>
-
-                </div>
-
-            </aside>
+            </div>
 
         </section>
 
@@ -1611,248 +1725,115 @@
 
     {{-- JAVASCRIPT --}}
     <script>
-        const variantRadios = document.querySelectorAll('.variant-radio');
-        const toppingCheckboxes = document.querySelectorAll('.topping-checkbox');
-        const quantityInput = document.getElementById('quantity');
-        const totalPrice = document.getElementById('totalPrice');
+        (function() {
+            // 1. KALKULASI HARGA DINAMIS (VARIAN, TOPPING, JUMLAH)
+            const basePrice = {{ json_encode($basePrice) }};
+            const variantInputs = document.querySelectorAll('.js-variant-input');
+            const toppingInputs = document.querySelectorAll('.js-topping-input');
+            const qtyInput = document.getElementById('quantityInput');
+            const qtyMinusBtn = document.getElementById('qtyMinusBtn');
+            const qtyPlusBtn = document.getElementById('qtyPlusBtn');
+            const totalDisplay = document.getElementById('totalPriceDisplay');
 
-        const baseProductPrice = Number(@json($basePrice));
-
-        function formatRupiah(value) {
-            return new Intl.NumberFormat('id-ID').format(Number(value) || 0);
-        }
-
-        function getSelectedVariant() {
-            const selected = document.querySelector('.variant-radio:checked');
-
-            if (!selected) {
-                return {
-                    price: baseProductPrice,
-                    name: ''
-                };
+            function formatRupiah(value) {
+                return 'Rp' + new Intl.NumberFormat('id-ID').format(Math.max(0, Math.round(value)));
             }
 
-            return {
-                price: Number(selected.dataset.price) || 0,
-                name: selected.dataset.name || ''
-            };
-        }
+            function updateTotalPrice() {
+                let unitPrice = basePrice;
 
-        function isLargeVariant(name) {
-            const normalized = String(name || '').toLowerCase();
-
-            return normalized.includes('large')
-                || normalized.includes('besar')
-                || normalized.includes('jumbo');
-        }
-
-        function updateToppingPrices() {
-            const large = isLargeVariant(getSelectedVariant().name);
-
-            toppingCheckboxes.forEach((checkbox) => {
-
-                const price = large
-                    ? Number(checkbox.dataset.large) || 0
-                    : Number(checkbox.dataset.medium) || 0;
-
-                const label = checkbox
-                    .closest('.topping-option')
-                    ?.querySelector('.topping-price');
-
-                if (label) {
-                    label.textContent = '+ Rp' + formatRupiah(price);
+                if (variantInputs.length > 0) {
+                    const checkedVariant = document.querySelector('.js-variant-input:checked');
+                    if (checkedVariant) {
+                        unitPrice = parseFloat(checkedVariant.dataset.price || '0');
+                    }
                 }
 
-            });
-        }
+                let toppingsTotal = 0;
+                toppingInputs.forEach((checkbox) => {
+                    if (checkbox.checked) {
+                        toppingsTotal += parseFloat(checkbox.dataset.price || '0');
+                    }
+                });
 
-        function calculateTotal() {
-            const variant = getSelectedVariant();
-            const large = isLargeVariant(variant.name);
+                const qty = Math.max(1, parseInt(qtyInput?.value || '1', 10));
+                const grandTotal = (unitPrice + toppingsTotal) * qty;
 
-            let unitPrice = variant.price;
+                if (totalDisplay) {
+                    totalDisplay.textContent = formatRupiah(grandTotal);
+                }
+            }
 
-            toppingCheckboxes.forEach((checkbox) => {
+            variantInputs.forEach((radio) => radio.addEventListener('change', updateTotalPrice));
+            toppingInputs.forEach((box) => box.addEventListener('change', updateTotalPrice));
 
-                if (checkbox.checked) {
+            if (qtyMinusBtn && qtyInput) {
+                qtyMinusBtn.addEventListener('click', () => {
+                    const current = Math.max(1, parseInt(qtyInput.value || '1', 10));
+                    if (current > 1) {
+                        qtyInput.value = current - 1;
+                        updateTotalPrice();
+                    }
+                });
+            }
 
-                    unitPrice += large
-                        ? (Number(checkbox.dataset.large) || 0)
-                        : (Number(checkbox.dataset.medium) || 0);
+            if (qtyPlusBtn && qtyInput) {
+                qtyPlusBtn.addEventListener('click', () => {
+                    const current = Math.max(1, parseInt(qtyInput.value || '1', 10));
+                    if (current < 99) {
+                        qtyInput.value = current + 1;
+                        updateTotalPrice();
+                    }
+                });
+            }
 
+            if (qtyInput) {
+                qtyInput.addEventListener('input', updateTotalPrice);
+                qtyInput.addEventListener('change', () => {
+                    qtyInput.value = Math.min(99, Math.max(1, parseInt(qtyInput.value || '1', 10)));
+                    updateTotalPrice();
+                });
+            }
+
+            updateTotalPrice();
+
+            // 2. PEMILIH BINTANG INTERAKTIF UNTUK ULASAN
+            const starButtons = document.querySelectorAll('#starPicker .star-pick-btn');
+            const ratingInput = document.getElementById('ratingInput');
+            const starPickLabel = document.getElementById('starPickLabel');
+            const starPicker = document.getElementById('starPicker');
+
+            if (starButtons.length && ratingInput) {
+                function renderStars(value) {
+                    starButtons.forEach((btn) => {
+                        btn.classList.toggle('active', Number(btn.dataset.value) <= value);
+                    });
+                    if (starPickLabel) {
+                        starPickLabel.textContent = value + ' / 5 Bintang';
+                    }
                 }
 
-            });
+                starButtons.forEach((btn) => {
+                    btn.addEventListener('mouseenter', () => {
+                        renderStars(Number(btn.dataset.value));
+                    });
 
-            let quantity = Math.max(
-                1,
-                parseInt(quantityInput?.value, 10) || 1
-            );
-
-            if (
-                quantityInput &&
-                String(quantityInput.value) !== String(quantity)
-            ) {
-                quantityInput.value = quantity;
-            }
-
-            const total = unitPrice * quantity;
-
-            if (totalPrice) {
-                totalPrice.textContent = 'Rp' + formatRupiah(total);
-            }
-
-            return {
-                unitPrice,
-                quantity,
-                total,
-                variant
-            };
-        }
-
-        function increaseQty() {
-            if (!quantityInput) return;
-
-            quantityInput.value =
-                Math.max(1, parseInt(quantityInput.value, 10) || 1) + 1;
-
-            calculateTotal();
-        }
-
-        function decreaseQty() {
-            if (!quantityInput) return;
-
-            quantityInput.value =
-                Math.max(
-                    1,
-                    (parseInt(quantityInput.value, 10) || 1) - 1
-                );
-
-            calculateTotal();
-        }
-
-
-        // VARIANT
-        variantRadios.forEach((radio) => {
-
-            radio.addEventListener('change', () => {
-                updateToppingPrices();
-                calculateTotal();
-            });
-
-        });
-
-
-        // TOPPING
-        toppingCheckboxes.forEach((checkbox) => {
-
-            checkbox.addEventListener('change', calculateTotal);
-
-        });
-
-
-        // QUANTITY
-        quantityInput?.addEventListener('input', calculateTotal);
-        quantityInput?.addEventListener('change', calculateTotal);
-
-
-        // TAB NAVIGATION
-        document.querySelectorAll('.tab-button').forEach((button) => {
-
-            button.addEventListener('click', () => {
-
-                document.querySelectorAll('.tab-button').forEach((item) => {
-                    item.classList.remove('active');
+                    btn.addEventListener('click', () => {
+                        const chosen = Number(btn.dataset.value);
+                        ratingInput.value = chosen;
+                        renderStars(chosen);
+                    });
                 });
 
-                document.querySelectorAll('.tab-content').forEach((panel) => {
-                    panel.classList.remove('active');
-                });
-
-                button.classList.add('active');
-
-                document
-                    .getElementById('tab-' + button.dataset.tab)
-                    ?.classList.add('active');
-
-            });
-
-        });
-
-
-        // WHATSAPP PRE-ORDER
-        function orderViaWhatsApp() {
-
-            const dateInput = document.getElementById('po_date');
-            const poDate = dateInput?.value;
-            const order = calculateTotal();
-
-            if (!poDate) {
-                alert('Silakan pilih tanggal Pre-Order.');
-                dateInput?.focus();
-                return;
+                if (starPicker) {
+                    starPicker.addEventListener('mouseleave', () => {
+                        renderStars(Number(ratingInput.value || 5));
+                    });
+                }
             }
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (new Date(poDate + 'T00:00:00') < today) {
-                alert('Tanggal Pre-Order tidak boleh sebelum hari ini.');
-                dateInput?.focus();
-                return;
-            }
-
-            const productName = @json($product->name);
-
-            const rawSellerNumber = @json(
-                config('services.whatsapp.seller_number') ?? '6283143290888'
-            );
-
-            const sellerNumber = String(rawSellerNumber)
-                .replace(/[^0-9]/g, '');
-
-            const selectedToppings = Array.from(toppingCheckboxes)
-                .filter((checkbox) => checkbox.checked)
-                .map((checkbox) => {
-                    return checkbox
-                        .closest('.topping-option')
-                        ?.querySelector('.topping-name')
-                        ?.textContent.trim();
-                })
-                .filter(Boolean);
-
-            const message = [
-                'Halo PizzaMozza, saya ingin memesan Pre-Order.',
-                '',
-                'Produk: ' + productName,
-                order.variant.name
-                    ? 'Ukuran: ' + order.variant.name
-                    : null,
-                selectedToppings.length
-                    ? 'Topping: ' + selectedToppings.join(', ')
-                    : null,
-                'Jumlah: ' + order.quantity,
-                'Total: Rp' + formatRupiah(order.total),
-                'Tanggal Pre-Order: ' + poDate,
-                '',
-                'Terima kasih!'
-            ]
-            .filter(Boolean)
-            .join('\n');
-
-            window.open(
-                'https://wa.me/' + sellerNumber + '?text=' + encodeURIComponent(message),
-                '_blank',
-                'noopener'
-            );
-        }
-
-
-        // INITIALIZATION
-        updateToppingPrices();
-        calculateTotal();
-
+        })();
     </script>
 
 </body>
+
 </html>
