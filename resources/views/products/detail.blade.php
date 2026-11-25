@@ -1622,8 +1622,6 @@
 
         calculateTotal();
 
-
-
         /*
         ==========================================
         TAMBAH KE KERANJANG
@@ -1637,7 +1635,6 @@
                 document.querySelector(
                     'input[name="variant"]:checked'
                 );
-
 
             if (!selectedVariant)
             {
@@ -1685,14 +1682,7 @@
 
             }
 
-
-            
-
         }
-
     </script>
-
-
 </body>
-
 </html>
