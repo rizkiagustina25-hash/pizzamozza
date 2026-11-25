@@ -82,22 +82,29 @@ class OrderController extends Controller
      * Mengubah status pesanan.
      */
     public function updateStatus(
-        Request $request,
-        Order $order
-    ) {
-        $request->validate([
-            'status' => 'required|in:pending,processing,shipped,completed,cancelled',
-        ]);
+    Request $request,
+    Order $order
+) {
+    $request->validate([
+        'status' => 'required|in:pending,processing,shipped,completed,cancelled',
+        'cancellation_reason' => 'required_if:status,cancelled|nullable|string|max:1000',
+    ], [
+        'cancellation_reason.required_if' => 'Alasan pembatalan wajib diisi.',
+        'cancellation_reason.max' => 'Alasan pembatalan maksimal 1000 karakter.',
+    ]);
 
-        $order->update([
-            'status' => $request->status,
-        ]);
+    $order->update([
+        'status' => $request->status,
+        'cancellation_reason' => $request->status === 'cancelled'
+            ? $request->cancellation_reason
+            : null,
+    ]);
 
-        return redirect()
-            ->back()
-            ->with(
-                'success',
-                'Status pesanan berhasil diperbarui.'
-            );
-    }
+    return redirect()
+        ->back()
+        ->with(
+            'success',
+            'Status pesanan berhasil diperbarui.'
+        );
+}
 }

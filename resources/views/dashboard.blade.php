@@ -1621,7 +1621,7 @@
                 margin-left: 0;
             }
         }
-    
+
         /* =====================================================
            KARTU MENU DASHBOARD - DISELARASKAN DENGAN HALAMAN PRODUK
            Hanya memperbarui tampilan Produk Best Seller.
@@ -2462,77 +2462,526 @@
                         @endif
 
                     </section>
-                @elseif($menu === 'orders')
-                    @auth
 
-                        @if ($allOrders->count())
-                            <div class="orders-card">
+@elseif($menu === 'orders')
+    <style>
+        .my-orders {
+            width: 100%;
+        }
 
-                                @foreach ($allOrders as $order)
-                                    @php
-                                        $status = strtolower((string) $order->status);
+        .orders-heading {
+            margin-bottom: 25px;
+        }
 
-                                        $statusClass = match ($status) {
-                                            'pending' => 'status-pending',
-                                            'processing' => 'status-processing',
-                                            'shipped' => 'status-shipped',
-                                            'completed' => 'status-completed',
-                                            'cancelled' => 'status-cancelled',
-                                            default => 'status-pending',
-                                        };
+        .orders-heading h2 {
+            font-size: 25px;
+            color: #292929;
+            margin: 0 0 7px;
+            font-weight: 800;
+        }
 
-                                        $statusLabel = match ($status) {
-                                            'pending' => 'Menunggu',
-                                            'processing' => 'Diproses',
-                                            'shipped' => 'Dikirim',
-                                            'completed' => 'Selesai',
-                                            'cancelled' => 'Dibatalkan',
-                                            default => ucfirst($status),
-                                        };
-                                    @endphp
+        .orders-heading p {
+            color: #888;
+            font-size: 13px;
+            margin: 0;
+        }
 
-                                    <a href="{{ route('customer.orders.show', $order->id) }}" class="order-row">
+        .orders-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
 
-                                        <div>
+        .orders-stat {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.025);
+        }
 
-                                            <div class="order-number">
-                                                #{{ $order->id }}
-                                            </div>
+        .orders-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+            flex-shrink: 0;
+        }
 
-                                            <div class="order-date">
-                                                {{ $order->created_at?->format('d M Y, H:i') ?? '-' }}
-                                            </div>
+        .orders-stat-icon.red {
+            background: #fff0ed;
+            color: #941919;
+        }
 
-                                        </div>
+        .orders-stat-icon.orange {
+            background: #fff4df;
+            color: #d58a13;
+        }
 
-                                        <div class="order-total">
-                                            Rp {{ number_format($order->total_price ?? 0, 0, ',', '.') }}
-                                        </div>
+        .orders-stat-icon.green {
+            background: #e5f8eb;
+            color: #168344;
+        }
 
-                                        <span class="status {{ $statusClass }}">
+        .orders-stat-number {
+            font-size: 23px;
+            font-weight: 800;
+            color: #292929;
+        }
+
+        .orders-stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-card-modern {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,.025);
+            transition: .2s;
+        }
+
+        .order-card-modern:hover {
+            border-color: #e2b5aa;
+            box-shadow: 0 7px 20px rgba(148,25,25,.07);
+            transform: translateY(-2px);
+        }
+
+        .order-card-link {
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .order-card-number {
+            font-size: 16px;
+            font-weight: 800;
+            color: #292929;
+            margin-bottom: 8px;
+        }
+
+        .order-card-date {
+            color: #888;
+            font-size: 11px;
+        }
+
+        .order-card-date i {
+            margin-right: 5px;
+        }
+
+        .order-product-info {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-width: 0;
+        }
+
+        .order-product-image {
+            width: 68px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: 11px;
+            background: #fff0ed;
+            flex-shrink: 0;
+        }
+
+        .order-product-placeholder {
+            width: 68px;
+            height: 68px;
+            border-radius: 11px;
+            background: #fff0ed;
+            color: #941919;
+            display: grid;
+            place-items: center;
+            font-size: 23px;
+            flex-shrink: 0;
+        }
+
+        .order-product-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: #292929;
+            margin-bottom: 6px;
+        }
+
+        .order-product-count {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .order-card-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 11px;
+        }
+
+        .order-card-price {
+            font-size: 16px;
+            font-weight: 800;
+            color: #941919;
+            white-space: nowrap;
+        }
+
+        .order-detail-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 15px;
+            border: 1px solid #941919;
+            border-radius: 8px;
+            color: #941919;
+            font-size: 11px;
+            font-weight: 800;
+            transition: .2s;
+        }
+
+        .order-card-modern:hover .order-detail-button {
+            background: #941919;
+            color: white;
+        }
+
+        .order-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fff1c9;
+            color: #9b6b00;
+        }
+
+        .status-processing {
+            background: #e6f2ff;
+            color: #2773ad;
+        }
+
+        .status-shipped {
+            background: #fff0d7;
+            color: #a96500;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #b42318;
+        }
+
+        .order-cancel-info {
+            margin: 0 20px 17px;
+            padding: 12px 15px;
+            border-left: 4px solid #dc3545;
+            background: #fff1f1;
+            border-radius: 8px;
+            color: #7f1d1d;
+            font-size: 12px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .order-cancel-info strong {
+            color: #b42318;
+        }
+
+        .orders-empty {
+            text-align: center;
+            background: white;
+            padding: 55px 20px;
+            border: 1px solid #eee;
+            border-radius: 15px;
+        }
+
+        .orders-empty-icon {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #fff0ed;
+            color: #941919;
+            display: grid;
+            place-items: center;
+            font-size: 32px;
+            margin: 0 auto 18px;
+        }
+
+        .orders-empty h3 {
+            font-size: 18px;
+            margin: 0 0 8px;
+            color: #292929;
+        }
+
+        .orders-empty p {
+            font-size: 12px;
+            color: #888;
+            margin: 0 0 20px;
+        }
+
+        .orders-shop-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            border-radius: 8px;
+            background: #941919;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        @media(max-width: 900px) {
+            .order-card-link {
+                grid-template-columns: 1fr auto;
+            }
+
+            .order-product-info {
+                grid-column: 1;
+            }
+
+            .order-card-right {
+                grid-column: 2;
+                grid-row: 1 / span 2;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .orders-stat-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .orders-stat {
+                padding: 14px;
+            }
+
+            .orders-heading h2 {
+                font-size: 21px;
+            }
+
+            .order-card-link {
+                grid-template-columns: 1fr;
+                gap: 14px;
+                padding: 16px;
+            }
+
+            .order-product-info,
+            .order-card-right {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .order-card-right {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .order-cancel-info {
+                margin: 0 15px 15px;
+            }
+        }
+    </style>
+
+    @auth
+        @php
+            $totalPesanan = $allOrders->count();
+
+            $totalDiproses = $allOrders->filter(function ($item) {
+                return strtolower((string) $item->status) === 'processing';
+            })->count();
+
+            $totalSelesai = $allOrders->filter(function ($item) {
+                return strtolower((string) $item->status) === 'completed';
+            })->count();
+        @endphp
+
+        <div class="my-orders">
+
+            <div class="orders-stat-grid">
+                <div class="orders-stat">
+                    <div class="orders-stat-icon red">
+                        <i class="bi bi-bag-check"></i>
+                    </div>
+                    <div>
+                        <div class="orders-stat-number">{{ $totalPesanan }}</div>
+                        <div class="orders-stat-label">Total Pesanan</div>
+                    </div>
+                </div>
+
+                <div class="orders-stat">
+                    <div class="orders-stat-icon orange">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+                    <div>
+                        <div class="orders-stat-number">{{ $totalDiproses }}</div>
+                        <div class="orders-stat-label">Sedang Diproses</div>
+                    </div>
+                </div>
+
+                <div class="orders-stat">
+                    <div class="orders-stat-icon green">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div>
+                        <div class="orders-stat-number">{{ $totalSelesai }}</div>
+                        <div class="orders-stat-label">Pesanan Selesai</div>
+                    </div>
+                </div>
+            </div>
+
+            @if ($allOrders->count())
+                <div class="orders-list">
+
+                    @foreach ($allOrders as $order)
+                        @php
+                            $status = strtolower((string) $order->status);
+
+                            $statusClass = match ($status) {
+                                'pending' => 'status-pending',
+                                'processing' => 'status-processing',
+                                'shipped' => 'status-shipped',
+                                'completed' => 'status-completed',
+                                'cancelled' => 'status-cancelled',
+                                default => 'status-pending',
+                            };
+
+                            $statusLabel = match ($status) {
+                                'pending' => 'Menunggu',
+                                'processing' => 'Diproses',
+                                'shipped' => 'Dikirim',
+                                'completed' => 'Selesai',
+                                'cancelled' => 'Dibatalkan',
+                                default => ucfirst($status),
+                            };
+
+                            $firstItem = $order->items->first();
+                            $jumlahProduk = $order->items->sum('quantity');
+                        @endphp
+
+                        <div class="order-card-modern">
+
+                            <a href="{{ route('customer.orders.show', $order->id) }}"
+                                class="order-card-link">
+
+                                <div>
+                                    <div class="order-card-number">
+                                        #PM{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}
+                                    </div>
+
+                                    <div class="order-card-date">
+                                        <i class="bi bi-calendar3"></i>
+                                        {{ $order->created_at?->format('d M Y, H:i') ?? '-' }}
+                                    </div>
+
+                                    <div style="margin-top: 10px;">
+                                        <span class="order-status-badge {{ $statusClass }}">
                                             {{ $statusLabel }}
                                         </span>
+                                    </div>
+                                </div>
 
-                                    </a>
-                                @endforeach
+                                <div class="order-product-info">
+                                    @if ($firstItem && $firstItem->product && $firstItem->product->image)
+                                        <img
+                                            src="{{ asset('image/' . $firstItem->product->image) }}"
+                                            alt="{{ $firstItem->product->name }}"
+                                            class="order-product-image">
+                                    @else
+                                        <div class="order-product-placeholder">
+                                            <i class="bi bi-image"></i>
+                                        </div>
+                                    @endif
 
-                            </div>
-                        @else
-                            <div class="empty-state">
+                                    <div>
+                                        <div class="order-product-name">
+                                            {{ $firstItem->product->name ?? 'Produk tidak ditemukan' }}
+                                        </div>
 
-                                <div class="empty-icon">🛒</div>
+                                        <div class="order-product-count">
+                                            {{ $jumlahProduk }} item
+                                            @if ($order->items->count() > 1)
+                                                · {{ $order->items->count() }} jenis produk
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <h3>Belum ada pesanan</h3>
+                                <div class="order-card-right">
+                                    <div class="order-card-price">
+                                        Rp{{ number_format($order->total_price ?? 0, 0, ',', '.') }}
+                                    </div>
 
-                                <p>Kamu belum melakukan transaksi.</p>
+                                    <span class="order-detail-button">
+                                        Lihat Detail
+                                        <i class="bi bi-arrow-right"></i>
+                                    </span>
+                                </div>
 
-                                <a href="{{ route('products.index') }}" class="btn-primary">
-                                    Mulai Belanja
-                                </a>
+                            </a>
 
-                            </div>
-                        @endif
-                    @else
+                            @if ($status === 'cancelled' && $order->cancellation_reason)
+                                <div class="order-cancel-info">
+                                    <strong>
+                                        <i class="bi bi-exclamation-circle-fill"></i>
+                                        Alasan Pembatalan:
+                                    </strong>
+                                    {{ $order->cancellation_reason }}
+                                </div>
+                            @endif
+
+                        </div>
+                    @endforeach
+
+                </div>
+            @else
+                <div class="orders-empty">
+                    <div class="orders-empty-icon">
+                        <i class="bi bi-bag-x"></i>
+                    </div>
+
+                    <h3>Belum Ada Pesanan</h3>
+
+                    <p>Kamu belum melakukan transaksi. Yuk, pesan pizza favoritmu!</p>
+
+                    <a href="{{ route('products.index') }}" class="orders-shop-button">
+                        <i class="bi bi-cart"></i>
+                        Mulai Belanja
+                    </a>
+                </div>
+            @endif
+
+        </div>
+    @else
+
                         <div class="empty-state">
 
                             <div class="empty-icon">🔐</div>

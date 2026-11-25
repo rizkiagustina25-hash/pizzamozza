@@ -276,3 +276,9 @@ Route::middleware(['auth', 'role:karyawan'])
             ->name('orders.updateStatus');
 
     });
+
+// Notifikasi pembayaran Midtrans
+Route::post('/midtrans/notification', [
+    PaymentController::class,
+    'notification'
+])->name('midtrans.notification');

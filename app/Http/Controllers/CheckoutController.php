@@ -88,73 +88,55 @@ class CheckoutController extends Controller
         // Total akhir termasuk ongkir.
         $total = $subtotal + $shippingCost;
 
-        $orderId = session()->get('order_id');
 
-        // Gunakan kembali pesanan pending milik pelanggan ini.
-        $order = null;
+$order = DB::transaction(function () use (
+    $cart,
+    $total,
+    $address,
+    $deliveryMethod,
+    $shippingCost
+) {
+    // Buat Order baru untuk setiap checkout.
+    $order = Order::create([
+        'user_id' => Auth::id(),
+        'total_price' => $total,
+        'status' => 'pending',
+        'payment_status' => 'pending',
+        'address' => $address,
+        'delivery_method' => $deliveryMethod,
+        'shipping_cost' => $shippingCost,
+    ]);
 
-        if ($orderId) {
-            $order = Order::where('id', $orderId)
-                ->where('user_id', Auth::id())
-                ->where('status', 'pending')
-                ->where('payment_status', 'pending')
-                ->first();
-        }
+    foreach ($cart as $item) {
+        $unitPrice = (float) (
+            $item['unit_price'] ?? $item['price'] ?? 0
+        );
 
-        $order = DB::transaction(function () use (
-            $order,
-            $cart,
-            $total,
-            $address,
-            $deliveryMethod,
-            $shippingCost
-        ) {
-            if (!$order) {
-                $order = Order::create([
-                    'user_id' => Auth::id(),
-                    'total_price' => $total,
-                    'status' => 'pending',
-                    'payment_status' => 'pending',
-                    'address' => $address,
-                    'delivery_method' => $deliveryMethod,
-                    'shipping_cost' => $shippingCost,
-                ]);
-            } else {
-                // Perbarui pesanan pending yang sama.
-                $order->update([
-                    'total_price' => $total,
-                    'address' => $address,
-                    'delivery_method' => $deliveryMethod,
-                    'shipping_cost' => $shippingCost,
-                ]);
+        $quantity = (int) $item['quantity'];
 
-                // Sesuaikan item dengan keranjang terbaru.
-                $order->items()->delete();
-            }
+        OrderItem::create([
+            'order_id' => $order->id,
+            'product_id' => $item['product_id'],
+            'variant_id' => $item['variant_id'] ?? null,
+            'quantity' => $quantity,
+            'price' => $unitPrice,
+            'subtotal' => (float) (
+                $item['subtotal'] ?? ($unitPrice * $quantity)
+            ),
+        ]);
+    }
 
-            foreach ($cart as $item) {
-                $unitPrice = (float) (
-                    $item['unit_price'] ?? $item['price'] ?? 0
-                );
+    return $order;
+});
 
-                $quantity = (int) $item['quantity'];
+// Gunakan ID Order baru untuk proses pembayaran.
+session()->put('order_id', $order->id);
 
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'],
-                    'variant_id' => $item['variant_id'] ?? null,
-                    'quantity' => $quantity,
-                    'price' => $unitPrice,
-                    'subtotal' => (float) (
-                        $item['subtotal'] ?? ($unitPrice * $quantity)
-                    ),
-                ]);
-            }
+// Hindari penggunaan token dari sesi sebelumnya.
+session()->forget('snap_token');
 
-            return $order;
-        });
+return redirect()->route('payment.index');
 
-        session()->put('order_id', $order->id);
 
         return redirect()->route('payment.index');
     }

@@ -994,35 +994,56 @@
                         </h2>
 
                         <form
-                            action="{{ route($ordersUpdateRoute, $order->id) }}"
-                            method="POST"
-                            class="status-form">
-                            @csrf
-                            @method('PUT')
+    action="{{ route($ordersUpdateRoute, $order->id) }}"
+    method="POST"
+    class="status-form"
+    id="statusForm">
+    @csrf
+    @method('PUT')
 
-                            <select name="status" class="status-select" required>
-                                <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>
-                                    Menunggu
-                                </option>
-                                <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>
-                                    Diproses
-                                </option>
-                                <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>
-                                    Dikirim
-                                </option>
-                                <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>
-                                    Selesai
-                                </option>
-                                <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>
-                                    Dibatalkan
-                                </option>
-                            </select>
+    <select name="status" class="status-select" id="orderStatus" required>
+        <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>
+            Menunggu
+        </option>
+        <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>
+            Diproses
+        </option>
+        <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }}>
+            Dikirim
+        </option>
+        <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>
+            Selesai
+        </option>
+        <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>
+            Dibatalkan
+        </option>
+    </select>
 
-                            <button type="submit" class="update-button">
-                                <i class="bi bi-save"></i>
-                                Simpan Status
-                            </button>
-                        </form>
+    <div id="cancellationReasonField"
+        style="display: {{ $order->status === 'cancelled' ? 'block' : 'none' }}; margin-top: 12px;">
+
+        <label for="cancellation_reason">
+            Alasan Pembatalan <span style="color: red;">*</span>
+        </label>
+
+        <textarea
+            name="cancellation_reason"
+            id="cancellation_reason"
+            rows="4"
+            maxlength="1000"
+            placeholder="Tuliskan alasan pembatalan pesanan..."
+            style="width: 100%; padding: 10px; margin-top: 8px; border: 1px solid #ccc; border-radius: 8px;">{{ old('cancellation_reason', $order->cancellation_reason) }}</textarea>
+
+        @error('cancellation_reason')
+            <small style="color: red;">{{ $message }}</small>
+        @enderror
+    </div>
+
+    <button type="submit" class="update-button">
+        <i class="bi bi-save"></i>
+        Simpan Status
+    </button>
+</form>
                     </section>
 
                     <section class="card">
@@ -1125,6 +1146,23 @@
         if (event.key === 'Escape' && logoutModal.classList.contains('show')) {
             closeLogoutModal();
         }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusSelect = document.getElementById('orderStatus');
+        const reasonField = document.getElementById('cancellationReasonField');
+        const reasonInput = document.getElementById('cancellation_reason');
+
+        function toggleCancellationReason() {
+            const isCancelled = statusSelect.value === 'cancelled';
+
+            reasonField.style.display = isCancelled ? 'block' : 'none';
+            reasonInput.required = isCancelled;
+        }
+
+        statusSelect.addEventListener('change', toggleCancellationReason);
+        toggleCancellationReason();
     });
 </script>
 </body>
