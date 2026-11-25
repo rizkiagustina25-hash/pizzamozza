@@ -1641,9 +1641,9 @@
                             </button>
                         </form>
                     @else
-                        <h3>Ingin Memberi Rating & Komentar?</h3>
+                        <h3>Ingin Melihat Rating & Komentar?</h3>
                         <p class="form-hint">
-                            Login terlebih dahulu untuk memberikan penilaian bintang dan komentar pada produk ini.
+                            Login terlebih dahulu untuk melihat penilaian bintang dan komentar pada produk ini.
                         </p>
                         <a href="{{ route('login') }}" class="review-submit-btn">
                             <i class="bi bi-box-arrow-in-right"></i>

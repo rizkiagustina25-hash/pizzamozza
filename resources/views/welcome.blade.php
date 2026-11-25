@@ -884,12 +884,6 @@
             <a href="#kontak">Kontak</a>
         </nav>
 
-        <div class="nav-actions">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" placeholder="Cari menu favorit...">
-            </div>
-
             @auth
                 <a href="{{ route('dashboard') }}" class="login-btn">
                     <i class="fa-regular fa-user"></i>
@@ -1030,10 +1024,7 @@
         <div class="section-heading">
             <h2>Pilih Kategori Menu</h2>
 
-            <a href="{{ route('products.index') }}">
-                Lihat Semua
-                <i class="fa-solid fa-arrow-right"></i>
-            </a>
+            
         </div>
 
         <!-- CATEGORY -->
@@ -1172,7 +1163,7 @@
 
                         <div class="product-rating-mini">
                             <i class="fa-solid fa-star"></i>
-                            <strong>{{ $totalReviews > 0 ? number_format($avgRating, 1) : 'Baru' }}</strong>
+                            <strong>{{ $totalReviews > 0 ? number_format($avgRating, 1) : 'Belum ada ulasan' }}</strong>
                             @if ($totalReviews > 0)
                                 <span>({{ $totalReviews }})</span>
                             @endif

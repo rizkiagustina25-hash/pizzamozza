@@ -1313,7 +1313,7 @@
                                 {{-- RATING BINTANG PRODUK --}}
                                 <div class="product-rating">
                                     <i class="bi bi-star-fill"></i>
-                                    <strong>{{ $totalReviews > 0 ? number_format($avgRating, 1) : 'Baru' }}</strong>
+                                    <strong>{{ $totalReviews > 0 ? number_format($avgRating, 1) : 'Belum ada ulasan' }}</strong>
                                     @if ($totalReviews > 0)
                                         <span>({{ $totalReviews }} ulasan)</span>
                                     @endif
