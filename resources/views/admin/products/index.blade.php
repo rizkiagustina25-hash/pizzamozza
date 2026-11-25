@@ -339,6 +339,96 @@
             color: #8a7d75;
         }
 
+        /* =====================================
+           PRODUCT SEARCH
+        ===================================== */
+
+        .product-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 16px 22px;
+            border-bottom: 1px solid #e5ded9;
+            background: #fffdfc;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: #9a8b83;
+            font-size: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px 0 40px;
+            border: 1px solid #e5ded9;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+            color: #45362e;
+            font-size: 13px;
+            transition: .2s ease;
+        }
+
+        .search-input:focus {
+            border-color: #941919;
+            box-shadow: 0 0 0 3px rgba(148, 25, 25, .08);
+        }
+
+        .btn-search {
+            height: 42px;
+            padding: 0 17px;
+            border: none;
+            border-radius: 8px;
+            background: #941919;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .btn-search:hover {
+            background: #b52d2d;
+        }
+
+        .btn-reset-search {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 42px;
+            padding: 0 15px;
+            border: 1px solid #e5ded9;
+            border-radius: 8px;
+            background: #fff;
+            color: #6b5b52;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s ease;
+        }
+
+        .btn-reset-search:hover {
+            background: #f8efed;
+        }
+
+        .search-result-info {
+            padding: 12px 22px 0;
+            color: #8a7d75;
+            font-size: 12px;
+        }
+
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -888,6 +978,43 @@
 
                     </div>
 
+                    {{-- FORM PENCARIAN PRODUK --}}
+                    <form action="{{ route('admin.products.index') }}"
+                        method="GET"
+                        class="product-search">
+
+                        <div class="search-input-wrapper">
+                            <i class="bi bi-search"></i>
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                class="search-input"
+                                placeholder="Cari nama produk atau kategori..."
+                                aria-label="Cari produk">
+                        </div>
+
+                        <button type="submit" class="btn-search">
+                            <i class="bi bi-search"></i>
+                            Cari
+                        </button>
+
+                        @if(request('search'))
+                            <a href="{{ route('admin.products.index') }}"
+                                class="btn-reset-search">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                                Reset
+                            </a>
+                        @endif
+                    </form>
+
+                    @if(request('search'))
+                        <div class="search-result-info">
+                            Hasil pencarian untuk:
+                            <strong>{{ request('search') }}</strong>
+                            — ditemukan {{ $products->count() }} produk.
+                        </div>
+                    @endif
 
                     <div class="table-wrapper">
 
@@ -1106,19 +1233,34 @@
                                                     <i class="fa-solid fa-pizza-slice"></i>
                                                 </div>
 
-                                                <h3>Belum Ada Produk</h3>
+                                                @if(request('search'))
+                                                    <h3>Produk Tidak Ditemukan</h3>
 
-                                                <p>
-                                                    Silakan tambahkan produk baru ke PizzaMozza.
-                                                </p>
+                                                    <p>
+                                                        Tidak ada produk yang cocok dengan pencarian
+                                                        "{{ request('search') }}".
+                                                    </p>
 
-                                                <a href="{{ route('admin.products.create') }}"
-                                                    class="btn-add mt-5">
+                                                    <a href="{{ route('admin.products.index') }}"
+                                                        class="btn-reset-search mt-5">
+                                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                                        Tampilkan Semua Produk
+                                                    </a>
+                                                @else
+                                                    <h3>Belum Ada Produk</h3>
 
-                                                    <i class="bi bi-plus-lg"></i>
-                                                    Tambah Produk
+                                                    <p>
+                                                        Silakan tambahkan produk baru ke PizzaMozza.
+                                                    </p>
 
-                                                </a>
+                                                    <a href="{{ route('admin.products.create') }}"
+                                                        class="btn-add mt-5">
+
+                                                        <i class="bi bi-plus-lg"></i>
+                                                        Tambah Produk
+
+                                                    </a>
+                                                @endif
 
                                             </div>
 

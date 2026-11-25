@@ -11,15 +11,27 @@ use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
     /**
-     * UML: Lihat Produk
+     * UML: Lihat dan mencari produk.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = trim((string) $request->input('search', ''));
+
         $products = Product::with('variants')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('category', 'like', '%' . $search . '%');
+
+                    if (ctype_digit($search)) {
+                        $subQuery->orWhere('id', (int) $search);
+                    }
+                });
+            })
             ->latest()
             ->get();
 
-        return view('admin.products.index', compact('products'));
+        return view('admin.products.index', compact('products', 'search'));
     }
 
     /**
