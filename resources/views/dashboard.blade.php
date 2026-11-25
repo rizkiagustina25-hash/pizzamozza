@@ -92,7 +92,7 @@
         }
 
         .brand-text span {
-            color: #ffb4a9;
+            color: #ffffff;
         }
 
         .brand-subtitle {
@@ -374,7 +374,7 @@
         }
 
         .content {
-            padding: 30px;
+            padding: 38px 30px 30px;
         }
 
         .page-title {
@@ -478,6 +478,115 @@
             background: white;
             font-size: 85px;
             box-shadow: 0 15px 35px #00000010;
+        }
+
+        /* ================= BANNER PELANGGAN ================= */
+
+        .customer-banner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 270px;
+            margin: 0 0 28px;
+            padding: 34px 38px;
+            overflow: hidden;
+            isolation: isolate;
+            border-radius: 22px;
+            background: linear-gradient(105deg, #8f1717 0%, #b52b20 48%, #e87527 100%);
+            box-shadow: 0 12px 28px rgba(120, 28, 20, .15);
+        }
+
+        .customer-banner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(90deg, rgba(105, 15, 15, .96) 0%, rgba(151, 27, 20, .91) 46%, rgba(151, 27, 20, .20) 100%);
+        }
+
+        .customer-banner-content {
+            position: relative;
+            z-index: 2;
+            width: min(62%, 620px);
+            color: #fffaf3;
+        }
+
+        .customer-banner-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 13px;
+            padding: 7px 13px;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 30px;
+            background: rgba(255,255,255,.13);
+            color: #fff2d8;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .customer-banner-title {
+            margin: 0 0 11px;
+            color: #fffaf3;
+            font-size: clamp(27px, 3vw, 39px);
+            font-weight: 700;
+            line-height: 1.15;
+        }
+
+        .customer-banner-title span {
+            color: #ffd16b;
+        }
+
+        .customer-banner-description {
+            max-width: 520px;
+            margin: 0 0 20px;
+            color: #ffede0;
+            font-size: 15.5px;
+            line-height: 1.65;
+        }
+
+        .customer-banner-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            min-height: 46px;
+            padding: 12px 21px;
+            border-radius: 10px;
+            background: #ffb33e;
+            color: #632016;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 6px 15px rgba(55, 15, 8, .18);
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+        }
+
+        .customer-banner-button:hover {
+            transform: translateY(-2px);
+            background: #ffd078;
+            color: #632016;
+            box-shadow: 0 9px 18px rgba(55, 15, 8, .23);
+        }
+
+        .customer-banner-image {
+            position: absolute;
+            z-index: 0;
+            top: 0;
+            right: 0;
+            width: 49%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: .9;
+            -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 35%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 35%);
+        }
+
+        /* Dekorasi lingkaran pada banner dihilangkan agar tampilan lebih bersih. */
+        .customer-banner-decoration {
+            display: none !important;
         }
 
         /* ================= DASHBOARD SUMMARY (2x2 MODERN) ================= */
@@ -835,25 +944,7 @@
             height: 100%;
             object-fit: cover;
         }
-
-        .bestseller-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 2;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(148, 25, 25, 0.92);
-            color: #ffffff;
-            font-size: 12px;
-            font-weight: 600;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
-        }
-
-        .product-placeholder {
+.product-placeholder {
             font-size: 55px;
         }
 
@@ -1392,7 +1483,20 @@
             }
 
             .content {
-                padding: 22px 18px;
+                padding: 30px 18px 22px;
+            }
+
+            .customer-banner {
+                min-height: 250px;
+                padding: 28px;
+            }
+
+            .customer-banner-content {
+                width: 70%;
+            }
+
+            .customer-banner-image {
+                width: 52%;
             }
 
             .landing-preview {
@@ -1454,7 +1558,39 @@
             }
 
             .content {
-                padding: 20px 14px;
+                padding: 28px 14px 20px;
+            }
+
+            .customer-banner {
+                min-height: 0;
+                padding: 28px 22px 170px;
+                align-items: flex-start;
+            }
+
+            .customer-banner-content {
+                width: 100%;
+            }
+
+            .customer-banner-title {
+                font-size: 29px;
+            }
+
+            .customer-banner-description {
+                font-size: 14px;
+            }
+
+            .customer-banner-image {
+                top: auto;
+                bottom: 0;
+                width: 100%;
+                height: 155px;
+                opacity: .72;
+                -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 42%);
+                mask-image: linear-gradient(180deg, transparent 0%, #000 42%);
+            }
+
+            .customer-banner-decoration {
+                display: none;
             }
 
             .dashboard-summary,
@@ -1485,6 +1621,164 @@
                 margin-left: 0;
             }
         }
+    
+        /* =====================================================
+           KARTU MENU DASHBOARD - DISELARASKAN DENGAN HALAMAN PRODUK
+           Hanya memperbarui tampilan Produk Best Seller.
+           Route, data, dan fungsi Blade tetap dipertahankan.
+        ====================================================== */
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 23px;
+            align-items: stretch;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid #f0dfd3;
+            border-radius: 20px;
+            box-shadow: 0 5px 16px rgba(80, 35, 20, .045);
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: #e7c4b5;
+            box-shadow: 0 13px 27px rgba(80, 35, 20, .11);
+        }
+
+        .product-image {
+            position: relative;
+            width: 100%;
+            height: 213px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #f8f0e9;
+            font-size: 55px;
+        }
+
+        .product-image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .55s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.06);
+        }
+.product-placeholder {
+            font-size: 55px;
+        }
+
+        .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 19px 19px;
+        }
+
+        .product-name {
+            margin: 0 0 9px;
+            color: #34241f;
+            font-size: 18px;
+            line-height: 1.35;
+            font-weight: 700;
+        }
+
+        .product-price {
+            margin-top: auto;
+            margin-bottom: 14px;
+            padding-top: 2px;
+            color: #941919;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .product-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            width: 100%;
+            min-height: 42px;
+            margin-top: auto;
+            padding: 10px 14px;
+            border: 1px solid #941919;
+            border-radius: 10px;
+            background: #941919;
+            color: #fff;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 5px 12px rgba(148, 25, 25, .13);
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+        }
+
+        .product-button::after {
+            content: "→";
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .product-button:hover {
+            transform: translateY(-2px);
+            background: #b52d2d;
+            border-color: #b52d2d;
+            color: #fff;
+            box-shadow: 0 8px 16px rgba(148, 25, 25, .2);
+        }
+
+        @media (max-width: 1100px) {
+            .product-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 16px;
+            }
+
+            .product-image {
+                height: 185px;
+            }
+
+            .product-info {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image {
+                height: 220px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .product-card,
+            .product-image img,
+            .product-button {
+                transition: none !important;
+            }
+        }
+
     </style>
 </head>
 
@@ -1771,13 +2065,46 @@
 
                         </section>
                     @else
+                        @php
+                            $customerName = trim((string) auth()->user()->name);
+
+                            // Jika nama akun berupa alamat email, gunakan bagian nama sebelum @.
+                            if (filter_var($customerName, FILTER_VALIDATE_EMAIL)) {
+                                $customerName = explode('@', $customerName)[0];
+                                $customerName = preg_replace('/[0-9._-]+/', ' ', $customerName);
+                                $customerName = ucwords(trim($customerName));
+                            }
+                        @endphp
+
                         <h1 class="page-title">
-                            Halo, {{ auth()->user()->name }} 👋
+                            Halo, {{ $customerName ?: 'Pelanggan' }} 👋
                         </h1>
 
                         <p class="page-subtitle">
                             Selamat datang kembali di PizzaMozza.
                         </p>
+
+                        <section class="customer-banner" aria-label="Promo PizzaMozza untuk pelanggan">
+                            <div class="customer-banner-content">
+                                <h2 class="customer-banner-title">
+                                    Lapar? <span>Pizza Favoritmu Menanti!</span>
+                                </h2>
+
+                                <p class="customer-banner-description">
+                                    Nikmati pizza lezat dengan bahan berkualitas dan topping pilihan.
+                                    Pesan dengan mudah, praktis, dan nikmati layanan PizzaMozza!
+                                </p>
+
+                                <a href="{{ route('products.index') }}" class="customer-banner-button">
+                                    Pesan Sekarang <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+
+                            <img class="customer-banner-image"
+                               src="{{ asset('images/pizza-banner.jpg') }}"
+                                alt="Pizza hangat dengan topping lezat"
+                                onerror="this.style.display='none'">
+                        </section>
 
                         <section class="dashboard-summary">
 
@@ -2084,12 +2411,7 @@
                                     <div class="product-card">
 
                                         <div class="product-image">
-
-                                            <span class="bestseller-badge">
-                                                🔥 Best Seller
-                                            </span>
-
-                                            @if ($resolvedImage)
+@if ($resolvedImage)
                                                 <img src="{{ $resolvedImage }}" alt="{{ $product->name }}"
                                                     onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<div class=\'product-placeholder\'>🍕</div>');">
                                             @else
