@@ -350,6 +350,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
             gap: 15px;
         }
 
@@ -364,15 +365,39 @@
             color: #999;
         }
 
+        .summary-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 9px;
+            background: #fff5f3;
+            border: 1px solid #f0d6d2;
+            color: var(--red);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
         .filter-form {
             display: grid;
             grid-template-columns:
-                minmax(180px, 1.5fr)
-                minmax(145px, .8fr)
-                minmax(165px, .9fr)
+                minmax(200px, 1.5fr)
+                minmax(185px, 1fr)
+                minmax(175px, .9fr)
                 auto auto;
             gap: 10px;
             padding: 20px 24px;
+            align-items: center;
+        }
+
+        .filter-form.admin-filter-grid {
+            grid-template-columns:
+                minmax(170px, 1.3fr)
+                minmax(150px, .85fr)
+                minmax(150px, .85fr)
+                minmax(140px, .8fr)
+                minmax(150px, .85fr)
+                auto auto;
         }
 
         .input,
@@ -387,6 +412,11 @@
             color: #333;
             font-size: 12px;
             transition: .2s ease;
+        }
+
+        .input[type="date"] {
+            cursor: pointer;
+            color: #333;
         }
 
         .input:focus,
@@ -432,7 +462,7 @@
         }
 
         /* =====================================
-           TABLE
+           TABLE (FIT DI LAYAR TANPA GESER)
         ===================================== */
 
         .table-panel {
@@ -444,12 +474,12 @@
 
         .table-wrapper {
             width: 100%;
-            overflow-x: auto;
+            overflow-x: hidden;
         }
 
         table {
             width: 100%;
-            min-width: 1000px;
+            table-layout: fixed;
             border-collapse: collapse;
         }
 
@@ -458,22 +488,32 @@
         }
 
         th {
-            padding: 16px 17px;
+            padding: 14px 10px;
             text-align: left;
             color: #776a64;
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: .45px;
-            white-space: nowrap;
+            letter-spacing: .4px;
             border: 1px solid #eee5df;
         }
 
         td {
-            padding: 17px;
+            padding: 14px 10px;
             border: 1px solid #e9e3e0;
             vertical-align: middle;
-            font-size: 12px;
+            font-size: 11.5px;
+            word-wrap: break-word;
         }
+
+        /* Proporsi lebar setiap kolom agar pas 100% tanpa geser */
+        th:nth-child(1), td:nth-child(1) { width: 10.5%; } /* PESANAN */
+        th:nth-child(2), td:nth-child(2) { width: 20%; }   /* PELANGGAN */
+        th:nth-child(3), td:nth-child(3) { width: 11%; }   /* PRODUK */
+        th:nth-child(4), td:nth-child(4) { width: 11.5%; } /* TOTAL */
+        th:nth-child(5), td:nth-child(5) { width: 11.5%; } /* STATUS */
+        th:nth-child(6), td:nth-child(6) { width: 12.5%; } /* PEMBAYARAN */
+        th:nth-child(7), td:nth-child(7) { width: 12.5%; } /* TANGGAL */
+        th:nth-child(8), td:nth-child(8) { width: 10.5%; text-align: center; } /* AKSI */
 
         tbody tr {
             transition: background .15s ease;
@@ -493,17 +533,17 @@
 
         .order-number {
             color: var(--red);
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             white-space: nowrap;
         }
 
         .customer {
-            max-width: 190px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: #333;
             font-size: 12px;
             font-weight: 700;
+            overflow-wrap: anywhere;
         }
 
         .customer-email {
@@ -515,7 +555,7 @@
         .product-count {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             color: #66564e;
             white-space: nowrap;
         }
@@ -526,7 +566,7 @@
 
         .total {
             color: #29201d;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             white-space: nowrap;
         }
@@ -539,7 +579,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 6px 10px;
+            padding: 5px 9px;
             border-radius: 6px;
             font-size: 10px;
             font-weight: 700;
@@ -572,12 +612,18 @@
         }
 
         .payment-paid {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             color: #27814c;
             font-weight: 700;
             white-space: nowrap;
         }
 
         .payment-pending {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             color: #b77b00;
             font-weight: 700;
             white-space: nowrap;
@@ -586,7 +632,7 @@
         .date-text {
             color: #655b56;
             font-size: 11px;
-            line-height: 1.7;
+            line-height: 1.6;
             white-space: nowrap;
         }
 
@@ -595,12 +641,12 @@
         ===================================== */
 
         .detail-button {
-            min-height: 35px;
-            padding: 0 12px;
+            min-height: 33px;
+            padding: 0 10px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
+            gap: 5px;
             border: 1px solid var(--red);
             border-radius: 8px;
             color: var(--red);
@@ -759,12 +805,24 @@
         ===================================== */
 
         @media (max-width: 1250px) {
-            .filter-form {
+            .filter-form,
+            .filter-form.admin-filter-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .search-input {
                 grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                table-layout: auto;
+                min-width: 780px;
             }
         }
 
@@ -825,7 +883,8 @@
                 font-size: 25px;
             }
 
-            .filter-form {
+            .filter-form,
+            .filter-form.admin-filter-grid {
                 grid-template-columns: 1fr;
                 padding: 16px;
             }
@@ -847,6 +906,15 @@
 
 <body>
 
+@php
+    $isAdmin = auth()->user()->role === 'admin';
+    $ordersRoute = $isAdmin ? route('admin.orders.index') : route('karyawan.orders.index');
+    $minDate = $isAdmin ? '' : now()->subMonth()->format('Y-m-d');
+    $maxDate = now()->format('Y-m-d');
+    $hasActiveFilter = request()->hasAny(['search', 'period', 'date', 'status', 'payment_status']) &&
+        (request('search') || request('period') || request('date') || request('status') || request('payment_status'));
+@endphp
+
 <div class="admin-layout">
 
     {{-- SIDEBAR --}}
@@ -863,9 +931,7 @@
                 <h1>PizzaMozza</h1>
 
                 <p>
-                    {{ auth()->user()->role === 'admin'
-                        ? 'Admin Dashboard'
-                        : 'Karyawan Dashboard' }}
+                    {{ $isAdmin ? 'Admin Dashboard' : 'Karyawan Dashboard' }}
                 </p>
             </div>
 
@@ -878,40 +944,31 @@
 
             <ul class="menu-list">
 
-                @if(auth()->user()->role === 'admin')
+                @if($isAdmin)
 
                     <li class="menu-item">
-                        <a href="{{ route('admin.dashboard') }}"
-                            class="menu-link">
-
+                        <a href="{{ route('admin.dashboard') }}" class="menu-link">
                             <span class="menu-icon">
                                 <i class="bi bi-grid-1x2"></i>
                             </span>
-
                             <span>Dashboard</span>
                         </a>
                     </li>
 
                     <li class="menu-item">
-                        <a href="{{ route('admin.employees.index') }}"
-                            class="menu-link">
-
+                        <a href="{{ route('admin.employees.index') }}" class="menu-link">
                             <span class="menu-icon">
                                 <i class="bi bi-people"></i>
                             </span>
-
                             <span>Data Karyawan</span>
                         </a>
                     </li>
 
                     <li class="menu-item">
-                        <a href="{{ route('admin.customers.index') }}"
-                            class="menu-link">
-
+                        <a href="{{ route('admin.customers.index') }}" class="menu-link">
                             <span class="menu-icon">
                                 <i class="bi bi-people"></i>
                             </span>
-
                             <span>Data Pelanggan</span>
                         </a>
                     </li>
@@ -919,13 +976,10 @@
                 @else
 
                     <li class="menu-item">
-                        <a href="{{ route('karyawan.dashboard') }}"
-                            class="menu-link">
-
+                        <a href="{{ route('karyawan.dashboard') }}" class="menu-link">
                             <span class="menu-icon">
                                 <i class="bi bi-grid-1x2"></i>
                             </span>
-
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -933,52 +987,36 @@
                 @endif
 
                 <li class="menu-item">
-
-                    <a href="{{ auth()->user()->role === 'admin'
-                        ? route('admin.products.index')
-                        : route('karyawan.products.index') }}"
+                    <a href="{{ $isAdmin ? route('admin.products.index') : route('karyawan.products.index') }}"
                         class="menu-link">
-
                         <span class="menu-icon">
                             <i class="bi bi-box-seam"></i>
                         </span>
-
                         <span>Data Produk</span>
                     </a>
-
                 </li>
 
                 <li class="menu-item">
-
-                    <a href="{{ auth()->user()->role === 'admin'
-                        ? route('admin.orders.index')
-                        : route('karyawan.orders.index') }}"
+                    <a href="{{ $ordersRoute }}"
                         class="menu-link {{ request()->routeIs('admin.orders.*', 'karyawan.orders.*') ? 'active' : '' }}">
-
                         <span class="menu-icon">
                             <i class="bi bi-receipt"></i>
                         </span>
-
                         <span>Pesanan</span>
                     </a>
-
                 </li>
 
                 {{-- LAPORAN PENJUALAN KHUSUS ADMIN --}}
-                @if(auth()->user()->role === 'admin')
+                @if($isAdmin)
 
                     <li class="menu-item">
-
                         <a href="{{ route('admin.sales-report.index') }}"
                             class="menu-link {{ request()->routeIs('admin.sales-report.*') ? 'active' : '' }}">
-
                             <span class="menu-icon">
                                 <i class="bi bi-bar-chart-line"></i>
                             </span>
-
                             <span>Laporan Penjualan</span>
                         </a>
-
                     </li>
 
                 @endif
@@ -997,36 +1035,24 @@
                 </div>
 
                 <div class="admin-info">
-
                     <strong>
                         {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
                     </strong>
 
                     <span>
-                        {{ auth()->user()->role === 'admin'
-                            ? 'Administrator'
-                            : 'Karyawan' }}
+                        {{ $isAdmin ? 'Administrator' : 'Karyawan' }}
                     </span>
-
                 </div>
 
             </div>
 
-            <form action="{{ route('logout') }}"
-                method="POST"
-                id="logoutForm">
-
+            <form action="{{ route('logout') }}" method="POST" id="logoutForm">
                 @csrf
 
-                <button type="button"
-                    class="logout-button"
-                    onclick="openLogoutModal()">
-
+                <button type="button" class="logout-button" onclick="openLogoutModal()">
                     <i class="bi bi-box-arrow-right"></i>
                     Keluar
-
                 </button>
-
             </form>
 
         </div>
@@ -1044,17 +1070,13 @@
             <div class="topbar-admin">
 
                 <div class="topbar-admin-info">
-
                     <strong>
                         {{ auth()->user()->name ?? 'Pengguna PizzaMozza' }}
                     </strong>
 
                     <span>
-                        {{ auth()->user()->role === 'admin'
-                            ? 'Administrator'
-                            : 'Karyawan' }}
+                        {{ $isAdmin ? 'Administrator' : 'Karyawan' }}
                     </span>
-
                 </div>
 
                 <div class="topbar-avatar">
@@ -1073,7 +1095,9 @@
                 <h2>Kelola Pesanan</h2>
 
                 <p>
-                    Lihat, cari, dan pantau pesanan pelanggan PizzaMozza.
+                    {{ $isAdmin
+                        ? 'Lihat, cari, dan pantau seluruh pesanan pelanggan PizzaMozza.'
+                        : 'Lihat, cari, dan pantau penjualan hari ini atau pesanan 1 bulan terakhir.' }}
                 </p>
 
             </div>
@@ -1082,11 +1106,8 @@
             @if(session('success'))
 
                 <div class="alert" role="status">
-
                     <i class="bi bi-check-circle-fill"></i>
-
                     <span>{{ session('success') }}</span>
-
                 </div>
 
             @endif
@@ -1101,17 +1122,13 @@
                     <i class="bi bi-exclamation-circle-fill"></i>
 
                     <div>
-
                         <strong>Terjadi kesalahan:</strong>
 
                         <ul style="margin:8px 0 0 18px;line-height:1.7;">
-
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
-
                         </ul>
-
                     </div>
 
                 </div>
@@ -1124,27 +1141,32 @@
                 <div class="panel-header">
 
                     <div>
-
                         <h3>
                             <i class="bi bi-funnel"></i>
                             Pencarian dan Filter
                         </h3>
 
                         <p>
-                            Temukan pesanan berdasarkan pelanggan,
-                            status, atau pembayaran.
+                            {{ $isAdmin
+                                ? 'Temukan pesanan berdasarkan pelanggan, periode, tanggal, status, atau pembayaran.'
+                                : 'Cari penjualan hari ini atau pilih tanggal pada kalender (maksimal 1 bulan terakhir).' }}
                         </p>
+                    </div>
 
+                    <div class="summary-pill">
+                        <i class="bi bi-receipt-cutoff"></i>
+                        <span>
+                            {{ $orders->count() }} Pesanan · Rp{{ number_format($orders->sum('total_price'), 0, ',', '.') }}
+                        </span>
                     </div>
 
                 </div>
 
-                <form action="{{ auth()->user()->role === 'admin'
-                    ? route('admin.orders.index')
-                    : route('karyawan.orders.index') }}"
+                <form action="{{ $ordersRoute }}"
                     method="GET"
-                    class="filter-form">
+                    class="filter-form {{ $isAdmin ? 'admin-filter-grid' : '' }}">
 
+                    {{-- PENCARIAN NAMA / ID --}}
                     <input type="text"
                         name="search"
                         class="input search-input"
@@ -1152,72 +1174,89 @@
                         placeholder="Cari nama pelanggan / ID pesanan..."
                         aria-label="Cari pesanan">
 
-                    <select name="status"
+                    {{-- 1 DROPDOWN: PENJUALAN HARI INI --}}
+                    <select name="period"
+                        id="periodSelect"
                         class="select"
-                        aria-label="Filter status pesanan">
+                        aria-label="Filter periode penjualan"
+                        onchange="handlePeriodChange(this)">
 
-                        <option value="">Semua Status</option>
+                        <option value="">Semua Pesanan {{ $isAdmin ? '' : '(1 Bulan Terakhir)' }}</option>
 
-                        <option value="pending"
-                            {{ request('status') === 'pending' ? 'selected' : '' }}>
-                            Menunggu
-                        </option>
-
-                        <option value="processing"
-                            {{ request('status') === 'processing' ? 'selected' : '' }}>
-                            Diproses
-                        </option>
-
-                        <option value="shipped"
-                            {{ request('status') === 'shipped' ? 'selected' : '' }}>
-                            Dikirim
-                        </option>
-
-                        <option value="completed"
-                            {{ request('status') === 'completed' ? 'selected' : '' }}>
-                            Selesai
-                        </option>
-
-                        <option value="cancelled"
-                            {{ request('status') === 'cancelled' ? 'selected' : '' }}>
-                            Dibatalkan
+                        <option value="today"
+                            {{ request('period') === 'today' ? 'selected' : '' }}>
+                            Penjualan Hari Ini
                         </option>
 
                     </select>
 
-                    <select name="payment_status"
-                        class="select"
-                        aria-label="Filter status pembayaran">
+                    {{-- KALENDER TANGGAL --}}
+                    <input type="date"
+                        name="date"
+                        id="datePickerInput"
+                        class="input"
+                        value="{{ request('date') }}"
+                        @if($minDate) min="{{ $minDate }}" @endif
+                        max="{{ $maxDate }}"
+                        aria-label="Pilih tanggal pesanan"
+                        title="Pilih tanggal pesanan dari kalender"
+                        onchange="handleDateChange(this)">
 
-                        <option value="">Semua Pembayaran</option>
+                    {{-- FILTER STATUS KHUSUS ADMIN --}}
+                    @if($isAdmin)
+                        <select name="status"
+                            class="select"
+                            aria-label="Filter status pesanan">
 
-                        <option value="pending"
-                            {{ request('payment_status') === 'pending' ? 'selected' : '' }}>
-                            Belum Dibayar
-                        </option>
+                            <option value="">Semua Status</option>
 
-                        <option value="paid"
-                            {{ request('payment_status') === 'paid' ? 'selected' : '' }}>
-                            Sudah Dibayar
-                        </option>
+                            <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>
+                                Menunggu
+                            </option>
 
-                    </select>
+                            <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>
+                                Diproses
+                            </option>
+
+                            <option value="shipped" {{ request('status') === 'shipped' ? 'selected' : '' }}>
+                                Dikirim
+                            </option>
+
+                            <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>
+                                Selesai
+                            </option>
+
+                            <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>
+                                Dibatalkan
+                            </option>
+
+                        </select>
+
+                        <select name="payment_status"
+                            class="select"
+                            aria-label="Filter status pembayaran">
+
+                            <option value="">Semua Pembayaran</option>
+
+                            <option value="pending" {{ request('payment_status') === 'pending' ? 'selected' : '' }}>
+                                Belum Dibayar
+                            </option>
+
+                            <option value="paid" {{ request('payment_status') === 'paid' ? 'selected' : '' }}>
+                                Sudah Dibayar
+                            </option>
+
+                        </select>
+                    @endif
 
                     <button type="submit" class="filter-button">
-
                         <i class="bi bi-search"></i>
                         Filter
-
                     </button>
 
-                    <a href="{{ auth()->user()->role === 'admin'
-                        ? route('admin.orders.index')
-                        : route('karyawan.orders.index') }}"
-                        class="reset-button">
-
+                    <a href="{{ $ordersRoute }}" class="reset-button">
                         <i class="bi bi-arrow-counterclockwise"></i>
                         Reset
-
                     </a>
 
                 </form>
@@ -1230,16 +1269,20 @@
                 <div class="panel-header">
 
                     <div>
-
                         <h3>
                             <i class="bi bi-receipt"></i>
                             Daftar Pesanan
                         </h3>
 
                         <p>
-                            Informasi pesanan pelanggan yang tercatat di sistem.
+                            @if(request('period') === 'today')
+                                Menampilkan daftar penjualan hari ini ({{ now()->format('d/m/Y') }}).
+                            @elseif(request('date'))
+                                Menampilkan daftar pesanan tanggal {{ \Carbon\Carbon::parse(request('date'))->format('d/m/Y') }}.
+                            @else
+                                Informasi pesanan pelanggan yang tercatat di sistem.
+                            @endif
                         </p>
-
                     </div>
 
                 </div>
@@ -1271,16 +1314,13 @@
 
                                     {{-- NOMOR PESANAN --}}
                                     <td>
-
                                         <div class="order-number">
                                             #PM{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}
                                         </div>
-
                                     </td>
 
                                     {{-- PELANGGAN --}}
                                     <td>
-
                                         <div class="customer">
                                             {{ $order->user->name ?? 'Pelanggan' }}
                                         </div>
@@ -1288,128 +1328,71 @@
                                         <div class="customer-email">
                                             {{ $order->user->email ?? '-' }}
                                         </div>
-
                                     </td>
 
                                     {{-- JUMLAH PRODUK --}}
                                     <td>
-
                                         <span class="product-count">
-
                                             <i class="bi bi-bag"></i>
-
                                             {{ $order->items->count() }} produk
-
                                         </span>
-
                                     </td>
 
                                     {{-- TOTAL HARGA --}}
                                     <td>
-
                                         <div class="total">
-
-                                            Rp{{ number_format(
-                                                $order->total_price,
-                                                0,
-                                                ',',
-                                                '.'
-                                            ) }}
-
+                                            Rp{{ number_format($order->total_price, 0, ',', '.') }}
                                         </div>
-
                                     </td>
 
                                     {{-- STATUS PESANAN --}}
                                     <td>
-
                                         @if($order->status === 'pending')
-
-                                            <span class="status status-pending">
-                                                Menunggu
-                                            </span>
-
+                                            <span class="status status-pending">Menunggu</span>
                                         @elseif($order->status === 'processing')
-
-                                            <span class="status status-processing">
-                                                Diproses
-                                            </span>
-
+                                            <span class="status status-processing">Diproses</span>
                                         @elseif($order->status === 'shipped')
-
-                                            <span class="status status-shipped">
-                                                Dikirim
-                                            </span>
-
+                                            <span class="status status-shipped">Dikirim</span>
                                         @elseif($order->status === 'completed')
-
-                                            <span class="status status-completed">
-                                                Selesai
-                                            </span>
-
+                                            <span class="status status-completed">Selesai</span>
                                         @else
-
-                                            <span class="status status-cancelled">
-                                                Dibatalkan
-                                            </span>
-
+                                            <span class="status status-cancelled">Dibatalkan</span>
                                         @endif
-
                                     </td>
 
                                     {{-- STATUS PEMBAYARAN --}}
                                     <td>
-
                                         @if($order->payment_status === 'paid')
-
                                             <span class="payment-paid">
-
                                                 <i class="bi bi-check-circle-fill"></i>
                                                 Dibayar
-
                                             </span>
-
                                         @else
-
                                             <span class="payment-pending">
-
                                                 <i class="bi bi-clock"></i>
                                                 Menunggu
-
                                             </span>
-
                                         @endif
-
                                     </td>
 
                                     {{-- TANGGAL --}}
                                     <td>
-
                                         <div class="date-text">
-
                                             {{ $order->created_at->format('d/m/Y') }}
-
                                             <br>
-
                                             {{ $order->created_at->format('H:i') }} WIB
-
                                         </div>
-
                                     </td>
 
                                     {{-- AKSI --}}
                                     <td>
-
-                                        <a href="{{ auth()->user()->role === 'admin'
+                                        <a href="{{ $isAdmin
                                             ? route('admin.orders.show', $order->id)
                                             : route('karyawan.orders.show', $order->id) }}"
                                             class="detail-button">
-
                                             <i class="bi bi-eye"></i>
                                             Detail
-
                                         </a>
-
                                     </td>
 
                                 </tr>
@@ -1427,39 +1410,13 @@
                                             </div>
 
                                             <strong>
-
-                                                @if(request()->hasAny([
-                                                    'search',
-                                                    'status',
-                                                    'payment_status'
-                                                ]))
-
-                                                    Pesanan Tidak Ditemukan
-
-                                                @else
-
-                                                    Belum Ada Pesanan
-
-                                                @endif
-
+                                                {{ $hasActiveFilter ? 'Pesanan Tidak Ditemukan' : 'Belum Ada Pesanan' }}
                                             </strong>
 
                                             <p>
-
-                                                @if(request()->hasAny([
-                                                    'search',
-                                                    'status',
-                                                    'payment_status'
-                                                ]))
-
-                                                    Coba ubah kata kunci atau filter pencarian.
-
-                                                @else
-
-                                                    Pesanan pelanggan akan muncul di halaman ini.
-
-                                                @endif
-
+                                                {{ $hasActiveFilter
+                                                    ? 'Tidak ada pesanan pada tanggal atau kriteria pencarian tersebut.'
+                                                    : 'Pesanan pelanggan akan muncul di halaman ini.' }}
                                             </p>
 
                                         </div>
@@ -1511,17 +1468,13 @@
             <button type="button"
                 class="cancel-logout"
                 onclick="closeLogoutModal()">
-
                 Tidak, Kembali
-
             </button>
 
             <button type="button"
                 class="confirm-logout"
                 onclick="confirmLogout()">
-
                 Ya, Keluar
-
             </button>
 
         </div>
@@ -1545,6 +1498,22 @@
 
     function confirmLogout() {
         document.getElementById('logoutForm').submit();
+    }
+
+    // Jika memilih "Penjualan Hari Ini" di dropdown, kosongkan input tanggal manual agar tidak bentrok
+    function handlePeriodChange(selectEl) {
+        const dateInput = document.getElementById('datePickerInput');
+        if (selectEl.value === 'today' && dateInput) {
+            dateInput.value = '';
+        }
+    }
+
+    // Jika memilih tanggal di kalender, kembalikan dropdown ke "Semua Pesanan"
+    function handleDateChange(dateEl) {
+        const periodSelect = document.getElementById('periodSelect');
+        if (dateEl.value && periodSelect) {
+            periodSelect.value = '';
+        }
     }
 
     logoutModal.addEventListener('click', function (event) {

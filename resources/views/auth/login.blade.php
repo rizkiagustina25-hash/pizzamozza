@@ -506,10 +506,6 @@
                     </div>
                 </div>
 
-                <label class="remember-row">
-                    <input type="checkbox" name="remember">
-                    <span>Ingat saya di perangkat ini</span>
-                </label>
 
                 <button type="submit" class="submit-btn">
                     <span>Masuk Sekarang</span>
