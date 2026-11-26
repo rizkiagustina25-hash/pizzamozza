@@ -873,13 +873,13 @@
             </div>
         </a>
 
-        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Menu">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Produk">
             <i class="fa-solid fa-bars"></i>
         </button>
 
         <nav class="nav-links" id="navLinks">
             <a href="#beranda" class="active">Beranda</a>
-            <a href="#menu">Menu</a>
+            <a href="#produk">Produk</a>
             <a href="#tentang">Tentang Kami</a>
             <a href="#kontak">Kontak</a>
         </nav>
@@ -921,7 +921,7 @@
                     </p>
 
                     <a href="#menu" class="promo-btn">
-                        Lihat Menu
+                        Lihat Produk
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -933,7 +933,7 @@
                 <div class="slide-content">
                     <span class="promo-label">
                         <i class="fa-solid fa-fire"></i>
-                        Menu Favorit
+                        Produk Favorit
                     </span>
 
                     <h1>Pizza Hangat<br>Setiap Gigitan!</h1>
@@ -943,8 +943,8 @@
                         untuk menemani harimu.
                     </p>
 
-                    <a href="#menu" class="promo-btn">
-                        Jelajahi Menu
+                    <a href="#produk" class="promo-btn">
+                        Jelajahi Produk
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -1019,10 +1019,10 @@
 
     <!-- MENU -->
 
-    <section class="section" id="menu">
+    <section class="section" id="produk">
 
         <div class="section-heading">
-            <h2>Pilih Kategori Menu</h2>
+            <h2>Pilih Kategori Produk</h2>
 
             
         </div>

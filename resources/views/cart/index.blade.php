@@ -1,3 +1,18 @@
+@php
+    $userFotoUrl = null;
+    if (auth()->check() && auth()->user()->foto_profile) {
+        $rawFoto = ltrim(auth()->user()->foto_profile, '/');
+        foreach (['profile/' . $rawFoto, 'storage/' . $rawFoto, $rawFoto] as $fotoPath) {
+            if (file_exists(public_path($fotoPath))) {
+                $userFotoUrl = asset($fotoPath);
+                break;
+            }
+        }
+        $userFotoUrl ??= asset('profile/' . $rawFoto);
+    }
+
+    $cartCount = session('cart') ? collect(session('cart'))->sum('quantity') : 0;
+@endphp
 
 <!DOCTYPE html>
 <html lang="id">
@@ -5,16 +20,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang | PizzaMozza</title>
 
-    <title>Keranjang - PizzaMozza</title>
-
-    {{-- Bootstrap Icons --}}
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    {{-- Font Awesome --}}
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <style>
         * {
@@ -23,116 +32,106 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #fffaf5;
-            color: #333;
+        :root {
+            --dashboard-red: #941919;
+            --dashboard-red-hover: #b52d2d;
         }
 
-        button, input {
-            font-family: inherit;
+        body {
+            font-family: Calibri, 'Segoe UI', sans-serif;
+            font-size: 15px;
+            background: #fffaf3;
+            color: #34241f;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
         }
 
         button {
             cursor: pointer;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* ==============================
-           LAYOUT
-        ============================== */
-
         .app {
             min-height: 100vh;
-            display: flex;
         }
 
+        /* ================= SIDEBAR ================= */
+
         .sidebar {
-            width: 265px;
-            min-height: 100vh;
             position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            background: #941919;
+            inset: 0 auto 0 0;
+            width: 265px;
+            height: 100vh;
+            background: var(--dashboard-red);
+            color: white;
             display: flex;
             flex-direction: column;
             z-index: 100;
-            color: white;
             transition: transform .25s ease;
         }
 
-        .main-wrapper {
-            width: calc(100% - 265px);
-            margin-left: 265px;
-            min-height: 100vh;
-        }
-
-        /* ==============================
-           SIDEBAR BRAND
-        ============================== */
-
         .brand {
             height: 88px;
+            min-height: 88px;
             padding: 18px 24px;
             display: flex;
             align-items: center;
-            gap: 11px;
-            border-bottom: 1px solid rgba(255,255,255,.15);
-            flex-shrink: 0;
+            gap: 12px;
+            border-bottom: 1px solid #ffffff25;
         }
 
         .brand-icon {
             width: 38px;
             height: 38px;
+            flex-shrink: 0;
             border-radius: 50%;
-            background: #b52d2d;
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 19px;
-            flex-shrink: 0;
+            background: var(--dashboard-red-hover);
+            color: white;
+            font-size: 21px;
         }
 
         .brand-text {
-            font-size: 23px;
-            font-weight: 700;
-            line-height: 1.1;
             color: white;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -.3px;
+        }
+
+        .brand-text span {
+            color: #ffb4a9;
         }
 
         .brand-subtitle {
-            margin-top: 4px;
-            font-size: 11px;
-            color: #f5dede;
+            margin-top: 2px;
+            color: #f2caca;
+            font-size: 13px;
         }
-
-        /* ==============================
-           SIDEBAR MENU
-        ============================== */
 
         .sidebar-section {
             padding: 24px 15px;
         }
 
         .sidebar-title {
-            margin: 0 12px 12px;
-            font-size: 10px;
-            font-weight: 700;
-            color: #f5dede;
-            letter-spacing: .8px;
+            padding: 0 12px 13px;
+            color: #e9bdbd;
+            font-size: 12px;
             text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
         }
 
         .sidebar-menu {
             list-style: none;
-            padding: 0;
-            margin: 0;
         }
 
         .sidebar-menu li {
@@ -141,62 +140,58 @@
 
         .sidebar-link {
             min-height: 45px;
-            padding: 0 14px;
-            border-radius: 9px;
             display: flex;
             align-items: center;
             gap: 12px;
-            color: white;
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: none;
+            padding: 11px 14px;
+            border-radius: 9px;
+            color: #f8eaea;
+            font-size: 15.5px;
+            font-weight: 500;
             transition: .2s ease;
         }
 
         .sidebar-link:hover,
         .sidebar-link.active {
-            background: #b52d2d;
+            background: var(--dashboard-red-hover);
             color: white;
         }
 
         .sidebar-icon {
-            width: 22px;
+            width: 20px;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 17px;
         }
-
-        /* ==============================
-           SIDEBAR BOTTOM
-        ============================== */
 
         .sidebar-bottom {
             margin-top: auto;
             padding: 18px 16px;
-            border-top: 1px solid rgba(255,255,255,.15);
+            border-top: 1px solid #ffffff25;
         }
 
         .user-mini {
             display: flex;
             align-items: center;
-            gap: 11px;
-            margin-bottom: 15px;
-            padding: 5px 6px;
+            gap: 10px;
+            margin-bottom: 13px;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             flex-shrink: 0;
-            border-radius: 50%;
-            background: #b52d2d;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 16px;
             overflow: hidden;
+            border-radius: 50%;
+            background: #ffe0e0;
+            color: var(--dashboard-red);
+            font-size: 17px;
+            font-weight: 600;
         }
 
         .user-avatar img {
@@ -211,164 +206,186 @@
         }
 
         .user-name {
-            font-size: 12px;
-            font-weight: 700;
             color: white;
-            white-space: nowrap;
+            font-size: 14.5px;
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .user-role {
-            margin-top: 4px;
-            font-size: 10px;
-            color: #f5dede;
+            margin-top: 2px;
+            color: #e9bdbd;
+            font-size: 13px;
         }
 
         .sidebar-logout,
         .sidebar-login {
             width: 100%;
-            height: 38px;
-            border: 1px solid rgba(255,255,255,.4);
-            border-radius: 8px;
-            background: white;
-            color: #941919;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
+            min-height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 9px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            color: var(--dashboard-red);
+            font-size: 14.5px;
+            font-weight: 600;
             transition: .2s ease;
         }
 
         .sidebar-logout:hover,
         .sidebar-login:hover {
-            background: #f5dede;
-            color: #941919;
+            background: #fbe9e9;
         }
 
-        /* ==============================
-           TOPBAR
-        ============================== */
+        /* ================= MAIN WRAPPER & TOPBAR ================= */
+
+        .main-wrapper {
+            min-height: 100vh;
+            margin-left: 265px;
+        }
 
         .topbar {
-            min-height: 72px;
-            padding: 12px 34px;
-            background: #fff;
-            border-bottom: 1px solid #e8e8e8;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            height: 88px;
+            min-height: 88px;
             position: sticky;
             top: 0;
             z-index: 50;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #fffdf9;
+            border-bottom: 1px solid #f0e1d5;
         }
 
-        .mobile-menu {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: 0;
-            border-radius: 8px;
-            background: #fff0f0;
-            color: #941919;
-            font-size: 20px;
+        .topbar-heading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 150px;
+            flex-shrink: 0;
         }
 
-        .search-box {
-            flex: 1;
-            max-width: 450px;
-            position: relative;
+        .topbar-title {
+            margin: 0;
+            font-size: 25px;
+            font-weight: 600;
+            color: #3b2925;
         }
 
-        .search-box input {
-            width: 100%;
-            height: 42px;
-            border: 1px solid #eee;
-            border-radius: 22px;
-            padding: 0 18px 0 43px;
-            outline: none;
-            background: #fafafa;
-            font-size: 13px;
-        }
-
-        .search-box input:focus {
-            border-color: #941919;
-            background: #fff;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
+        .topbar-description {
+            margin-top: 3px;
+            color: #907d73;
+            font-size: 14px;
         }
 
         .topbar-actions {
             margin-left: auto;
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .mobile-menu {
+            display: none;
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 8px;
+            background: #fbe9e4;
+            color: var(--dashboard-red);
+            font-size: 21px;
         }
 
         .cart-button {
-    width: 42px;
-    height: 42px;
-    border: 0;
-    border-radius: 50%;
-    background: #fff3f3;
-    color: #e63946;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: 18px;
-    transition: .2s ease;
-}
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            position: relative;
+            display: grid;
+            place-items: center;
+            background: #fbe9e4;
+            color: var(--dashboard-red);
+            font-size: 19px;
+            transition: .2s ease;
+        }
 
-/* Ikon aktif ketika berada di halaman keranjang */
-.cart-button.active {
-    background: #e63946;
-    color: #fff;
-    box-shadow: 0 3px 10px rgba(230, 57, 70, .25);
-}
+        .cart-button.active {
+            background: var(--dashboard-red);
+            color: white;
+        }
 
-.cart-button:hover {
-    background: #c92e3a;
-    color: #fff;
-}
+        .cart-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 4px;
+            border-radius: 10px;
+            background: #c52c2c;
+            color: white;
+            display: grid;
+            place-items: center;
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+
+        .btn-saya {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #c52c2c;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .btn-saya:hover {
+            background: #a82020;
+            color: white;
+        }
 
         .login-button {
-            padding: 10px 18px;
-            background: #941919;
-            color: #fff;
-            border: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 18px;
             border-radius: 8px;
-            font-size: 13px;
+            background: var(--dashboard-red);
+            color: white;
+            font-size: 15px;
             font-weight: 600;
-            cursor: pointer;
         }
 
-        .login-button:hover {
-            background: #b52d2d;
-        }
-
-        /* ==============================
-           CONTENT
-        ============================== */
+        /* ================= CONTENT ================= */
 
         .content {
-            padding: 35px;
+            padding: 30px;
         }
 
         .back-link {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             margin-bottom: 18px;
-            color: #941919;
-            font-size: 13px;
+            color: var(--dashboard-red);
+            font-size: 14.5px;
             font-weight: 600;
         }
 
@@ -378,53 +395,54 @@
 
         .page-title {
             margin-bottom: 6px;
-            font-size: 28px;
-            font-weight: 700;
-            color: #292929;
+            font-size: 30px;
+            font-weight: 600;
         }
 
         .page-subtitle {
             margin-bottom: 25px;
-            font-size: 13px;
-            color: #888;
+            color: #907d73;
+            font-size: 15.5px;
         }
 
-        /* ==============================
-           ALERT
-        ============================== */
+        /* ================= ALERTS ================= */
 
         .alert {
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 18px;
+            margin-bottom: 20px;
+            border-radius: 12px;
             background: #eaf8ef;
-            color: #23864b;
-            font-size: 13px;
+            border: 1px solid #bfe6cd;
+            color: #16794c;
+            font-size: 14.5px;
+            font-weight: 500;
         }
 
         .alert.error {
             background: #fff0f0;
-            color: #d22;
+            border-color: #f5c2c2;
+            color: #a81c1c;
         }
 
-        /* ==============================
-           CART
-        ============================== */
+        /* ================= CART BOX ================= */
 
         .cart-box {
-            background: #fff;
-            border-radius: 14px;
-            border: 1px solid #f0dcd0;
+            background: white;
+            border: 1px solid #f0e1d5;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,.03);
+            box-shadow: 0 4px 15px rgba(72, 44, 26, 0.04);
         }
 
         .cart-item {
             display: flex;
             align-items: center;
             gap: 18px;
-            padding: 20px;
-            border-bottom: 1px solid #eee;
+            padding: 20px 24px;
+            border-bottom: 1px solid #f2e8e0;
         }
 
         .cart-item:last-child {
@@ -432,17 +450,17 @@
         }
 
         .product-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            background: #f8e8e3;
+            width: 82px;
+            height: 82px;
+            border-radius: 12px;
+            background: #f8f0e9;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             flex-shrink: 0;
-            font-size: 28px;
-            color: #941919;
+            font-size: 30px;
+            color: var(--dashboard-red);
         }
 
         .product-image img {
@@ -457,89 +475,98 @@
         }
 
         .product-info h3 {
-            margin-bottom: 6px;
-            font-size: 16px;
+            margin-bottom: 5px;
+            font-size: 17.5px;
+            font-weight: 600;
+            color: #34241f;
             overflow-wrap: anywhere;
-            color: #292929;
         }
 
         .product-info p {
             margin: 3px 0;
-            font-size: 12px;
-            color: #888;
+            font-size: 13.5px;
+            color: #8b776d;
         }
 
         .price {
-            margin-top: 8px;
-            font-weight: 700;
-            color: #941919;
+            margin-top: 7px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dashboard-red);
         }
 
         .quantity-form {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 8px;
         }
 
         .quantity-form input {
-            width: 60px;
-            padding: 9px 5px;
+            width: 64px;
+            height: 38px;
             text-align: center;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 1px solid #eadbd0;
+            border-radius: 8px;
+            background: #fffaf5;
+            font-size: 14.5px;
+            font-weight: 600;
         }
 
         .btn {
             border: 0;
-            padding: 9px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             white-space: nowrap;
+            transition: .2s ease;
         }
 
         .btn-update {
-            background: #eee;
-            color: #333;
+            background: #f5ebe3;
+            color: #4b3832;
         }
 
         .btn-update:hover {
-            background: #ddd;
+            background: #ead9cc;
         }
 
         .btn-delete {
-            background: #fff0f0;
-            color: #d22;
+            background: #ffe8e8;
+            color: #d12d2d;
         }
 
         .btn-delete:hover {
-            background: #ffe0e0;
+            background: #ffd6d6;
         }
 
-        /* ==============================
-           CART FOOTER
-        ============================== */
+        /* ================= CART FOOTER ================= */
 
         .cart-footer {
-            padding: 20px;
+            padding: 22px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            border-top: 1px solid #eee;
+            background: #fffdf9;
+            border-top: 1px solid #f0e1d5;
         }
 
         .total-text {
-            font-size: 14px;
-            color: #777;
+            font-size: 14.5px;
+            color: #8b776d;
         }
 
         .total-price {
             display: block;
-            margin-top: 5px;
-            font-size: 22px;
+            margin-top: 4px;
+            font-size: 24px;
             font-weight: 700;
-            color: #941919;
+            color: var(--dashboard-red);
         }
 
         .actions {
@@ -548,101 +575,159 @@
             gap: 10px;
         }
 
-        .actions form {
-            margin: 0;
-        }
-
         .btn-primary,
         .btn-secondary {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 11px 18px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
+            gap: 7px;
+            padding: 11px 20px;
+            border-radius: 9px;
+            font-size: 14.5px;
+            font-weight: 600;
             white-space: nowrap;
+            transition: .2s ease;
         }
 
         .btn-primary {
             border: 0;
-            background: #941919;
-            color: #fff;
+            background: var(--dashboard-red);
+            color: white;
         }
 
         .btn-primary:hover {
-            background: #b52d2d;
+            background: var(--dashboard-red-hover);
         }
 
         .btn-secondary {
-            border: 1px solid #ddd;
-            background: #eee;
-            color: #333;
-            cursor: pointer;
+            border: 1px solid #e5d4c9;
+            background: white;
+            color: #59453d;
         }
 
         .btn-secondary:hover {
-            background: #ddd;
+            background: #f5ebe3;
         }
 
-        /* ==============================
-           EMPTY CART
-        ============================== */
+        /* ================= EMPTY CART ================= */
 
         .empty {
-            padding: 70px 20px;
+            padding: 65px 20px;
             text-align: center;
-            color: #888;
+            color: #907d73;
         }
 
         .empty-icon {
-            font-size: 45px;
-            margin-bottom: 15px;
-            color: #941919;
+            font-size: 48px;
+            margin-bottom: 14px;
+            color: var(--dashboard-red);
         }
 
         .empty h3 {
             margin-bottom: 8px;
-            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            color: #34241f;
         }
 
         .empty p {
-            margin-bottom: 20px;
-            font-size: 13px;
+            margin-bottom: 22px;
+            font-size: 15px;
         }
-
-        /* ==============================
-           FOOTER
-        ============================== */
 
         .footer {
-            padding: 25px 30px;
+            padding: 25px;
             text-align: center;
-            color: #999;
-            font-size: 11px;
+            color: #99877e;
+            font-size: 13.5px;
         }
 
-        /* ==============================
-           RESPONSIVE
-        ============================== */
+        /* ================= MODAL LOGOUT ================= */
 
-        @media (max-width: 1000px) {
-            .cart-item {
-                flex-wrap: wrap;
-            }
-
-            .product-info {
-                flex-basis: calc(100% - 100px);
-            }
-
-            .cart-footer {
-                align-items: flex-start;
-            }
-
-            .content {
-                padding: 25px;
-            }
+        .logout-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(35, 15, 15, 0.55);
         }
+
+        .logout-modal.show {
+            display: flex;
+        }
+
+        .logout-dialog {
+            width: 100%;
+            max-width: 380px;
+            padding: 30px 25px;
+            text-align: center;
+            background: #fffaf3;
+            border: 1px solid #f0e1d5;
+            border-radius: 18px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+            animation: popupFadeIn .2s ease;
+        }
+
+        .logout-modal-icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f8e5e2;
+            color: var(--dashboard-red);
+            font-size: 28px;
+        }
+
+        .logout-dialog h3 {
+            margin-bottom: 10px;
+            font-size: 23px;
+            font-weight: 600;
+        }
+
+        .logout-dialog p {
+            margin-bottom: 24px;
+            color: #81716a;
+            font-size: 15px;
+            line-height: 1.55;
+        }
+
+        .logout-modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .logout-modal-actions button {
+            flex: 1;
+            min-height: 42px;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .cancel-logout {
+            border: 1px solid #e5d4c9;
+            background: white;
+            color: #59453d;
+        }
+
+        .confirm-logout {
+            border: none;
+            background: var(--dashboard-red);
+            color: white;
+        }
+
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ================= RESPONSIVE ================= */
 
         @media (max-width: 800px) {
             .sidebar {
@@ -651,106 +736,65 @@
 
             .sidebar.open {
                 transform: translateX(0);
-                box-shadow: 5px 0 20px rgba(0,0,0,.2);
             }
 
             .main-wrapper {
-                width: 100%;
                 margin-left: 0;
             }
 
             .mobile-menu {
-                display: block;
-                flex-shrink: 0;
-            }
-
-            .topbar {
-                padding: 12px 15px;
+                display: inline-flex;
             }
 
             .content {
-                padding: 25px 20px;
+                padding: 22px 18px;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
             }
 
             .cart-footer {
                 flex-direction: column;
+                align-items: flex-start;
             }
 
             .actions {
                 width: 100%;
-                flex-wrap: wrap;
             }
 
-            .actions form {
+            .actions form,
+            .actions > a {
                 flex: 1;
             }
 
-            .actions form button,
-            .actions > a {
+            .actions button {
                 width: 100%;
             }
         }
 
         @media (max-width: 550px) {
-            .search-box {
-                display: none;
+            .topbar {
+                padding: 12px 15px;
+                gap: 10px;
             }
 
-            .content {
-                padding: 20px 15px;
-            }
-
-            .page-title {
-                font-size: 23px;
-            }
-
-            .cart-item {
-                gap: 12px;
-                padding: 15px;
-            }
-
-            .product-image {
-                width: 65px;
-                height: 65px;
-            }
-
-            .product-info {
-                flex-basis: calc(100% - 80px);
-            }
-
-            .quantity-form {
-                flex: 1;
-            }
-
-            .quantity-form input {
-                flex: 1;
+            .topbar-heading {
                 min-width: 0;
+                flex: 1;
             }
 
-            .cart-item > form:last-child {
-                margin-left: auto;
-            }
-
-            .cart-footer {
-                padding: 15px;
-            }
-
-            .total-price {
+            .topbar-title {
                 font-size: 20px;
             }
 
-            .actions {
-                flex-direction: column;
-                align-items: stretch;
+            .topbar-description {
+                font-size: 12.5px;
             }
 
-            .actions form {
-                width: 100%;
-                flex: auto;
-            }
-
-            .footer {
-                padding: 20px 15px;
+            .btn-saya,
+            .login-button {
+                padding: 10px 12px;
             }
         }
     </style>
@@ -758,640 +802,317 @@
 
 <body>
 
-<div class="app">
+    <div class="app">
 
-    {{-- =================================
-         SIDEBAR
-    ================================== --}}
-
-    <aside class="sidebar" id="sidebar">
-
-        {{-- BRAND --}}
-        <div class="brand">
-
-            <div class="brand-icon">
-                <i class="fa-solid fa-pizza-slice"></i>
-            </div>
-
-            <div>
-                <div class="brand-text">PizzaMozza</div>
-
-                <div class="brand-subtitle">
-                    Fresh, Tasty, Happiness!
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-pizza-slice"></i>
+                </div>
+                <div>
+                    <div class="brand-text">Pizza<span>Mozza</span></div>
+                    <div class="brand-subtitle">Fresh, Tasty, Happiness!</div>
                 </div>
             </div>
 
-        </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Main Menu</div>
 
-        {{-- MENU --}}
-        <div class="sidebar-section">
-
-            <div class="sidebar-title">
-                Main Menu
-            </div>
-
-            <ul class="sidebar-menu">
-
-                {{-- DASHBOARD --}}
-                <li>
-                    <a href="{{ route('dashboard') }}"
-                       class="sidebar-link {{ request()->routeIs('dashboard') && !request()->has('menu') ? 'active' : '' }}">
-
-                        <span class="sidebar-icon">
-                            <i class="bi bi-grid-1x2"></i>
-                        </span>
-
-                        <span>Dashboard</span>
-
-                    </a>
-                </li>
-
-                {{-- PRODUK --}}
-                <li>
-                    <a href="{{ route('products.index') }}"
-                       class="sidebar-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
-
-                        <span class="sidebar-icon">
-                            <i class="bi bi-box-seam"></i>
-                        </span>
-
-                        <span>Produk</span>
-
-                    </a>
-                </li>
-
-            
-
-                @auth
-
-                    {{-- PESANAN SAYA --}}
+                <ul class="sidebar-menu">
                     <li>
-                        <a href="{{ route('dashboard') }}?menu=orders"
-                           class="sidebar-link {{ request('menu') === 'orders' ? 'active' : '' }}">
-
-                            <span class="sidebar-icon">
-                                <i class="bi bi-receipt"></i>
-                            </span>
-
-                            <span>Pesanan Saya</span>
-
+                        <a href="{{ route('dashboard') }}" class="sidebar-link">
+                            <span class="sidebar-icon"><i class="bi bi-grid-1x2-fill"></i></span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
 
-                    {{-- AKUN SAYA --}}
                     <li>
-                        <a href="{{ route('dashboard') }}?menu=profile"
-                           class="sidebar-link {{ request('menu') === 'profile' ? 'active' : '' }}">
-
-                            <span class="sidebar-icon">
-                                <i class="bi bi-person"></i>
-                            </span>
-
-                            <span>Akun Saya</span>
-
+                        <a href="{{ route('products.index') }}" class="sidebar-link">
+                            <span class="sidebar-icon"><i class="bi bi-box-seam"></i></span>
+                            <span>Produk</span>
                         </a>
                     </li>
-
-                @endauth
-
-            </ul>
-        </div>
-
-        {{-- SIDEBAR BOTTOM --}}
-        <div class="sidebar-bottom">
-
-            @auth
-
-                <div class="user-mini">
-
-                    <div class="user-avatar">
-
-                        @if(auth()->user()->foto_profile)
-
-                            <img
-                                src="{{ asset('storage/' . auth()->user()->foto_profile) }}"
-                                alt="Foto {{ auth()->user()->name }}"
-                            >
-
-                        @else
-
-                            <i class="bi bi-person"></i>
-
-                        @endif
-
-                    </div>
-
-                    <div class="user-info">
-
-                        <div class="user-name">
-                            {{ auth()->user()->name }}
-                        </div>
-
-                        <div class="user-role">
-                            Pelanggan
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <form action="{{ route('logout') }}"
-                      method="POST">
-
-                    @csrf
-
-                    <button type="submit" class="sidebar-logout">
-
-                        <i class="bi bi-box-arrow-right"></i>
-
-                        <span>Keluar</span>
-
-                    </button>
-
-                </form>
-
-            @else
-
-                <a href="{{ route('login') }}"
-                   class="sidebar-login">
-
-                    <i class="bi bi-box-arrow-in-right"></i>
-
-                    <span>Login</span>
-
-                </a>
-
-            @endauth
-
-        </div>
-
-    </aside>
-
-
-    {{-- =================================
-         MAIN WRAPPER
-    ================================== --}}
-
-    <div class="main-wrapper">
-
-        {{-- TOPBAR --}}
-        <header class="topbar">
-
-            {{-- MOBILE MENU --}}
-            <button
-                type="button"
-                class="mobile-menu"
-                onclick="toggleSidebar()"
-                id="mobileMenuButton"
-                aria-label="Buka menu"
-                aria-controls="sidebar"
-                aria-expanded="false"
-            >
-                <i class="bi bi-list"></i>
-            </button>
-
-            {{-- SEARCH --}}
-            <form
-                action="{{ route('products.index') }}"
-                method="GET"
-                class="search-box"
-            >
-
-                <span class="search-icon">
-                    <i class="bi bi-search"></i>
-                </span>
-
-                <input
-                    type="text"
-                    name="search"
-                    placeholder="Cari pizza favorit kamu..."
-                    value="{{ request('search') }}"
-                >
-
-            </form>
-
-            {{-- TOPBAR ACTIONS --}}
-            <div class="topbar-actions">
-
-                {{-- CART BUTTON --}}
-                <a
-                href="{{ route('cart.index') }}"
-                    class="cart-button {{ request()->routeIs('cart.index') ? 'active' : '' }}"
-                    aria-label="Buka keranjang"
-                    aria-current="{{ request()->routeIs('cart.index') ? 'page' : 'false' }}"
-                >
-                    <i class="bi bi-cart3"></i>
 
                     @auth
+                        <li>
+                            <a href="{{ route('dashboard', ['menu' => 'orders']) }}" class="sidebar-link">
+                                <span class="sidebar-icon"><i class="bi bi-bag-check"></i></span>
+                                <span>Pesanan Saya</span>
+                            </a>
+                        </li>
 
-                        @php
-                            $cartCount = session('cart')
-                                ? collect(session('cart'))->sum('quantity')
-                                : 0;
-                        @endphp
-
-                        @if($cartCount > 0)
-
-                            <span class="cart-badge">
-                                {{ $cartCount }}
-                            </span>
-
-                        @endif
-
+                        <li>
+                            <a href="{{ route('dashboard', ['menu' => 'profile']) }}" class="sidebar-link">
+                                <span class="sidebar-icon"><i class="bi bi-person-circle"></i></span>
+                                <span>Akun Saya</span>
+                            </a>
+                        </li>
                     @endauth
-
-                </a>
-
-                {{-- LOGIN / LOGOUT --}}
-                @guest
-
-                    <a href="{{ route('login') }}"
-                       class="login-button">
-                        Login
-                    </a>
-
-                @else
-
-                    <form
-                        action="{{ route('logout') }}"
-                        method="POST"
-                        style="margin:0;"
-                    >
-
-                        @csrf
-
-                        <button
-                            type="submit"
-                            class="login-button"
-                        >
-                            Logout
-                        </button>
-
-                    </form>
-
-                @endguest
-
+                </ul>
             </div>
 
-        </header>
+            <div class="sidebar-bottom">
+                @auth
+                    <div class="user-mini">
+                        <div class="user-avatar">
+                            @if ($userFotoUrl)
+                                <img src="{{ $userFotoUrl }}" alt="Foto profil"
+                                    onerror="this.style.display='none'; this.parentElement.textContent='{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}';">
+                            @else
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            @endif
+                        </div>
 
+                        <div class="user-info">
+                            <div class="user-name">{{ auth()->user()->name }}</div>
+                            <div class="user-role">Pelanggan</div>
+                        </div>
+                    </div>
 
-        {{-- =================================
-             CONTENT
-        ================================== --}}
+                    <button type="button" class="sidebar-logout" onclick="openCustomerLogoutModal()">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </button>
+                @else
+                    <a href="{{ route('login') }}" class="sidebar-login">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Login
+                    </a>
+                @endauth
+            </div>
+        </aside>
 
-        <main class="content">
+        <!-- ================= MAIN WRAPPER ================= -->
+        <div class="main-wrapper">
 
-            <a href="{{ route('products.index') }}"
-               class="back-link">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <button type="button" class="mobile-menu" onclick="toggleSidebar()" aria-label="Buka menu">
+                    <i class="bi bi-list"></i>
+                </button>
 
-                <i class="bi bi-arrow-left"></i>
-
-                Kembali ke Menu
-
-            </a>
-
-            <h1 class="page-title">
-                <i class="bi bi-cart3" style="color:#941919;"></i>
-                Keranjang Saya
-            </h1>
-
-            <p class="page-subtitle">
-                Periksa kembali pesanan kamu sebelum checkout.
-            </p>
-
-
-            {{-- SUCCESS --}}
-            @if(session('success'))
-
-                <div class="alert">
-
-                    <i class="bi bi-check-circle-fill"></i>
-
-                    {{ session('success') }}
-
+                <div class="topbar-heading">
+                    <div class="topbar-title">Keranjang</div>
+                    <div class="topbar-description">Periksa kembali pesanan kamu sebelum checkout.</div>
                 </div>
 
-            @endif
+                <div class="topbar-actions">
+                    <a href="{{ route('cart.index') }}" class="cart-button active" aria-label="Keranjang">
+                        <i class="bi bi-cart3"></i>
+                        @if ($cartCount > 0)
+                            <span class="cart-badge">{{ $cartCount }}</span>
+                        @endif
+                    </a>
 
-
-            {{-- ERROR --}}
-            @if(session('error'))
-
-                <div class="alert error">
-
-                    <i class="bi bi-exclamation-circle-fill"></i>
-
-                    {{ session('error') }}
-
+                    @guest
+                        <a href="{{ route('login') }}" class="login-button">Login</a>
+                    @else
+                        <a href="{{ route('dashboard', ['menu' => 'profile']) }}" class="btn-saya">
+                            <i class="bi bi-person-circle"></i>
+                            <span>Saya</span>
+                        </a>
+                    @endguest
                 </div>
+            </header>
 
-            @endif
-
-
-            {{-- VALIDATION ERRORS --}}
-            @if($errors->any())
-
-                <div class="alert error">
-
-                    <ul style="padding-left:18px;">
-
-                        @foreach($errors->all() as $error)
-
-                            <li>{{ $error }}</li>
-
-                        @endforeach
-
-                    </ul>
-
-                </div>
-
-            @endif
+            <!-- CONTENT -->
+            <main class="content">
+                <a href="{{ route('products.index') }}" class="back-link">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali
+                </a>
 
 
-            {{-- =================================
-                 CART ITEMS
-            ================================== --}}
 
-            @if(count($cart) > 0)
+                @if (session('success'))
+                    <div class="alert">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                @endif
 
-                <div class="cart-box">
+                @if (session('error'))
+                    <div class="alert error">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        <span>{{ session('error') }}</span>
+                    </div>
+                @endif
 
-                    @foreach($cart as $key => $item)
+                @if ($errors->any())
+                    <div class="alert error">
+                        <ul style="padding-left:18px;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-                        <div class="cart-item">
+                @if (count($cart) > 0)
+                    <div class="cart-box">
+                        @foreach ($cart as $key => $item)
+                            @php
+                                $rawCartImg = !empty($item['image']) ? ltrim($item['image'], '/') : null;
+                                $cartImgUrl = null;
+                                if ($rawCartImg) {
+                                    if (str_starts_with($rawCartImg, 'http')) {
+                                        $cartImgUrl = $rawCartImg;
+                                    } else {
+                                        foreach (['image/' . $rawCartImg, 'images/' . $rawCartImg, 'storage/' . $rawCartImg, $rawCartImg] as $imgPath) {
+                                            if (file_exists(public_path($imgPath))) {
+                                                $cartImgUrl = asset($imgPath);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            @endphp
 
-                            {{-- IMAGE --}}
-                            <div class="product-image">
-
-                                @if(!empty($item['image']))
-
-                                    <img
-                                        src="{{ asset('image/' . $item['image']) }}"
-                                        alt="{{ $item['name'] }}"
-                                    >
-
-                                @else
-
-                                    <i class="fa-solid fa-pizza-slice"></i>
-
-                                @endif
-
-                            </div>
-
-
-                            {{-- PRODUCT INFO --}}
-                            <div class="product-info">
-
-                                <h3>
-                                    {{ $item['name'] }}
-                                </h3>
-
-                                @if(!empty($item['variant_name']))
-
-                                    <p>
-                                        Ukuran: {{ $item['variant_name'] }}
-                                    </p>
-
-                                @endif
-
-                                <div class="price">
-
-                                    Rp {{ number_format($item['price'], 0, ',', '.') }}
-
+                            <div class="cart-item">
+                                <div class="product-image">
+                                    @if ($cartImgUrl)
+                                        <img src="{{ $cartImgUrl }}" alt="{{ $item['name'] }}"
+                                            onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fa-solid fa-pizza-slice\'></i>';">
+                                    @else
+                                        <i class="fa-solid fa-pizza-slice"></i>
+                                    @endif
                                 </div>
 
+                                <div class="product-info">
+                                    <h3>{{ $item['name'] }}</h3>
+                                    @if (!empty($item['variant_name']))
+                                        <p>Ukuran: {{ $item['variant_name'] }}</p>
+                                    @endif
+                                    <div class="price">Rp {{ number_format($item['price'], 0, ',', '.') }}</div>
+                                </div>
+
+                                <form action="{{ route('cart.update', $key) }}" method="POST" class="quantity-form">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" required>
+                                    <button type="submit" class="btn btn-update">
+                                        <i class="bi bi-arrow-repeat"></i> Update
+                                    </button>
+                                </form>
+
+                                <form action="{{ route('cart.remove', $key) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-delete">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </form>
+                            </div>
+                        @endforeach
+
+                        <div class="cart-footer">
+                            <div>
+                                <span class="total-text">Total Keranjang</span>
+                                <strong class="total-price">Rp {{ number_format($total, 0, ',', '.') }}</strong>
                             </div>
 
+                            <div class="actions">
+                                <form action="{{ route('cart.clear') }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-secondary">
+                                        <i class="bi bi-trash"></i> Kosongkan
+                                    </button>
+                                </form>
 
-                            {{-- UPDATE QUANTITY --}}
-                            <form
-                                action="{{ route('cart.update', $key) }}"
-                                method="POST"
-                                class="quantity-form"
-                            >
-
-                                @csrf
-                                @method('PUT')
-
-                                <input
-                                    type="number"
-                                    name="quantity"
-                                    value="{{ $item['quantity'] }}"
-                                    min="1"
-                                    required
-                                    aria-label="Jumlah {{ $item['name'] }}"
-                                >
-
-                                <button type="submit"
-                                        class="btn btn-update">
-
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    Update
-
-                                </button>
-
-                            </form>
-
-
-                            {{-- REMOVE ITEM --}}
-                            <form
-                                action="{{ route('cart.remove', $key) }}"
-                                method="POST"
-                            >
-
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit"
-                                        class="btn btn-delete">
-
-                                    <i class="bi bi-trash"></i>
-                                    Hapus
-
-                                </button>
-
-                            </form>
-
+                                <a href="{{ route('checkout.index') }}" class="btn-primary">
+                                    <i class="bi bi-credit-card"></i> Checkout
+                                </a>
+                            </div>
                         </div>
-
-                    @endforeach
-
-
-                    {{-- CART FOOTER --}}
-                    <div class="cart-footer">
-
-                        <div>
-
-                            <span class="total-text">
-                                Total Keranjang
-                            </span>
-
-                            <strong class="total-price">
-
-                                Rp {{ number_format($total, 0, ',', '.') }}
-
-                            </strong>
-
-                        </div>
-
-
-                        <div class="actions">
-
-                            {{-- CLEAR CART --}}
-                            <form
-                                action="{{ route('cart.clear') }}"
-                                method="POST"
-                            >
-
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit"
-                                        class="btn-secondary">
-
-                                    <i class="bi bi-trash"></i>
-                                    Kosongkan
-
-                                </button>
-
-                            </form>
-
-
-                            {{-- CHECKOUT --}}
-                            <a
-                                href="{{ route('checkout.index') }}"
-                                class="btn-primary"
-                            >
-
-                                <i class="bi bi-credit-card"></i>
-                                Checkout
-
+                    </div>
+                @else
+                    <div class="cart-box">
+                        <div class="empty">
+                            <div class="empty-icon"><i class="bi bi-cart-x"></i></div>
+                            <h3>Keranjang masih kosong</h3>
+                            <p>Yuk pilih produk PizzaMozza terlebih dahulu.</p>
+                            <a href="{{ route('products.index') }}" class="btn-primary">
+                                <i class="bi bi-bag"></i> Lihat Produk
                             </a>
-
                         </div>
-
                     </div>
+                @endif
+            </main>
 
-                </div>
+            <footer class="footer">
+                © {{ date('Y') }} PizzaMozza. All Rights Reserved.
+            </footer>
 
-            @else
-
-                {{-- EMPTY CART --}}
-                <div class="cart-box">
-
-                    <div class="empty">
-
-                        <div class="empty-icon">
-                            <i class="bi bi-cart-x"></i>
-                        </div>
-
-                        <h3>
-                            Keranjang masih kosong
-                        </h3>
-
-                        <p>
-                            Yuk pilih produk PizzaMozza terlebih dahulu.
-                        </p>
-
-                        <a
-                            href="{{ route('products.index') }}"
-                            class="btn-primary"
-                        >
-
-                            <i class="bi bi-bag"></i>
-                            Lihat Produk
-
-                        </a>
-
-                    </div>
-
-                </div>
-
-            @endif
-
-        </main>
-
-
-        {{-- FOOTER --}}
-        <footer class="footer">
-
-            © {{ date('Y') }} PizzaMozza. All Rights Reserved.
-
-        </footer>
+        </div>
 
     </div>
 
-</div>
+    <!-- ================= MODAL LOGOUT ================= -->
+    @auth
+        <form action="{{ route('logout') }}" method="POST" id="customerLogoutForm" style="display:none;">
+            @csrf
+        </form>
+    @endauth
 
+    <div class="logout-modal" id="customerLogoutModal">
+        <div class="logout-dialog" role="dialog" aria-modal="true" aria-labelledby="customerLogoutTitle">
+            <div class="logout-modal-icon">
+                <i class="bi bi-box-arrow-right"></i>
+            </div>
+            <h3 id="customerLogoutTitle">Keluar dari Akun?</h3>
+            <p>Apakah kamu yakin ingin keluar dari akun PizzaMozza?</p>
+            <div class="logout-modal-actions">
+                <button type="button" class="cancel-logout" onclick="closeCustomerLogoutModal()">Batal</button>
+                <button type="button" class="confirm-logout" onclick="confirmCustomerLogout()">Ya, Keluar</button>
+            </div>
+        </div>
+    </div>
 
-{{-- =================================
-     JAVASCRIPT
-================================== --}}
-
-<script>
-
-    function toggleSidebar() {
-
-        const sidebar = document.getElementById('sidebar');
-
-        const button = document.getElementById('mobileMenuButton');
-
-        const isOpen = sidebar.classList.toggle('open');
-
-        button.setAttribute('aria-expanded', String(isOpen));
-
-        button.setAttribute(
-            'aria-label',
-            isOpen ? 'Tutup menu' : 'Buka menu'
-        );
-
-    }
-
-    // Menutup sidebar ketika klik di luar sidebar pada tampilan mobile
-    document.addEventListener('click', function(event) {
-
-        const sidebar = document.getElementById('sidebar');
-
-        const button = document.getElementById('mobileMenuButton');
-
-        if (
-            window.innerWidth <= 800 &&
-            sidebar.classList.contains('open') &&
-            !sidebar.contains(event.target) &&
-            !button.contains(event.target)
-        ) {
-
-            sidebar.classList.remove('open');
-
-            button.setAttribute('aria-expanded', 'false');
-
-            button.setAttribute('aria-label', 'Buka menu');
-
-        }
-
-    });
-
-    // Menutup sidebar dengan tombol Escape
-    document.addEventListener('keydown', function(event) {
-
-        if (event.key === 'Escape') {
-
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-
-            const button = document.getElementById('mobileMenuButton');
-
-            sidebar.classList.remove('open');
-
-            button.setAttribute('aria-expanded', 'false');
-
-            button.setAttribute('aria-label', 'Buka menu');
-
+            if (sidebar) sidebar.classList.toggle('open');
         }
 
-    });
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.mobile-menu');
+            if (window.innerWidth <= 800 && sidebar && toggleBtn && sidebar.classList.contains('open') &&
+                !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
 
-</script>
+        function openCustomerLogoutModal() {
+            const modal = document.getElementById('customerLogoutModal');
+            if (modal) modal.classList.add('show');
+        }
+
+        function closeCustomerLogoutModal() {
+            const modal = document.getElementById('customerLogoutModal');
+            if (modal) modal.classList.remove('show');
+        }
+
+        function confirmCustomerLogout() {
+            const form = document.getElementById('customerLogoutForm');
+            if (form) form.submit();
+        }
+
+        const logoutModal = document.getElementById('customerLogoutModal');
+        if (logoutModal) {
+            logoutModal.addEventListener('click', function(event) {
+                if (event.target === this) closeCustomerLogoutModal();
+            });
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeCustomerLogoutModal();
+        });
+    </script>
 
 </body>
+
 </html>
